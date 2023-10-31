@@ -1,0 +1,21 @@
+FROM node:18-alpine AS dependencies
+WORKDIR /app
+COPY package.json yarn.lock ./
+RUN yarn install
+
+FROM node:18-alpine AS builder
+WORKDIR /app
+COPY . .
+COPY --from=dependencies /app/node_modules ./node_modules
+RUN yarn build:development
+
+FROM node:18-alpine AS runner
+WORKDIR /app
+RUN addgroup -g 1001 -S nodejs
+RUN adduser -S nextjs -u 1001
+COPY --from=builder --chown=nextjs:nodejs /app/.next ./.next
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/package.json ./package.json
+USER nextjs
+EXPOSE 8081
+CMD ["yarn", "start"]
