@@ -5,7 +5,7 @@ class AuthService {
     urlBaseService
 
     constructor() {
-        this.urlBaseService = 'api/auth'
+        this.urlBaseService = '/auth'
     }
 
     async login(data: ILoginForm): Promise<ILogin> {

@@ -4,7 +4,7 @@ export class ReportService {
     urlBaseService
 
     constructor() {
-        this.urlBaseService = 'api/report'
+        this.urlBaseService = '/report'
     }
 
     async getPosts(urlParams: string): Promise<number> {

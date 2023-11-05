@@ -8,7 +8,7 @@ class UserService {
     urlBaseService
 
     constructor() {
-        this.urlBaseService = 'api/users'
+        this.urlBaseService = '/users'
     }
 
     async getAll(filters: string): Promise<IDashUser[]> {

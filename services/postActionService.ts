@@ -5,7 +5,7 @@ export class PostActionService {
     urlBaseService
 
     constructor() {
-        this.urlBaseService = 'api/postactions'
+        this.urlBaseService = '/postactions'
     }
 
     async getAll(): Promise<any> {

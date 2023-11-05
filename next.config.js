@@ -25,12 +25,12 @@ module.exports = withTM({
         unoptimized: true,
         remotePatterns: [
             {
-                protocol: 'https',
-                hostname: 'strapi-adv-doc-s3.s3.amazonaws.com',
+                protocol: 'http',
+                hostname: 'localhost',
             },
             {
                 protocol: 'https',
-                hostname: 'canal.ouvidordigital.com.br',
+                hostname: 'canalspeakout.com',
             },
         ],
     },

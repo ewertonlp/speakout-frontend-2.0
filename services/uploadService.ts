@@ -4,7 +4,7 @@ import api from './api'
 export class UploadService {
     async uploadFile(data: File): Promise<IImageUpload[]> {
         return await api.post(
-            `api/upload`,
+            `/upload`,
             { files: data },
             {
                 headers: {
