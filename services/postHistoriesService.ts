@@ -4,7 +4,7 @@ import api from './api'
 export class PostHistoriesService {
     urlBaseService
     constructor() {
-        this.urlBaseService = '/posthistories'
+        this.urlBaseService = 'api/posthistories'
     }
 
     async sendNewComment(data: IPostHistoryCreate) {

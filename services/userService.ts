@@ -8,7 +8,7 @@ class UserService {
     urlBaseService
 
     constructor() {
-        this.urlBaseService = '/users'
+        this.urlBaseService = 'api/users'
     }
 
     async getAll(filters: string): Promise<IDashUser[]> {
@@ -18,9 +18,9 @@ class UserService {
     async getById(id: string): Promise<IDashUserGet> {
         return await api.get(`${this.urlBaseService}/${id}`)
     }
-    r
+    
     async create(user: IDashUser): Promise<IDashUser> {
-        return await api.post('/auth/local/register', user)
+        return await api.post('api/auth/local/register', user)
     }
 
     async update(id: string, user: IDashUser): Promise<IDashUser> {

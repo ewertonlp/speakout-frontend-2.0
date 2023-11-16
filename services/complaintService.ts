@@ -5,12 +5,19 @@ import api from './api'
 
 export default class ComplaintService {
     async sendComplaint(data: IComplaint) {
-        return await api.post(`posts`, { data: data })
+        try {
+            console.log(data);
+            const response = await api.post(`api/posts`, { data: data });
+            return response.data;
+        } catch (error) {
+            console.error('Erro ao enviar queixa:', error.response || error.message);
+            throw error;
+        }
     }
 
     async uploadFile(data: File): Promise<IImageUpload[]> {
         return await api.post(
-            `upload`,
+            `api/upload`,
             { files: data },
             {
                 headers: {
@@ -21,6 +28,6 @@ export default class ComplaintService {
     }
 
     async getHistoryOfComplaint(protocol: string): Promise<IComplaintStatus> {
-        return await api.get(`/posthistorybyprotocol/${protocol}`)
+        return await api.get(`api/posthistorybyprotocol/${protocol}`)
     }
 }

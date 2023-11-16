@@ -31,7 +31,7 @@ export default function Empresas() {
         const tenantController = new TenantController()
         try {
             const tenants = await tenantController.getAll({ status: true })
-            tenants.forEach(tenant => (tenant.linkRelato = `http://${location.host}/ouvidoria/${tenant.identity}`))
+            tenants.forEach(tenant => (tenant.linkRelato = `https://${location.host}/ouvidoria/${tenant.identity}`))
             setTenants(tenants)
         } catch (error) {
             console.log(error)

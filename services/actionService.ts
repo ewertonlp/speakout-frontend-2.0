@@ -4,7 +4,7 @@ export class ActionService {
     urlBaseService
 
     constructor() {
-        this.urlBaseService = '/actions'
+        this.urlBaseService = 'api/actions'
     }
 
     async create(data: any) {

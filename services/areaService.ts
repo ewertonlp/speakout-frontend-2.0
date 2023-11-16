@@ -5,7 +5,7 @@ export class AreaService {
     urlBaseService
 
     constructor() {
-        this.urlBaseService = '/areas'
+        this.urlBaseService = 'api/areas'
     }
 
     async create(data: IArea) {

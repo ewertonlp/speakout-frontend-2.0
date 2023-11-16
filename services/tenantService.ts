@@ -6,11 +6,11 @@ export default class TenantService {
     urlBaseService
     getBasicInformation(companyName: string): Promise<ICompanyInfo> {
         console.log(companyName)
-        return api.get(`/gettenantbyidentity/${companyName}`)
+        return api.get(`api/gettenantbyidentity/${companyName}`)
     }
 
     constructor() {
-        this.urlBaseService = '/tenants'
+        this.urlBaseService = 'api/tenants'
     }
 
     async create(data: ITenant) {

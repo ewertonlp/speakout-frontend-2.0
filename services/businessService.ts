@@ -5,7 +5,7 @@ class BusinessService {
     urlBaseService
 
     constructor() {
-        this.urlBaseService = '/businesses'
+        this.urlBaseService = 'api/businesses'
     }
 
     async getAll(filters: URLSearchParams): Promise<IBusiness[]> {

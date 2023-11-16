@@ -6,7 +6,7 @@ export class PostService {
     urlBaseService
 
     constructor() {
-        this.urlBaseService = '/posts'
+        this.urlBaseService = 'api/posts'
     }
 
     async getAll(filters: string): Promise<IPostListing[]> {

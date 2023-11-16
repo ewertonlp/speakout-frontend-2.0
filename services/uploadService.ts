@@ -4,7 +4,7 @@ import api from './api'
 export class UploadService {
     async uploadFile(data: File): Promise<IImageUpload[]> {
         return await api.post(
-            `/upload`,
+            `api/upload`,
             { files: data },
             {
                 headers: {
@@ -15,7 +15,7 @@ export class UploadService {
     }
 
     async deleteFile(id: string) {
-        return await api.delete(`upload/files/${id}`)
+        return await api.delete(`api/upload/files/${id}`)
     }
 
     async getById(id: string): Promise<IImageUpload> {
@@ -23,6 +23,6 @@ export class UploadService {
     }
 
     async getAll(): Promise<IImageUpload[]> {
-        return await api.get(`api/upload/files`)
+        return await api.get('api/upload/files')
     }
 }
