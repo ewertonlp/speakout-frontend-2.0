@@ -30,4 +30,9 @@ export class PostService {
     async findByPostId(postId: string): Promise<IPostClosed> {
         return await api.get(`api/postcloseds/findByPost/${postId}`)
     }
+
+    async deletePost(postId: string): Promise<IPostListing> {
+        const response = await api.delete(`${this.urlBaseService}/${postId}`)
+        return response.data
+    }
 }

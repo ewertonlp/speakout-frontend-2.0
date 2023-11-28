@@ -106,4 +106,10 @@ export class PostController {
         const response = await postService.findByPostId(postId)
         return response
     }
+
+    async deletePost(postId: string): Promise<IPostListing> {
+        const postService = new PostService()
+        const deletePost = await postService.deletePost(postId)
+        return deletePost
+    }
 }

@@ -1,18 +1,22 @@
 // next
 import Head from 'next/head'
 // @mui
-import { Card, Container, Grid } from '@mui/material'
+import { Button, Card, Container, Dialog, DialogActions, DialogContent, DialogTitle, Grid } from '@mui/material'
 import moment from 'moment'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { useAuthContext } from 'src/auth/useAuthContext'
 import HeaderBreadcrumbs from 'src/components/HeaderBreadcrumbs'
+
+import { useSnackbar } from 'notistack'
 import LoadingScreen from 'src/components/loading-screen/LoadingScreen'
 import { useSettingsContext } from 'src/components/settings'
 import DashboardLayout from 'src/layouts/dashboard'
 import CrudTable from 'src/sections/@dashboard/general/app/CrudTable'
 import { IPostListing } from 'types/IPostListing'
 import { PostController } from '../../../controllers/postController'
+
+
 
 // ----------------------------------------------------------------------
 
@@ -23,11 +27,14 @@ ReportsListing.getLayout = (page: React.ReactElement) => <DashboardLayout>{page}
 export default function ReportsListing() {
     const router = useRouter()
     const { themeStretch } = useSettingsContext()
+    const { enqueueSnackbar } = useSnackbar()
+    const [deletePostId, setDeletePostId] = useState('')
+    const [isDeleteModalOpen, setDeleteModalOpen] = useState(false)
 
     function convertStatusText(text) {
         switch (text) {
             case 'em_progresso':
-                return 'Em progresso'
+                return 'andamento'
             case 'novo':
                 return 'Novo'
             case 'concluido_procedente':
@@ -47,9 +54,10 @@ export default function ReportsListing() {
     const getPosts = async () => {
         setLoading(true)
         const postController = new PostController()
-
+        
         try {
             const postsData = await postController.getAll()
+
             postsData?.forEach(item => {
                 item.createdAt = moment(item.createdAt).format('DD/MM/YYYY')
                 item.company = item.tenant.description
@@ -82,6 +90,7 @@ export default function ReportsListing() {
                 }
                 return 0
             })
+
             setPosts(postsData)
         } catch (error) {
             console.log(error)
@@ -94,6 +103,30 @@ export default function ReportsListing() {
     useEffect(() => {
         getPosts()
     }, [tenantId])
+
+    const handleDeleteConfirmation = (id) => {
+    
+        setDeletePostId(id)
+        setDeleteModalOpen(true)
+    }
+
+    const handleDeletePost = async () => {
+        if (deletePostId) {
+            const postController = new PostController()
+
+            try {
+                await postController.deletePost(deletePostId)
+                const updatePosts = posts.filter(post => post.id !== deletePostId)
+                enqueueSnackbar('Relato excluído com sucesso', { variant: 'success' })
+                setPosts(updatePosts)
+            } catch (error) {
+                console.error('Erro ao excluir o post:', error)
+                enqueueSnackbar('Erro ao excluir o relato', { variant: 'error' })
+            }
+            setDeleteModalOpen(false)
+            setDeletePostId('')
+        }
+    }
 
     return (
         <>
@@ -130,7 +163,7 @@ export default function ReportsListing() {
                                 tableData={posts}
                                 setTableData={setPosts}
                                 clickableRow
-                                colorfulstatus
+                                onDelete={handleDeleteConfirmation}
                                 tableLabels={[
                                     { id: 'email', label: 'Email' },
                                     { id: 'createdAt', label: 'Data Criação' },
@@ -144,6 +177,16 @@ export default function ReportsListing() {
                     </Grid>
                 </Container>
             </Card>
+            <Dialog open={isDeleteModalOpen} onClose={() => setDeleteModalOpen(false)}>
+                <DialogTitle textAlign={'center'}>Confirmar Exclusão</DialogTitle>
+                <DialogContent>Tem certeza que deseja excluir este relato?</DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setDeleteModalOpen(false)} size='large'>Cancelar</Button>
+                    <Button onClick={handleDeletePost} color="error" size='large'>
+                        Excluir
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </>
     )
 }

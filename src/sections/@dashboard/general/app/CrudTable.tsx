@@ -39,6 +39,7 @@ interface Props extends CardProps {
     clickableRow?: boolean
     colorfulstatus?: boolean
     removeFunction?: (data: any, id: string) => void
+    onDelete?: (id: string) => void
     getItems?: () => void
 }
 
@@ -56,6 +57,7 @@ export default function CrudTable({
     editPagePath,
     clickableRow,
     removeFunction,
+    onDelete,
     getItems,
     ...other
 }: Props) {
@@ -77,6 +79,7 @@ export default function CrudTable({
                                           tableLabels={tableLabels}
                                           editPagePath={editPagePath ? editPagePath : '/edicao/'}
                                           colorfulstatus
+                                          onDelete={onDelete}
                                       />
                                   ))
                                 : tableData.map(row => (
@@ -103,6 +106,7 @@ type RowProps = {
     editPagePath: string
     colorfulstatus?: boolean
     removeFunction?: (data: any, id: string) => void
+    onDelete?: (id: string) => void
     getItems?: () => void
 }
 
@@ -194,7 +198,7 @@ function GenericTableRow({ row, tableLabels, editPagePath, removeFunction, getIt
     )
 }
 
-function ClickableGenericTableRow({ row, tableLabels }: RowProps) {
+function ClickableGenericTableRow({ row, tableLabels, onDelete }: RowProps) {
     const router = useRouter()
 
     const theme = useTheme()
@@ -207,6 +211,13 @@ function ClickableGenericTableRow({ row, tableLabels }: RowProps) {
         Novo: 'info',
         Baixa: 'info',
         Concluído: 'success',
+    }
+
+    const handleDeleteClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+        event.stopPropagation()
+        if (onDelete) {
+            onDelete(row.id);
+        }
     }
 
     return (
@@ -229,6 +240,11 @@ function ClickableGenericTableRow({ row, tableLabels }: RowProps) {
                     )}
                 </TableCell>
             ))}
+            <TableCell align="left">
+                <IconButton sx={{ color: 'error.main' }} onClick={handleDeleteClick} title="Excluir Relato">
+                    <Iconify icon="eva:trash-2-outline" />
+                </IconButton>
+            </TableCell>
         </TableRow>
     )
 }

@@ -110,8 +110,8 @@ const Form = ({ values }) => {
                 setProtocol(response.data.protocol)
                 setOpenSuccessMessageModal(true)
             } catch (error) {
-                console.log('Erro ao enviar formulário (parte 2):', error);
-                enqueueSnackbar('Erro ao enviar formulário', { variant: 'error' })
+                console.error('Erro ao enviar formulário:', error);
+                enqueueSnackbar('Erro ao enviar formulário', { variant: 'error' });
             }
         }   
     }
@@ -743,7 +743,7 @@ const Form = ({ values }) => {
                 <AppBar logoUrl={companyInfo?.logo?.url as string} />
                 <TermosAceite
                     setTermAccepted={setTermAccepted}
-                    companyName={companyInfo?.identity ? companyInfo.identity : ''}
+                    companyName={companyInfo?.description ? companyInfo.description : ''}
                 />
             </>
         )

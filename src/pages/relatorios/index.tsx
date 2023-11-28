@@ -15,12 +15,12 @@ import { useSettingsContext } from 'src/components/settings'
 import DashboardLayout from 'src/layouts/dashboard'
 
 const reportData = [
-    { title: 'Total de relatos', Icon: InboxIcon },
-    { title: 'Relatos abertos no mês atual', Icon: CalendarMonth },
-    { title: 'Novos', Icon: ArticleOutlined },
-    { title: 'Em andamento', Icon: HourglassEmptyIcon },
-    { title: 'Finalizado procedente', Icon: DoneIcon },
-    { title: 'Finalizado improcedente', Icon: CancelIcon },
+    { title: 'Total de relatos', Icon: InboxIcon, status: 'Total de relatos'},
+    { title: 'Relatos abertos no mês atual', Icon: CalendarMonth, status: 'Relatos abertos no mês atual' },
+    { title: 'Novos', Icon: ArticleOutlined, status: 'Novos' },
+    { title: 'Em andamento', Icon: HourglassEmptyIcon,  status: 'Em andamento' },
+    { title: 'Finalizado procedente', Icon: DoneIcon, status: 'Finalizado procedente'  },
+    { title: 'Finalizado improcedente', Icon: CancelIcon, status: 'Finalizado improcedente' },
 ]
 
 const Relatorios = ({ data = reportData }) => {
@@ -48,16 +48,16 @@ const Relatorios = ({ data = reportData }) => {
 
             count = await postController.getAllMonth()
             setReportNumbers(prev => ({ ...prev, 'Relatos abertos no mês atual': count.toString() }))
-            
+
             count = await postController.getAllNovo()
             setReportNumbers(prev => ({ ...prev, Novos: count.toString() }))
-            
+
             count = await postController.getAllEmProgresso()
             setReportNumbers(prev => ({ ...prev, 'Em andamento': count.toString() }))
-            
+
             count = await postController.getAllConcluidoProcedente()
             setReportNumbers(prev => ({ ...prev, 'Finalizado procedente': count.toString() }))
-            
+
             count = await postController.getAllConcluidoImprocedente()
             setReportNumbers(prev => ({ ...prev, 'Finalizado improcedente': count.toString() }))
         } catch (error) {
@@ -65,50 +65,12 @@ const Relatorios = ({ data = reportData }) => {
         }
         setLoading(false)
     }
-    
+
     useEffect(() => {
         getData()
-        console.log(data)
     }, [tenantId])
 
-    // const getData = async () => {
-    //     setLoading(true)
-    //     const postController = new PostController()
-    //     try {
-    //         let count;
-    //         switch() {
-    //             case 'Total de relatos':
-    //                 let count = await postController.getAllYear()
-    //                 count = await postController.getAllYear()
-    //                 break
-    //             case 'Relatos abertos no mês atual':
-    //                 count = await postController.getAllMonth()
-    //                 break
-    //             case 'Novos':
-    //                 count = await postController.getAllNovo()
-    //                 break
-    //             case 'Em andamento':
-    //                 count = await postController.getAllEmProgresso()
-    //                 break
-    //             case 'Finalizado procedente':
-    //                 count = await postController.getAllConcluidoProcedente()
-    //                 break
-    //             case 'Finalizado improcedente':
-    //                 count = await postController.getAllConcluidoImprocedente()
-    //                 break
-    //             default:
-    //                 throw new Error('Status inválido')
-    //         }
-    //         setReportNumbers(prev => ({ ...prev, [status]: count.toString() }))
-    //     } catch (error) {
-    //         enqueueSnackbar('Ops! Erro ao recuperar dados do relatório', { autoHideDuration: 5000 })
-    //     }
-    //     setLoading(false)
-    // }
-
-    // useEffect(() => {
-    //     getData()
-    // }, [tenantId, selectedStatus])
+    
 
     return (
         <>
@@ -129,7 +91,7 @@ const Relatorios = ({ data = reportData }) => {
                 >
                     {data.map((report, index) => (
                         <Grid item xs={12} sm={6} md={4} lg={6} xl={4} key={index}>
-                            <Link href={`/relatos?status=${report.title}`}>
+                            <Link href={`/relatos?status=${report.status.trim()}`}>
                                 {selectedStatus === null || selectedStatus === report.title ? (
                                     <Card
                                         sx={{
@@ -140,6 +102,8 @@ const Relatorios = ({ data = reportData }) => {
                                             cursor: 'pointer',
                                         }}
                                     >
+                                        
+
                                         <report.Icon
                                             style={{
                                                 fontSize: 40,
@@ -161,6 +125,7 @@ const Relatorios = ({ data = reportData }) => {
                                             </Typography>
                                         </CardContent>
                                     </Card>
+
                                 ) : null}
                             </Link>
                         </Grid>
