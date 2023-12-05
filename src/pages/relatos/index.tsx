@@ -2,12 +2,12 @@
 import Head from 'next/head'
 // @mui
 import { Button, Card, Container, Dialog, DialogActions, DialogContent, DialogTitle, Grid } from '@mui/material'
-import moment from 'moment'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { useAuthContext } from 'src/auth/useAuthContext'
 import HeaderBreadcrumbs from 'src/components/HeaderBreadcrumbs'
 
+import moment from 'moment'
 import { useSnackbar } from 'notistack'
 import LoadingScreen from 'src/components/loading-screen/LoadingScreen'
 import { useSettingsContext } from 'src/components/settings'
@@ -15,8 +15,6 @@ import DashboardLayout from 'src/layouts/dashboard'
 import CrudTable from 'src/sections/@dashboard/general/app/CrudTable'
 import { IPostListing } from 'types/IPostListing'
 import { PostController } from '../../../controllers/postController'
-
-
 
 // ----------------------------------------------------------------------
 
@@ -30,11 +28,16 @@ export default function ReportsListing() {
     const { enqueueSnackbar } = useSnackbar()
     const [deletePostId, setDeletePostId] = useState('')
     const [isDeleteModalOpen, setDeleteModalOpen] = useState(false)
+    const [selectedStatus, setSelectedStatus] = useState('')
+    const [loading, setLoading] = useState(false)
+    const [posts, setPosts] = useState<IPostListing[]>([])
+
+    const { tenantId } = useAuthContext()
 
     function convertStatusText(text) {
         switch (text) {
             case 'em_progresso':
-                return 'andamento'
+                return 'Em andamento'
             case 'novo':
                 return 'Novo'
             case 'concluido_procedente':
@@ -48,64 +51,77 @@ export default function ReportsListing() {
         }
     }
 
-    const [loading, setLoading] = useState(false)
-    const [posts, setPosts] = useState<IPostListing[]>([])
-
     const getPosts = async () => {
         setLoading(true)
         const postController = new PostController()
-        
         try {
             const postsData = await postController.getAll()
 
-            postsData?.forEach(item => {
-                item.createdAt = moment(item.createdAt).format('DD/MM/YYYY')
-                item.company = item.tenant.description
-                item.type = item.response['tipo-denuncia'].label
-                item.status = convertStatusText(item.status)
-                if (item.postcloseds.length > 0) {
-                    item.date_closed = item.postcloseds[0].date_close
-                        ? moment(item.postcloseds[0].date_close).format('DD/MM/YYYY')
-                        : '--'
-                } else {
-                    item.date_closed = '--'
-                }
-                switch (item.sensibilidade) {
-                    case 'alta':
-                        item.sensibilidadeNum = 3
-                        break
-                    case 'media':
-                        item.sensibilidadeNum = 2
-                        break
-                    case 'baixa':
-                        item.sensibilidadeNum = 1
-                        break
-                }
-            })
-            postsData.sort(function compareFn(a, b) {
-                if (a.sensibilidadeNum < b.sensibilidadeNum) {
-                    return 1
-                } else if (a.sensibilidadeNum > b.sensibilidadeNum) {
-                    return -1
-                }
-                return 0
-            })
+            const filteredPosts = postsData
+                .map(item => ({
+                    ...item,
+                    createdAt: moment(item.createdAt).format('DD/MM/YYYY'),
+                    company: item.tenant.description,
+                    type: item.response['tipo-denuncia'].label,
+                    status: convertStatusText(item.status),
+                    date_closed:
+                        item.postcloseds.length > 0
+                            ? moment(item.postcloseds[0].date_close).format('DD/MM/YYYY')
+                            : '--',
+                    sensibilidadeNum: getSensibilidadeNum(item.sensibilidade),
+                }))
+                .filter(item => selectedStatus === '' || item.status === selectedStatus)
 
-            setPosts(postsData)
+            setPosts(filteredPosts)
         } catch (error) {
             console.log(error)
+        } finally {
+            setLoading(false)
         }
-        setLoading(false)
     }
 
-    const { tenantId } = useAuthContext()
+    const getSensibilidadeNum = sensibilidade => {
+        switch (sensibilidade) {
+            case 'alta':
+                return 3
+            case 'media':
+                return 2
+            case 'baixa':
+                return 1
+            default:
+                return 0
+        }
+    }
+
+    const handleButtonClick = status => {
+        setSelectedStatus(status)
+        getPosts()
+    }
 
     useEffect(() => {
-        getPosts()
-    }, [tenantId])
+        const fetchData = async () => {
+            await getPosts()
+        }
+        fetchData()
+    }, [tenantId, selectedStatus])
 
-    const handleDeleteConfirmation = (id) => {
-    
+    const filterPostsByDate = posts => {
+        const date = moment()
+        const firstDayOfMonth = date.clone().startOf('month')
+        const lastDayOfMonth = date.clone().endOf('month')
+        
+        return posts.filter(post => {
+            const postDate = moment(post.createdAt, 'DD/MM/YYYY')
+            return postDate.isSameOrAfter(firstDayOfMonth) && postDate.isSameOrBefore(lastDayOfMonth)
+        })
+    }
+
+    const handleFilterByDate = () => {
+        const filteredPosts = filterPostsByDate(posts)
+        setPosts(filteredPosts)
+    }
+
+    const handleDeleteConfirmation = id => {
         setDeletePostId(id)
         setDeleteModalOpen(true)
     }
@@ -149,6 +165,46 @@ export default function ReportsListing() {
                                 ]}
                             />
                         </Grid>
+                        <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'center' }}>
+                            <Button variant="contained" sx={{ mx: '0.5rem' }} onClick={() => handleButtonClick('')}>
+                                Todos
+                            </Button>
+                            <Button variant="contained" sx={{ mx: '0.5rem' }} onClick={() => handleFilterByDate()}>
+                                Abertos no mês
+                            </Button>
+                            <Button variant="contained" sx={{ mx: '0.5rem' }} onClick={() => handleButtonClick('Novo')}>
+                                Novos
+                            </Button>
+                            <Button
+                                variant="contained"
+                                sx={{ mx: '0.5rem' }}
+                                onClick={() => handleButtonClick('Em andamento')}
+                            >
+                                Em andamento
+                            </Button>
+                            <Button
+                                variant="contained"
+                                sx={{ mx: '0.5rem' }}
+                                onClick={() => handleButtonClick('Concluído Procedente')}
+                            >
+                                Finalizado procedente
+                            </Button>
+                            <Button
+                                variant="contained"
+                                sx={{ mx: '0.5rem' }}
+                                onClick={() => handleButtonClick('Concluído Improcedente')}
+                            >
+                                Finalizado improcedente
+                            </Button>
+                            <Button
+                                variant="contained"
+                                sx={{ mx: '0.5rem' }}
+                                onClick={() => handleButtonClick('Cancelado')}
+                            >
+                                Cancelados
+                            </Button>
+                        </Grid>
+
                         <Grid item xs={12}>
                             {/* <AccordionFilter
                                 schemaForm={BusinessFilterFormSchema}
@@ -160,7 +216,7 @@ export default function ReportsListing() {
                         <Grid item xs={12}>
                             <CrudTable
                                 editPagePath="/detalhes/"
-                                tableData={posts}
+                                tableData={posts || []}
                                 setTableData={setPosts}
                                 clickableRow
                                 onDelete={handleDeleteConfirmation}
@@ -181,8 +237,10 @@ export default function ReportsListing() {
                 <DialogTitle textAlign={'center'}>Confirmar Exclusão</DialogTitle>
                 <DialogContent>Tem certeza que deseja excluir este relato?</DialogContent>
                 <DialogActions>
-                    <Button onClick={() => setDeleteModalOpen(false)} size='large'>Cancelar</Button>
-                    <Button onClick={handleDeletePost} color="error" size='large'>
+                    <Button onClick={() => setDeleteModalOpen(false)} size="large">
+                        Cancelar
+                    </Button>
+                    <Button onClick={handleDeletePost} color="error" size="large">
                         Excluir
                     </Button>
                 </DialogActions>

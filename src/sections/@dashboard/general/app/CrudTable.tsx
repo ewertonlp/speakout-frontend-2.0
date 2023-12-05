@@ -41,6 +41,7 @@ interface Props extends CardProps {
     removeFunction?: (data: any, id: string) => void
     onDelete?: (id: string) => void
     getItems?: () => void
+    onSelectedStatus?: () => void
 }
 
 const StyledCard = styled(Card)(({ theme }) => ({
@@ -59,6 +60,7 @@ export default function CrudTable({
     removeFunction,
     onDelete,
     getItems,
+    onSelectedStatus,
     ...other
 }: Props) {
     const router = useRouter()

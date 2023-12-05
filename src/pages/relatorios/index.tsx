@@ -15,11 +15,11 @@ import { useSettingsContext } from 'src/components/settings'
 import DashboardLayout from 'src/layouts/dashboard'
 
 const reportData = [
-    { title: 'Total de relatos', Icon: InboxIcon, status: 'Total de relatos'},
+    { title: 'Total de relatos', Icon: InboxIcon, status: 'Total de relatos' },
     { title: 'Relatos abertos no mês atual', Icon: CalendarMonth, status: 'Relatos abertos no mês atual' },
     { title: 'Novos', Icon: ArticleOutlined, status: 'Novos' },
-    { title: 'Em andamento', Icon: HourglassEmptyIcon,  status: 'Em andamento' },
-    { title: 'Finalizado procedente', Icon: DoneIcon, status: 'Finalizado procedente'  },
+    { title: 'Em andamento', Icon: HourglassEmptyIcon, status: 'Em andamento' },
+    { title: 'Finalizado procedente', Icon: DoneIcon, status: 'Finalizado procedente' },
     { title: 'Finalizado improcedente', Icon: CancelIcon, status: 'Finalizado improcedente' },
 ]
 
@@ -29,7 +29,8 @@ const Relatorios = ({ data = reportData }) => {
     const { tenantId } = useAuthContext()
 
     const [loading, setLoading] = useState(true)
-    const [selectedStatus, setSelectedStatus] = useState(null)
+    const [selectedStatus, setSelectedStatus] = useState('')
+  
     const [reportNumbers, setReportNumbers] = useState({
         'Total de relatos': '-',
         'Relatos abertos no mês atual': '-',
@@ -42,6 +43,7 @@ const Relatorios = ({ data = reportData }) => {
     const getData = async () => {
         setLoading(true)
         const postController = new PostController()
+
         try {
             let count = await postController.getAllYear()
             setReportNumbers(prev => ({ ...prev, 'Total de relatos': count.toString() }))
@@ -67,10 +69,14 @@ const Relatorios = ({ data = reportData }) => {
     }
 
     useEffect(() => {
+        setSelectedStatus('')
         getData()
     }, [tenantId])
 
-    
+    const handleSelectStatus = status => {
+        setSelectedStatus(status)
+        console.log(status)
+    }
 
     return (
         <>
@@ -92,41 +98,40 @@ const Relatorios = ({ data = reportData }) => {
                     {data.map((report, index) => (
                         <Grid item xs={12} sm={6} md={4} lg={6} xl={4} key={index}>
                             <Link href={`/relatos?status=${report.status.trim()}`}>
-                                {selectedStatus === null || selectedStatus === report.title ? (
-                                    <Card
-                                        sx={{
-                                            minWidth: 275,
-                                            alignItems: 'center',
-                                            display: 'flex',
-                                            flexDirection: 'column',
-                                            cursor: 'pointer',
-                                        }}
-                                    >
-                                        
-
-                                        <report.Icon
-                                            style={{
-                                                fontSize: 40,
-                                                marginTop: '20px',
-                                                marginBottom: '-16px',
-                                                color: '#7eb353',
+                                <div onClick={() => handleSelectStatus(report.status)}>
+                                    {selectedStatus === '' || selectedStatus === report.title ? (
+                                        <Card
+                                            sx={{
+                                                minWidth: 275,
+                                                alignItems: 'center',
+                                                display: 'flex',
+                                                flexDirection: 'column',
+                                                cursor: 'pointer',
                                             }}
-                                        />
-                                        <CardContent sx={{ textAlign: 'center' }}>
-                                            <Typography
-                                                sx={{ marginBottom: '16px', color: 'gray' }}
-                                                variant="h5"
-                                                component="div"
-                                            >
-                                                {report.title}
-                                            </Typography>
-                                            <Typography sx={{ fontSize: '24px', color: '#7eb353' }} variant="body2">
-                                                {reportNumbers[report.title]}
-                                            </Typography>
-                                        </CardContent>
-                                    </Card>
-
-                                ) : null}
+                                        >
+                                            <report.Icon
+                                                style={{
+                                                    fontSize: 40,
+                                                    marginTop: '20px',
+                                                    marginBottom: '-16px',
+                                                    color: '#7eb353',
+                                                }}
+                                            />
+                                            <CardContent sx={{ textAlign: 'center' }}>
+                                                <Typography
+                                                    sx={{ marginBottom: '16px', color: 'gray' }}
+                                                    variant="h5"
+                                                    component="div"
+                                                >
+                                                    {report.title}
+                                                </Typography>
+                                                <Typography sx={{ fontSize: '24px', color: '#7eb353' }} variant="body2">
+                                                    {reportNumbers[report.title]}
+                                                </Typography>
+                                            </CardContent>
+                                        </Card>
+                                    ) : null}
+                                </div>
                             </Link>
                         </Grid>
                     ))}
