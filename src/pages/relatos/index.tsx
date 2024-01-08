@@ -34,7 +34,7 @@ export default function ReportsListing() {
 
     const { tenantId } = useAuthContext()
 
-    function convertStatusText(text) {
+    function convertStatusText(text:string) {
         switch (text) {
             case 'em_progresso':
                 return 'Em andamento'
@@ -58,20 +58,26 @@ export default function ReportsListing() {
             const postsData = await postController.getAll()
 
             const filteredPosts = postsData
-                .map(item => ({
-                    ...item,
-                    createdAt: moment(item.createdAt).format('DD/MM/YYYY'),
-                    company: item.tenant.description,
-                    type: item.response['tipo-denuncia'].label,
-                    status: convertStatusText(item.status),
-                    date_closed:
-                        item.postcloseds.length > 0
-                            ? moment(item.postcloseds[0].date_close).format('DD/MM/YYYY')
-                            : '--',
-                    sensibilidadeNum: getSensibilidadeNum(item.sensibilidade),
-                }))
-                .filter(item => selectedStatus === '' || item.status === selectedStatus)
 
+                .map(item => {
+                    const createdAtFormatted = moment(item.createdAt).format('DD/MM/YYYY')
+                    const diasEmAberto = getDiasEmAberto(createdAtFormatted)
+
+                    return {
+                        ...item,
+                        createdAt: createdAtFormatted,
+                        company: item.tenant.description,
+                        type: item.response['tipo-denuncia'].label,
+                        status: convertStatusText(item.status),
+                        openDays: diasEmAberto,
+                        date_closed:
+                            item.postcloseds.length > 0
+                                ? moment(item.postcloseds[0].date_close).format('DD/MM/YYYY')
+                                : '--',
+                        sensibilidadeNum: getSensibilidadeNum(item.sensibilidade),
+                    };
+                })
+                .filter(item => selectedStatus === '' || item.status === selectedStatus)
             setPosts(filteredPosts)
         } catch (error) {
             console.log(error)
@@ -80,7 +86,14 @@ export default function ReportsListing() {
         }
     }
 
-    const getSensibilidadeNum = sensibilidade => {
+    const getDiasEmAberto = (createdAt:string) => {
+        const dataAtual = moment()
+        const dataCriacao = moment(createdAt, 'DD/MM/YYYY')
+        const diasEmAberto = dataAtual.diff(dataCriacao, 'days')
+        return diasEmAberto
+    }
+
+    const getSensibilidadeNum = (sensibilidade:string) => {
         switch (sensibilidade) {
             case 'alta':
                 return 3
@@ -93,7 +106,7 @@ export default function ReportsListing() {
         }
     }
 
-    const handleButtonClick = status => {
+    const handleButtonClick = (status:string) => {
         setSelectedStatus(status)
         getPosts()
     }
@@ -105,11 +118,11 @@ export default function ReportsListing() {
         fetchData()
     }, [tenantId, selectedStatus])
 
-    const filterPostsByDate = posts => {
+    const filterPostsByDate = (posts) => {
         const date = moment()
         const firstDayOfMonth = date.clone().startOf('month')
         const lastDayOfMonth = date.clone().endOf('month')
-        
+
         return posts.filter(post => {
             const postDate = moment(post.createdAt, 'DD/MM/YYYY')
             return postDate.isSameOrAfter(firstDayOfMonth) && postDate.isSameOrBefore(lastDayOfMonth)
@@ -225,6 +238,7 @@ export default function ReportsListing() {
                                     { id: 'createdAt', label: 'Data Criação' },
                                     { id: 'status', label: 'Status' },
                                     { id: 'type', label: 'Tipo de denúncia' },
+                                    { id: 'openDays', label: 'Dias em aberto' },
                                     { id: 'date_closed', label: 'Data Fechamento' },
                                     { id: 'sensibilidade', label: 'Sensibilidade' },
                                 ]}

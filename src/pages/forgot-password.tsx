@@ -34,7 +34,7 @@ function Form() {
 
         try {
             await authController.sendPasswordRecoveryEmail(data)
-            setMesssage({ text: 'O email foi enviado. Cheque sua caixa de entrada', severity: 'success' })
+            setMesssage({ text: 'O email foi enviado. Verifique sua caixa de entrada', severity: 'success' })
         } catch (error) {
             setMesssage({ text: 'Erro ao enviar email!', severity: 'error' })
         }

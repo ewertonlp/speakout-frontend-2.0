@@ -22,8 +22,9 @@ export default class MyDocument extends Document {
 
                     {/* Favicon */}
                     <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
-                    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png" />
-                    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png" />
+                    {/* <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png" />
+                    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png" /> */}
+                    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/logo_speakout.png" />
 
                     {/* Fonts */}
                     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -47,7 +48,7 @@ export default class MyDocument extends Document {
                         content="The starting point for your next project with Minimal UI Kit, built on the newest version of Material-UI ©, ready to be customized to your style"
                     />
                     <meta name="keywords" content="react,material,kit,application,dashboard,admin,template" />
-                    <meta name="author" content="Minimal UI Kit" />
+                    <meta name="author" content="Canal Speak Out" />
                 </Head>
 
                 <body>

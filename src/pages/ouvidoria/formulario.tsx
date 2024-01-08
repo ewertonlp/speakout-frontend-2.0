@@ -51,7 +51,7 @@ const Form = ({ values }) => {
     const onSubmit = async data => {
         if (!companyInfo) return
         const complaintController = new ComplaintController()
-  
+
         const formData = {
             ...data,
             'data-ocorrencia': moment(data['data-ocorrencia']).format('YYYY-MM-DD'),
@@ -70,6 +70,7 @@ const Form = ({ values }) => {
                 const promises = fileFieldValue.map(async file => {
                     const uploadImageResponse = await uploadController.uploadFile(file)
                     filesIds.push(uploadImageResponse[0].id)
+                    console.log(promises)
                 })
                 await Promise.all(promises)
                 try {
@@ -90,12 +91,11 @@ const Form = ({ values }) => {
                     console.log(error)
                 }
             } catch (error) {
-                console.log('Erro ao enviar formulário:', error);
+                console.log('Erro ao enviar formulário:', error)
                 enqueueSnackbar('Erro ao enviar formulário', { variant: 'error' })
             }
         } else {
             try {
-                
                 const formattedData: IComplaint = {
                     tenant: companyInfo?.id,
                     email: data.email,
@@ -106,14 +106,13 @@ const Form = ({ values }) => {
                     },
                 }
                 const response = await complaintController.sendComplaint(formattedData)
-                console.log(response.data)
                 setProtocol(response.data.protocol)
                 setOpenSuccessMessageModal(true)
             } catch (error) {
-                console.error('Erro ao enviar formulário:', error);
-                enqueueSnackbar('Erro ao enviar formulário', { variant: 'error' });
+                console.error('Erro ao enviar formulário:', error)
+                enqueueSnackbar('Erro ao enviar formulário', { variant: 'error' })
             }
-        }   
+        }
     }
 
     useEffect(() => {

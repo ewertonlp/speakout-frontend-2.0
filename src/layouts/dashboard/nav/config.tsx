@@ -49,6 +49,7 @@ const navConfig = [
             { title: 'Áreas de atuação', path: PATH_PAGE.areas, icon: ICONS.area, adminOnly: true },
             { title: 'Usuários', path: PATH_PAGE.users, icon: ICONS.user, adminOnly: true },
             { title: 'Empresas', path: PATH_PAGE.companies, icon: ICONS.business, adminOnly: true },
+            { title: 'Treinamentos', path: PATH_PAGE.training, icon: ICONS.folder, adminOnly: true },
         ],
     },
 ]

@@ -42,6 +42,7 @@ export default function Detalhes() {
         const postController = new PostController()
         try {
             const postData = await postController.getById(id)
+            console.log(postData)
             setPost(postData.data)
             setHistories(postData.data.posthistories)
         } catch (error) {
@@ -51,7 +52,7 @@ export default function Detalhes() {
     }
 
     useEffect(() => {
-        if (query.id && Number(query.id)) {
+        if (query.id && Number(query.id)) { 
             getPost(query.id)
         }
     }, [query.id])

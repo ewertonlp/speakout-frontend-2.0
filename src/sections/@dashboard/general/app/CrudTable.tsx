@@ -240,6 +240,7 @@ function ClickableGenericTableRow({ row, tableLabels, onDelete }: RowProps) {
                             {formatValues(row[tl.id])}
                         </Button>
                     )}
+                   
                 </TableCell>
             ))}
             <TableCell align="left">

@@ -5,8 +5,8 @@
   "workbench.colorTheme": "Downpour Contrast (rainglow)",
   "screencastMode.mouseIndicatorColor": "#FF0000",
   "editor.codeActionsOnSave": {
-    "source.fixAll": true,
-    "source.organizeImports": true
+    "source.fixAll": "explicit",
+    "source.organizeImports": "explicit"
   },
   "editor.defaultFormatter": null,
   "editor.formatOnSave": true,
@@ -33,6 +33,12 @@
     "editor.codeActionsOnSave": {
       "source.fixAll": true,
       "source.organizeImports": true
+    }
+  },
+  "[json][typescript][typescriptreact]": {
+    "editor.codeActionsOnSave": {
+      "source.fixAll": "explicit",
+      "source.organizeImports": "explicit"
     }
   }
 }

@@ -37,8 +37,6 @@ export default function GeneralAnalyticsPage() {
         'Finalizado improcedente': 0,
     })
 
-    console.log(user)
-
     const [relationWithCompanyData, setRelationWithCompanyData] = useState({
         colaborador: 0,
         'ex-colaborador': 0,

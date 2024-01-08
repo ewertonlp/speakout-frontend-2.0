@@ -27,4 +27,5 @@ export const PATH_PAGE = {
     users: '/usuarios',
     areas: '/areasdeatuacao',
     home: '/home',
+    training: '/treinamentos'
 }

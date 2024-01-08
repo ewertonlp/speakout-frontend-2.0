@@ -80,7 +80,7 @@ export default function Usuarios() {
                                     { name: 'Lista' },
                                 ]}
                                 action={
-                                    <Grid container spacing={1}>
+                                    <Grid container spacing={2}>
                                         <Grid item>
                                             <Button
                                                 variant="contained"
@@ -89,7 +89,18 @@ export default function Usuarios() {
                                                     router.push('/usuarios/cadastro')
                                                 }}
                                             >
-                                                Adicionar usuário
+                                                Cadastrar usuário
+                                            </Button>
+                                        </Grid>
+                                        <Grid item>
+                                            <Button
+                                                variant="soft"
+                                                startIcon={<Iconify icon="material-symbols:add" />}
+                                                onClick={() => {
+                                                    router.push('/usuarios/cadastro/usuariotemporario')
+                                                }}
+                                            >
+                                                Cadastrar usuário temporário
                                             </Button>
                                         </Grid>
                                     </Grid>

@@ -114,7 +114,7 @@ function MegaMenuItem({ parent }: { parent: MegaMenuItemProps }) {
 
                                 <MegaMenuCarousel
                                     products={products}
-                                    numberShow={6}
+                                    numberShow={7}
                                     sx={{ '& .controlsArrows': { mt: 5 } }}
                                 />
 

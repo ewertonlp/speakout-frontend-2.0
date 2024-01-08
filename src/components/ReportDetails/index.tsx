@@ -64,6 +64,16 @@ function ReportDetails({ post, setPost }: { post: IPostListing; setPost: (value:
         }
     }
 
+    const getDiasEmAberto = (formattedCreatedAt: string) => {
+        const dataAtual = moment()
+        const dataCriacao = moment(formattedCreatedAt, 'DD/MM/YYYY HH:mm');
+        const diasEmAberto = dataAtual.diff(dataCriacao, 'days');
+        return diasEmAberto;
+    }
+    
+    const diasEmAberto = getDiasEmAberto(formattedCreatedAt).toString();
+    const diasEmAbertoNumero = parseInt(diasEmAberto, 10); // Converte a string para um número
+
     return (
         <Grid display="flex" justifyContent="space-between" container>
             <Grid xs={12} lg={3.8} item paddingBottom="20px">
@@ -77,6 +87,7 @@ function ReportDetails({ post, setPost }: { post: IPostListing; setPost: (value:
                             </Button>
                         </Grid> */}
                         <CardItem title="Data de criação" value={formattedCreatedAt} />
+                        <CardItem title="Dias em aberto" value={diasEmAberto} />
                         <EditableCardItem
                             title="Status"
                             value={post.status}
