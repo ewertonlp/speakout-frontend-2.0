@@ -9,6 +9,7 @@ export const UserTempFormSchema: ApolloFormSchemaItem[] = [
         componenttype: ApolloFormSchemaComponentType.HIDDEN,
         ui: { grid: 12 },
     },
+
     {
         name: 'fullname',
         required: true,
@@ -17,13 +18,19 @@ export const UserTempFormSchema: ApolloFormSchemaItem[] = [
         ui: { grid: 6 },
     },
     {
+        name: 'username',
+        required: true,
+        label: 'Nome de usuário',
+        componenttype: ApolloFormSchemaComponentType.TEXT,
+        ui: { grid: 6 },
+    },
+    {
         name: 'email',
         required: true,
         label: 'Email',
         componenttype: ApolloFormSchemaComponentType.TEXT,
-        ui: { grid: 6 },
+        ui: { grid: 12 },
     },
-   
 ]
 
 export const UserFiltersFormSchema: ApolloFormSchemaItem[] = [

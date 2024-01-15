@@ -98,7 +98,7 @@ export default function Detalhes() {
                         ) : page === 'historico' ? (
                             <ReportHistory histories={histories} getPost={getPost} />
                         ) : page === 'usuarios' ? (
-                            <UserList postId={post.id} />
+                            <UserList postId={post.id}/>
                         ) : page === 'acoes' ? (
                             <ActionsPage post={post} getPost={getPost} />
                         ) : (

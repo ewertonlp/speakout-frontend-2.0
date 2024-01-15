@@ -7,8 +7,10 @@ import { IUpdatePassword } from 'types/IUpdatePassword'
 
 class UserController {
     private removeMasks(user: IDashUser): IDashUser {
-        user.cpf = removeMask(user.cpf)
-        return user
+        if (user && user.cpf !== undefined && user.cpf !== null) {
+            user.cpf = removeMask(user.cpf);
+        }
+        return user;
     }
 
     async getAll(filters?: IDashUserFilter): Promise<IDashUser[]> {
