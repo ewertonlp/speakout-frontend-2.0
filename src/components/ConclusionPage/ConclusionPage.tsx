@@ -58,15 +58,15 @@ const ButtonDownloadPDF = styled(Button)({
 
 export const ConclusionPage = ({ histories, tenantId, postId }) => {
     const [currentUser] = useState(
-        histories && histories[0] && histories[0].user ? histories[0].user : { fullname: 'User Real Name' },
+        histories && histories[0] && histories[0].user ? histories[0].user : { fullname: 'Nome de usuário' },
     )
     const [messages, setMessages] = useState<{ createdAt: string; user: { fullname: string }; comment: string }[]>([])
     const [selectedFile, setSelectedFile] = useState<File | null>(null)
-    const [, setIsUploading] = useState(false)
+    const [isUploading, setIsUploading] = useState(false)
     const [message, setMessage] = useState('')
     const [isLoading, setIsLoading] = useState(false)
     const [loadingComments, setLoadingComments] = useState(false)
-    const [, setIsReportGenerated] = useState(false)
+    const [isReportGenerated, setIsReportGenerated] = useState(false)
     const [isReportFinalized, setIsReportFinalized] = useState(false)
     const [reportUrl, setReportUrl] = useState<string | null>(null)
     const [downloadingFile, setDownloadingFile] = useState<string | null>(null)
@@ -102,6 +102,7 @@ export const ConclusionPage = ({ histories, tenantId, postId }) => {
         setLoadingComments(true)
 
         const postClosed = await postController.getPostClosedByPostId(postId)
+        console.log(postId)
         if (postClosed) {
             const postClosedArray = Array.isArray(postClosed) ? postClosed : [postClosed]
             setMessages(
@@ -193,7 +194,7 @@ export const ConclusionPage = ({ histories, tenantId, postId }) => {
             setIsLoading(false)
             setIsReportGenerated(true)
             setIsReportFinalized(true)
-            fetchPostClosedFiles()
+            // fetchPostClosedFiles()
         }
 
         if (selectedFile) {

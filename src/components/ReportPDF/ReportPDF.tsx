@@ -1,59 +1,82 @@
-import { Document, Font, Page, StyleSheet, Text, View } from '@react-pdf/renderer'
+import { Document, Font, Image, Page, StyleSheet, Text, View } from '@react-pdf/renderer'
 import { format } from 'date-fns'
+
 
 Font.register({ family: 'CircularStd-Bold', src: '/fonts/CircularStd-Bold.otf' })
 
 const styles = StyleSheet.create({
     page: {
         flexDirection: 'column',
-        backgroundColor: '#F4F6F7',
         padding: 20,
     },
-    section: {
-        margin: 10,
-        padding: 10,
-        flexGrow: 1,
-        backgroundColor: '#EBF5FB',
-        borderRadius: 5,
+    logo: {
+        width: 60,
+        height: 'auto' /* Adjust dimensions as needed */,
+        // margin: 5,
+        position: 'absolute',
+        right: 5,
+        top: 0,
     },
     header: {
-        fontSize: 18,
-        textAlign: 'center',
+        flexDirection: 'column',
+        // alignItems: 'center',
+        // Add padding or margin as needed
+    },
+    section: {
+        display: 'flex',
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        alignItems: 'flex-start',
+        justifyContent: 'flex-start',
+        gap: 4,
         marginBottom: 20,
-        color: '#1A5276',
+        padding: 10,
+    },
+    headerText: {
+        fontSize: 16,
+        textAlign: 'center',
+        marginBottom: 40,
+        marginTop: 20,
+        color: '#161C24',
         fontFamily: 'CircularStd-Bold',
     },
     subheader: {
         fontSize: 14,
-        margin: 10,
-        color: '#21618C',
+        marginTop: 10,
+        marginBottom: 5,
+        color: '#161C24',
         fontFamily: 'CircularStd-Bold',
     },
     text: {
-        margin: 5,
-        fontSize: 12,
-        color: '#17202A',
+        flexWrap: 'wrap',
+        flexShrink: 1,
+        marginTop: 3,
+        marginRight: 8,
+        fontSize: 11,
+        color: '#212B36',
     },
     itemLabel: {
         margin: 5,
-        fontSize: 12,
-        color: '#17202A',
-        fontFamily: 'CircularStd-Bold',
+        fontSize: 11,
+        color: '#161C24',
     },
     userSection: {
-        margin: 10,
-        padding: 10,
-        backgroundColor: '#D6EAF8',
-        borderRadius: 5,
+        margin: 5,
+        padding: 5,
     },
 })
 
+
 const ReportPDF = ({ reportData }) => (
+    
     <Document>
         <Page size="A4" style={styles.page}>
+            <View style={styles.header}>
+                <Image src="/logo/logo_speakout.jpg" style={styles.logo} />
+                <Text style={styles.headerText}>Relatório de Denúncia</Text>
+            </View>
+            <Text style={styles.subheader}>Informações Gerais</Text>
             <View style={styles.section}>
-                <Text style={styles.header}>Relatório de Denúncia</Text>
-                <Text style={styles.subheader}>Informações Gerais</Text>
                 <Text style={styles.text}>
                     <Text style={styles.itemLabel}>Id: </Text>
                     {reportData.data.id}
@@ -82,7 +105,10 @@ const ReportPDF = ({ reportData }) => (
                     <Text style={styles.itemLabel}>Atualizado em: </Text>
                     {format(new Date(reportData.data.updatedAt), 'dd/MM/yyyy')}
                 </Text>
-                <Text style={styles.subheader}>Detalhes do Denunciante</Text>
+            </View>
+
+            <Text style={styles.subheader}>Detalhes do Denunciante</Text>
+            <View style={styles.section}>
                 <Text style={styles.text}>
                     <Text style={styles.itemLabel}>Nome: </Text>
                     {reportData.data.response.nome}
@@ -155,7 +181,10 @@ const ReportPDF = ({ reportData }) => (
                     <Text style={styles.itemLabel}>Grau de certeza da denúncia: </Text>
                     {reportData.data.response['grau-de-certeza-denuncia']}
                 </Text>
-                <Text style={styles.subheader}>Comitê:</Text>
+            </View>
+
+            <Text style={styles.subheader}>Comitê:</Text>
+            <View style={styles.section}>
                 {reportData.data.users.map(user => (
                     <View style={styles.userSection} key={user.id}>
                         <Text style={styles.text}>Nome: {user.fullname}</Text>
@@ -164,7 +193,10 @@ const ReportPDF = ({ reportData }) => (
                         <Text style={styles.text}>Atualizado: {format(new Date(user.updatedAt), 'dd/MM/yyyy')}</Text>
                     </View>
                 ))}
-                <Text style={styles.subheader}>Chat com Manifestante</Text>
+            </View>
+
+            <Text style={styles.subheader}>Chat com Manifestante</Text>
+            <View style={styles.section}>
                 {reportData.data.posthistories.map(message => (
                     <View style={styles.userSection} key={message.id}>
                         <Text style={styles.text}>
@@ -173,7 +205,7 @@ const ReportPDF = ({ reportData }) => (
                             </Text>
                         </Text>
                         <Text style={styles.text}>
-                            <Text style={styles.itemLabel}>Message: </Text>
+                            <Text style={styles.itemLabel}>Mensagem: </Text>
                             {message.comment}
                         </Text>
                         <Text style={styles.text}>
@@ -183,13 +215,15 @@ const ReportPDF = ({ reportData }) => (
                         </Text>
                     </View>
                 ))}
+            </View>
 
-                <Text style={styles.subheader}>Conclusão</Text>
+            <Text style={styles.subheader}>Conclusão</Text>
+            <View style={styles.section}>
                 {reportData.data.postcloseds.map(postsClosed => (
                     <View style={styles.userSection} key={postsClosed.id}>
                         <Text style={styles.text}>
                             <Text style={styles.itemLabel}>Criado em: </Text>
-                            {postsClosed.createdAt}
+                            {format(new Date(postsClosed.createdAt), 'dd/MM/yyyy')}
                         </Text>
                         <Text style={styles.text}>
                             <Text style={styles.itemLabel}>Message: </Text>
