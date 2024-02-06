@@ -2,7 +2,7 @@
   "typescript.tsdk": "node_modules/typescript/lib",
 
   "workbench.preferredLightColorTheme": "Default Light+",
-  "workbench.colorTheme": "Downpour Contrast (rainglow)",
+  "workbench.colorTheme": "Visual Studio 2019 Dark",
   "screencastMode.mouseIndicatorColor": "#FF0000",
   "editor.codeActionsOnSave": {
     "source.fixAll": "explicit",

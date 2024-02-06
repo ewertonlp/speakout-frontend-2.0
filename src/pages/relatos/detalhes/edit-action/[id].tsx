@@ -87,6 +87,7 @@ export default function EditAction() {
     }
 
     useEffect(() => {
+
         if (actionId && Number(actionId)) {
             loadData(actionId)
         }
@@ -180,6 +181,7 @@ export default function EditAction() {
                     showSnackbarMessage('error', 'Falha ao cadastrar comentário')
                 }
             }
+            handleClose()
         }
     }
 

@@ -37,7 +37,7 @@ export default function Edicao() {
             return
         }
         const areasIds: string[] = []
-        user.areas.map(area => areasIds.push(area.id!))
+        user.areas?.map(area => areasIds.push(area.id!))
         setAreas(areasIds)
         setCustomValues([
             { name: 'id', value: user.id },
@@ -45,7 +45,7 @@ export default function Edicao() {
             { name: 'email', value: user.email },
             { name: 'cpf', value: user.cpf },
             { name: 'username', value: user.username },
-            { name: 'role', value: user.role.id },
+            { name: 'role', value: user.role?.id },
             { name: 'blocked', value: user.blocked },
         ])
 

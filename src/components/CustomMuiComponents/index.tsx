@@ -48,7 +48,7 @@ export function CardItem({ title, value }: { title: string; value: string }) {
         <Grid sx={{ display: 'flex', flexDirection: 'column', marginY: '12px', rowGap: '5px' }}>
             <GrayTypography>{title}</GrayTypography>
             <BlackTypography>
-                {value === '' || value === undefined ? '-' : value && value.replaceAll('-', ' ')}
+                {value === '' || value === undefined ? '-' : value && value?.replaceAll('-', ' ')}
             </BlackTypography>
         </Grid>
     )
@@ -79,7 +79,7 @@ export function EditableCardItem({
         if (text == null) {
             return '-'
         }
-        text.replaceAll('-', ' ')
+        text = text.replaceAll('-', ' ')
         switch (text) {
             case 'novo':
                 return 'Novo'

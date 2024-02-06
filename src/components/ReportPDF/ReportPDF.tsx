@@ -11,16 +11,14 @@ const styles = StyleSheet.create({
     },
     logo: {
         width: 60,
-        height: 'auto' /* Adjust dimensions as needed */,
-        // margin: 5,
+        height: 'auto',
         position: 'absolute',
         right: 5,
         top: 0,
     },
     header: {
         flexDirection: 'column',
-        // alignItems: 'center',
-        // Add padding or margin as needed
+      
     },
     section: {
         display: 'flex',
