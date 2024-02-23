@@ -10,6 +10,7 @@ import { useSettingsContext } from '../settings'
 import { IconifyIcon } from '@iconify/react'
 import StyledNotistack from './styles'
 
+
 // ----------------------------------------------------------------------
 
 type Props = {
@@ -39,7 +40,7 @@ export default function SnackbarProvider({ children }: Props) {
                 autoHideDuration={5000}
                 TransitionComponent={isRTL ? Collapse : undefined}
                 variant="success" // Set default variant
-                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
                 iconVariant={{
                     info: <SnackbarIcon icon="eva:info-fill" color="info" />,
                     success: <SnackbarIcon icon="eva:checkmark-circle-2-fill" color="success" />,
@@ -82,7 +83,7 @@ function SnackbarIcon({ icon, color }: SnackbarIconProps) {
                 bgcolor: theme => alpha(theme.palette[color].main, 0.16),
             }}
         >
-            <Iconify icon={icon} width={24} />
+            <Iconify icon={icon} width={28} />
         </Box>
     )
 }

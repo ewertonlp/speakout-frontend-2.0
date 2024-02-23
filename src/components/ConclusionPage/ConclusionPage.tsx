@@ -56,7 +56,7 @@ const ButtonDownloadPDF = styled(Button)({
     marginTop: '0.65rem',
 })
 
-export const ConclusionPage = ({ histories, tenantId, postId }) => {
+export const ConclusionPage = ({ histories, tenantId, postId, emailDenunciante }) => {
     const [currentUser] = useState(
         histories && histories[0] && histories[0].user ? histories[0].user : { fullname: 'Nome de usuário' },
     )
@@ -102,7 +102,6 @@ export const ConclusionPage = ({ histories, tenantId, postId }) => {
         setLoadingComments(true)
 
         const postClosed = await postController.getPostClosedByPostId(postId)
-        console.log(postId)
         if (postClosed) {
             const postClosedArray = Array.isArray(postClosed) ? postClosed : [postClosed]
             setMessages(
@@ -173,6 +172,7 @@ export const ConclusionPage = ({ histories, tenantId, postId }) => {
             comment: message,
         }
 
+
         const createPostClosed = async (mediaId?: string) => {
             const postData: IPostClosed = {
                 comment: newMessage.comment,
@@ -181,7 +181,9 @@ export const ConclusionPage = ({ histories, tenantId, postId }) => {
                 media: mediaId ? [mediaId] : [],
                 post: postId,
                 tenant: tenantId,
+                emailDenunciante: emailDenunciante[0].email,
             }
+
             try {
                 await postController.createPostClosed(postData)
                 const reportData = await postController.getById(query.id as string)

@@ -1,6 +1,7 @@
 import { IPostClosed } from 'types/IPostClosed'
 import { IPostListing } from 'types/IPostListing'
 import api from './api'
+import { IDashUserGet } from 'types/IDashUser'
 
 export class PostService {
     urlBaseService
@@ -33,6 +34,11 @@ export class PostService {
 
     async deletePost(postId: string): Promise<IPostListing> {
         const response = await api.delete(`${this.urlBaseService}/${postId}`)
+        return response.data
+    }
+
+    async sendEmail(email: IDashUserGet): Promise<IPostListing> {
+        const response = await api.post('api/users/create', {email} )
         return response.data
     }
 }

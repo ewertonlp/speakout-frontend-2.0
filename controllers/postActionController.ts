@@ -21,4 +21,8 @@ export class PostActionController {
         const postActionService = new PostActionService()
         await postActionService.create(data)
     }
+    async sendMail(email: string) {
+        const postActionService = new PostActionService()
+        await postActionService.sendMail(email)
+    }
 }

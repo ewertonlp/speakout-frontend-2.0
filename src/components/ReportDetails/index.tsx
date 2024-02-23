@@ -22,9 +22,14 @@ const statusOptions: ISelectOption[] = [
     { value: 'concluido_improcedente', label: 'Concluido Improcedente' },
 ]
 
+export function getEmailDenunciante(post: IPostListing): string {
+    return post.response.email;
+}
+
 function ReportDetails({ post, setPost }: { post: IPostListing; setPost: (value: IPostListing) => void }) {
     const formattedDate = moment(post.response['data-ocorrencia']).format('DD/MM/YYYY')
     const formattedCreatedAt = moment(post.createdAt).format('DD/MM/YYYY HH:mm')
+
 
     const { query } = useRouter()
 
@@ -72,7 +77,7 @@ function ReportDetails({ post, setPost }: { post: IPostListing; setPost: (value:
     }
     
     const diasEmAberto = getDiasEmAberto(formattedCreatedAt).toString();
-    const diasEmAbertoNumero = parseInt(diasEmAberto, 10); // Converte a string para um número
+    const diasEmAbertoNumero = parseInt(diasEmAberto, 10); 
 
     return (
         <Grid display="flex" justifyContent="space-between" container>

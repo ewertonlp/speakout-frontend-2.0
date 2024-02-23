@@ -10,6 +10,7 @@ import {
     TextField,
 } from '@mui/material'
 import { PostActionController } from 'controllers/postActionController'
+import { PostController } from 'controllers/postController'
 import { UploadController } from 'controllers/uploadController'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
@@ -39,9 +40,10 @@ export function NewActionModal({
     const { query } = useRouter()
 
     const [initialValue, setInitialValue] = useState([])
+    const postController = new PostController()
 
-    const userOptions: { label: string; value: string }[] = []
-    users.map(user => userOptions.push({ value: user.id, label: user.fullname }))
+    const userOptions: { label: string; value: string; email: string }[] = []
+    users.map(user => userOptions.push({ value: user.id, label: user.fullname, email: user.email }))
 
     const [openSnackbar, setOpenSnackbar] = useState<boolean>(false)
     const [snackbarMessage, setSnackbarMessage] = useState<{ type: AlertColor; text: string }>({
@@ -59,11 +61,21 @@ export function NewActionModal({
     }
 
     const [loading, setLoading] = useState(false)
+    const postActionController = new PostActionController()
+
+    const handleSendEmail = async (email: string) => {
+        console.log(email)
+        try {
+            await postActionController.sendMail(email)
+        } catch (error) {
+            console.error('Erro ao enviar email', error)
+        } 
+    }
 
     async function onSubmit(formData: any) {
         setLoading(true)
-        const postActionController = new PostActionController()
         const uploadController = new UploadController()
+        const email = users[0].email
         if (fileFieldValue) {
             try {
                 const filesIds = [] as string[]
@@ -82,9 +94,10 @@ export function NewActionModal({
                         status: 'active',
                         title: formData.title,
                     }
+                    getPost(query.id as string)
                     await postActionController.create(formattedData)
                     showSnackbarMessage('success', 'Cadastro realizado com sucesso')
-                    getPost(query.id as string)
+                    handleSendEmail(email)
                 } catch (error) {
                     showSnackbarMessage('error', 'Falha ao cadastrar ocorrência')
                 }
@@ -103,6 +116,7 @@ export function NewActionModal({
                 await postActionController.create(formattedData)
                 getPost(query.id as string)
                 showSnackbarMessage('success', 'Ação cadastrada com sucesso')
+                handleSendEmail(email)
             } catch (error) {
                 showSnackbarMessage('error', 'Falha ao cadastrar ação')
             }

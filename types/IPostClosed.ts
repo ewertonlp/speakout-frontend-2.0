@@ -10,4 +10,5 @@ export type IPostClosed = {
     user: string
     date_close: Date | string
     post: string
+    emailDenunciante?: string
 }

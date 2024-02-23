@@ -1,4 +1,5 @@
 import DeleteIcon from '@mui/icons-material/Delete'
+import SendIcon from '@mui/icons-material/Send'
 import {
     Box,
     Card,
@@ -10,15 +11,18 @@ import {
     ListItem,
     ListItemSecondaryAction,
     ListItemText,
+    Tooltip,
     Typography,
 } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { PostController } from 'controllers/postController'
+import { useSnackbar } from 'notistack'
 import { useEffect, useState } from 'react'
 import { useAuthContext } from 'src/auth/useAuthContext'
 import { checkPermission } from 'src/utils/functions'
 import { IDashUser } from 'types/IDashUser'
 import { UserSelector } from '../UserSelector'
+
 
 const StyledListItem = styled(ListItem)(({ theme }) => ({
     backgroundColor: theme.palette.background.paper,
@@ -37,6 +41,7 @@ export const UserList = ({ postId }) => {
     const [selectedUsers, setSelectedUsers] = useState<IDashUser[]>([])
     const [loading, setLoading] = useState(false)
     const postController = new PostController()
+    const { enqueueSnackbar } = useSnackbar()
 
     const { user } = useAuthContext()
 
@@ -82,6 +87,19 @@ export const UserList = ({ postId }) => {
         await postController.update({ users: newSelectedUsers }, postId)
     }
 
+    const handleSendEmail = async (selectedUser) => {
+        try {
+            setLoading(true);
+            const response = await postController.sendEmail(selectedUser.email);
+            enqueueSnackbar('O convite foi enviado por email ao usuário selecionado.', { variant: 'success' })
+        } catch (error) {
+            enqueueSnackbar('Erro ao enviar email', { variant: 'error' })
+            console.error('Erro ao enviar email', error)
+        } finally {
+            setLoading(false);
+        }
+    }
+
     useEffect(() => {
         fetchUsers()
     }, [postId])
@@ -111,13 +129,27 @@ export const UserList = ({ postId }) => {
                                                 secondary={selectedUser.email}
                                             />
                                             <ListItemSecondaryAction>
-                                                <IconButton
-                                                    edge="end"
-                                                    aria-label="delete"
-                                                    onClick={() => handleDelete(selectedUser)}
-                                                >
-                                                    {checkPermission(user?.role) && <DeleteIcon />}
-                                                </IconButton>
+                                                <Tooltip title="Enviar convite">
+                                                    <IconButton
+                                                        edge="end"
+                                                        aria-label="mail"
+                                                        onClick={() => handleSendEmail(selectedUser)}
+                                                        sx={{
+                                                            marginX: 2,
+                                                        }}
+                                                    >
+                                                        {checkPermission(user?.role) && <SendIcon />}
+                                                    </IconButton>
+                                                </Tooltip>
+                                                <Tooltip title="Excluir usuário">
+                                                    <IconButton
+                                                        edge="end"
+                                                        aria-label="delete"
+                                                        onClick={() => handleDelete(selectedUser)}
+                                                    >
+                                                        {checkPermission(user?.role) && <DeleteIcon />}
+                                                    </IconButton>
+                                                </Tooltip>
                                             </ListItemSecondaryAction>
                                         </StyledListItem>
                                         {index !== selectedUsers.length - 1 && <Divider />}

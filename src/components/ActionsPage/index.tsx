@@ -1,6 +1,8 @@
 import AddIcon from '@mui/icons-material/Add'
 import { Button, Grid, Typography } from '@mui/material'
+import { PostController } from 'controllers/postController'
 import { useRouter } from 'next/router'
+import { useSnackbar } from 'notistack'
 import { useState } from 'react'
 import { useAuthContext } from 'src/auth/useAuthContext'
 import { checkPermission } from 'src/utils/functions'
@@ -10,10 +12,27 @@ import ActionCard from '../ouvidoria/ActionCard'
 
 function ActionsPage({ post, getPost }: { post: IPostListing; getPost: (id: string) => void }) {
     const [openModal, setOpenModal] = useState<boolean>(false)
+    const postController = new PostController()
+    const { enqueueSnackbar } = useSnackbar()
+    const [loading, setLoading] = useState(false)
 
     const { push, query } = useRouter()
 
     const { user } = useAuthContext()
+
+    // const handleSendEmail = async () => {
+    //     const email = post.users
+    //     try {
+    //         setLoading(true)
+    //         const response = await postController.sendEmail(email)
+    //         enqueueSnackbar('O convite foi enviado por email ao usuário selecionado.', { variant: 'success' })
+    //     } catch (error) {
+    //         enqueueSnackbar('Erro ao enviar email', { variant: 'error' })
+    //         console.error('Erro ao enviar email', error)
+    //     } finally {
+    //         setLoading(false)
+    //     }
+    // }
 
     return (
         <Grid
@@ -54,6 +73,23 @@ function ActionsPage({ post, getPost }: { post: IPostListing; getPost: (id: stri
                             lightShadow
                             biggerPadding
                         />
+                        {/* <div>
+                            <Tooltip title="Enviar convite">
+                                <IconButton
+                                    edge="end"
+                                    aria-label="mail"
+                                    onClick={e => {
+                                        e.stopPropagation() // Impede que o clique se propague para o ActionCard
+                                        handleSendEmail()
+                                    }}
+                                    sx={{
+                                        marginX: 2,
+                                    }}
+                                >
+                                    {checkPermission(user?.role) && <SendIcon />}
+                                </IconButton>
+                            </Tooltip>
+                        </div> */}
                     </div>
                 ))) || (
                 <Typography variant="body1" textAlign={'center'} fontWeight={600}>

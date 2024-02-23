@@ -49,6 +49,7 @@
         "@rjsf/mui": "^5.5.2",
         "@rjsf/utils": "^5.5.2",
         "@rjsf/validator-ajv8": "^5.5.2",
+        "@sendgrid/mail": "^8.1.0",
         "@types/js-cookie": "^3.0.3",
         "@types/react-input-mask": "^3.0.2",
         "@types/styled-components": "^5.1.26",

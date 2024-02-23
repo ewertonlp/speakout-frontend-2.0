@@ -2,6 +2,7 @@ import moment from 'moment'
 import { PostService } from 'services/postService'
 import { ReportService } from 'services/reportService'
 import MapperUrlParams from 'src/utils/mapperUrlParams'
+import { IDashUserGet } from 'types/IDashUser'
 import { IPostClosed } from 'types/IPostClosed'
 import { IPostListing, IPostListingFilter } from 'types/IPostListing'
 
@@ -111,5 +112,11 @@ export class PostController {
         const postService = new PostService()
         const deletePost = await postService.deletePost(postId)
         return deletePost
+    }
+
+    async sendEmail(email: IDashUserGet ): Promise<IPostListing> {
+        const postService = new PostService()
+        const response = await postService.sendEmail(email)    
+        return response
     }
 }

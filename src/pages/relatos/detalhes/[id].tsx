@@ -101,7 +101,7 @@ export default function Detalhes() {
                         ) : page === 'acoes' ? (
                             <ActionsPage post={post} getPost={getPost} />
                         ) : (
-                            <ConclusionPage histories={histories} postId={post.id} tenantId={post.tenant.id} />
+                            <ConclusionPage histories={histories} postId={post.id} tenantId={post.tenant.id} emailDenunciante={post.users} />
                         )}
                     </Container>
                 </>

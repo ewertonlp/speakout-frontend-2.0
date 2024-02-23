@@ -23,4 +23,7 @@ export class PostActionService {
     async create(data: IPostAction) {
         await api.post(this.urlBaseService, { data: data })
     }
+    async sendMail(email: string) {
+        await api.post(`${this.urlBaseService}/sendMail`, { email: email })
+    }
 }

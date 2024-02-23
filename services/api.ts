@@ -30,7 +30,7 @@ instance.interceptors.response.use(
     },
     function (error) {
         if (error.response.status == 401 || error.response.status == 403) {
-            new AuthController().logout()
+            // new AuthController().logout()
         }
         return Promise.reject(error)
     },
