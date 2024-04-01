@@ -68,7 +68,7 @@ export default function Input(theme: Theme) {
       styleOverrides: {
         root: {
           '& .MuiOutlinedInput-notchedOutline': {
-            borderColor: alpha(theme.palette.grey[500], 0.32),
+            borderColor: alpha(theme.palette.grey[500], 0.01),
           },
           '&.Mui-focused': {
             '& .MuiOutlinedInput-notchedOutline': {

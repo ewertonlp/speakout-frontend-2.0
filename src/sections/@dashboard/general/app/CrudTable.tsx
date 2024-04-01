@@ -19,7 +19,7 @@ import { useRouter } from 'next/router'
 import { useState } from 'react'
 import Scrollbar from '../../../../components/Scrollbar'
 import Iconify from '../../../../components/iconify/Iconify'
-import MenuPopover from '../../../../components/menu-popover'
+// import MenuPopover from '../../../../components/menu-popover'
 import { TableHeadCustom } from '../../../../components/table'
 
 type RowArrayTypes = any
@@ -45,7 +45,7 @@ interface Props extends CardProps {
 }
 
 const StyledCard = styled(Card)(({ theme }) => ({
-    boxShadow: theme.shadows[3],
+    boxShadow: theme.shadows[5],
     borderRadius: theme.shape.borderRadius,
 }))
 
@@ -67,7 +67,7 @@ export default function CrudTable({
 
     return (
         <StyledCard {...other}>
-            <TableContainer>
+            <TableContainer sx={{ maxWidth: '100%'}}>
                 <Scrollbar>
                     <Table sx={{ minWidth: 720 }}>
                         <TableHeadCustom headLabel={tableLabels} />
@@ -131,6 +131,8 @@ const formatValues = (value: any) => {
 
 function GenericTableRow({ row, tableLabels, editPagePath, removeFunction, getItems }: RowProps) {
     const [openPopover, setOpenPopover] = useState<HTMLElement | null>(null)
+    const theme = useTheme()
+    const backgroundColor = theme.palette.mode === 'dark' ? '#141A29' : '#f5f5f5'
 
     const handleOpenPopover = (event: React.MouseEvent<HTMLElement>) => {
         setOpenPopover(event.currentTarget)
@@ -159,7 +161,12 @@ function GenericTableRow({ row, tableLabels, editPagePath, removeFunction, getIt
 
     return (
         <>
-            <TableRow sx={{ '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.04)' } }}>
+            <TableRow
+                sx={{
+                    backgroundColor: backgroundColor,
+                    '&:hover': { backgroundColor: theme.palette.action.hover },
+                }}
+            >
                 {tableLabels.map(
                     tl =>
                         tl.id !== 'action' &&
@@ -174,36 +181,28 @@ function GenericTableRow({ row, tableLabels, editPagePath, removeFunction, getIt
                         )),
                 )}
 
-                <TableCell align="left">
-                    <IconButton color={openPopover ? 'inherit' : 'default'} onClick={handleOpenPopover}>
-                        <Iconify icon="eva:more-vertical-fill" />
-                    </IconButton>
+                <TableCell align="center" sx={{ display: 'flex' }}>
+                    <MenuItem onClick={handleEdit}>
+                        <Box display="flex" alignItems="center">
+                            <Iconify icon="eva:edit-fill" />
+                        </Box>
+                    </MenuItem>
+                    <Divider />
+                    <MenuItem onClick={() => handleDelete(row, row.id)} sx={{ color: 'error.main' }}>
+                        <Box display="flex" alignItems="center">
+                            <Iconify icon="eva:trash-2-fill" />
+                        </Box>
+                    </MenuItem>
                 </TableCell>
             </TableRow>
-
-            <MenuPopover open={openPopover} onClose={handleClosePopover} arrow="right-top" sx={{ width: 160 }}>
-                <MenuItem onClick={handleEdit}>
-                    <Box display="flex" alignItems="center">
-                        <Iconify icon="eva:edit-fill" />
-                        <Box ml={1}>Editar</Box>
-                    </Box>
-                </MenuItem>
-                <Divider />
-                <MenuItem onClick={() => handleDelete(row, row.id)} sx={{ color: 'error.main' }}>
-                    <Box display="flex" alignItems="center">
-                        <Iconify icon="eva:trash-2-outline" />
-                        <Box ml={1}>Excluir</Box>
-                    </Box>
-                </MenuItem>
-            </MenuPopover>
         </>
     )
 }
 
 function ClickableGenericTableRow({ row, tableLabels, onDelete }: RowProps) {
     const router = useRouter()
-
     const theme = useTheme()
+    const backgroundColor = theme.palette.mode === 'dark' ? '#141A29' : '#f5f5f5'
 
     const backgroundButtonColors = {
         Cancelado: 'error',
@@ -218,14 +217,17 @@ function ClickableGenericTableRow({ row, tableLabels, onDelete }: RowProps) {
     const handleDeleteClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.stopPropagation()
         if (onDelete) {
-            onDelete(row.id);
+            onDelete(row.id)
         }
     }
 
     return (
         <TableRow
             onClick={() => router.push(`/relatos/detalhes/${row.id}`)}
-            sx={{ '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.04)' }, cursor: 'pointer' }}
+            sx={{
+                backgroundColor: backgroundColor,
+                '&:hover': { backgroundColor: theme.palette.action.hover },
+            }}
         >
             {tableLabels.map(tl => (
                 <TableCell key={tl.id}>
@@ -240,12 +242,11 @@ function ClickableGenericTableRow({ row, tableLabels, onDelete }: RowProps) {
                             {formatValues(row[tl.id])}
                         </Button>
                     )}
-                   
                 </TableCell>
             ))}
             <TableCell align="left">
                 <IconButton sx={{ color: 'error.main' }} onClick={handleDeleteClick} title="Excluir Relato">
-                    <Iconify icon="eva:trash-2-outline" />
+                    <Iconify icon="eva:trash-2-fill" />
                 </IconButton>
             </TableCell>
         </TableRow>

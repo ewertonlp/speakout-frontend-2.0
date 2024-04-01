@@ -13,9 +13,8 @@ import { FormProvider } from '../hook-form'
 
 import { useRouter } from 'next/router'
 import { ApolloField } from './ApolloField'
-
+import { useTheme, styled } from '@mui/material/styles'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-import { styled } from '@mui/material/styles'
 import { Variant } from '@mui/material/styles/createTypography'
 import { useSnackbar } from 'notistack'
 import useResponsive from '../../hooks/useResponsive'
@@ -319,6 +318,8 @@ const ApolloForm: React.FC<ApolloFormProps> = ({
         values: initialValues,
     })
     const router = useRouter()
+    const theme = useTheme();
+    const backgroundColor = theme.palette.mode === 'dark' ? theme.palette.background.default : theme.palette.background.default;
     const {
         reset,
         handleSubmit,
@@ -578,11 +579,11 @@ const ApolloForm: React.FC<ApolloFormProps> = ({
         <Grid container spacing={4}>
             {renderFields()}
             <Grid item xs={12}>
-                <Box sx={{ mb: 0, display: 'flex' }}>
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <Box sx={{ mb: 0, display: 'flex', justifyContent: 'center'}}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                         <Box sx={{ flexGrow: 1 }} />
                         <Box sx={{ flexShrink: 0 }}>
-                            <Grid container spacing={2}>
+                            <Grid container spacing={2} >
                                 {filterClean && (
                                     <Grid item>
                                         <Button onClick={filterClean} variant="contained" color="inherit">
@@ -598,7 +599,18 @@ const ApolloForm: React.FC<ApolloFormProps> = ({
                                             orderButtons?.find(button => button.identity == 'cancelButton')?.order || 0
                                         }
                                     >
-                                        <Button onClick={() => handleCancel()} variant="contained" color="inherit">
+                                        <Button
+                                            onClick={() => handleCancel()}
+                                            variant="outlined"
+                                            color="error"
+                                            sx={{
+                                                borderRadius: '25px',
+                                                width: '200px',
+                                                py: 1,
+                                                fontSize: '1rem',
+                                                textTransform: 'uppercase',
+                                            }}
+                                        >
                                             {cancelButtonTitle ? cancelButtonTitle : 'Cancelar'}
                                         </Button>
                                     </Grid>
@@ -609,6 +621,7 @@ const ApolloForm: React.FC<ApolloFormProps> = ({
                                         order={
                                             orderButtons?.find(button => button.identity == 'submitButton')?.order || 0
                                         }
+                                        
                                     >
                                         <LoadingButton
                                             onClick={handleSubmit(onSubmitCustom, onError)}
@@ -616,6 +629,15 @@ const ApolloForm: React.FC<ApolloFormProps> = ({
                                             variant="contained"
                                             color="primary"
                                             loading={isSubmitting}
+                                            sx={{
+                                                borderRadius: '25px',
+                                                width: '200px',
+                                                py: 1.5,
+                                                fontSize: '1rem',
+                                                textTransform: 'uppercase',
+                                                position: 'relative',
+                                               
+                                            }}
                                         >
                                             {submitButtonText ? submitButtonText : 'Salvar'}
                                         </LoadingButton>
@@ -644,14 +666,14 @@ const ApolloForm: React.FC<ApolloFormProps> = ({
     )
 
     return (
-        <Box style={{ width: '100%', height: '100%' }}>
+        <Box style={{ width: '100%', height: '100%'}}>
             <FormProvider methods={methods}>
                 {withBox ? (
                     <Box sx={{ p: 2 }}>{renderForm(withBox)}</Box>
                 ) : noRenderCardInForm ? (
                     renderForm(withBox)
                 ) : (
-                    <Card sx={{ p: 2 }}>
+                    <Card sx={{ p: 1, backgroundColor: backgroundColor, borderRadius: '10px' }}>
                         <Grid container>
                             <Grid item xs={!isDesktop ? 12 : gridSize || 12}>
                                 {renderForm(withBox)}

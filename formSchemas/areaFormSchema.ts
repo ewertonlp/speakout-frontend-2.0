@@ -12,8 +12,9 @@ export const AreaFormSchema: ApolloFormSchemaItem[] = [
     {
         name: 'description',
         required: true,
-        label: 'Descrição',
+        label: 'Insira o nome da área que deseja cadastrar',
         componenttype: ApolloFormSchemaComponentType.TEXT,
-        ui: { grid: 6 },
+        ui: { grid: 12 },
+        
     },
 ]

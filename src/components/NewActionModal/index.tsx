@@ -166,9 +166,9 @@ export function NewActionModal({
             required: false,
             renderComponent(params) {
                 return (
-                    <Grid item>
+                    <Grid item xs={12}>
                         <Grid item xs={12}>
-                            <InputLabel>Selecione o arquivo</InputLabel>
+                            <InputLabel sx={{ml:'1rem'}}>Selecione o arquivo</InputLabel>
                         </Grid>
                         <TextField
                             type="file"
@@ -191,8 +191,8 @@ export function NewActionModal({
     return (
         <>
             {loading && <LoadingScreen />}
-            <Dialog open={open} onClose={handleClose}>
-                <DialogTitle sx={{ padding: '20px 18px 5px 18px' }} color="#727272" id="scroll-dialog-title">
+            <Dialog open={open} onClose={handleClose} sx={{borderRadius:'10px'}}>
+                <DialogTitle sx={{ textAlign:'center' }} textTransform='capitalize' color="text" id="scroll-dialog-title">
                     Cadastrar nova ação
                 </DialogTitle>
                 <DialogContent sx={{ padding: '0' }}>

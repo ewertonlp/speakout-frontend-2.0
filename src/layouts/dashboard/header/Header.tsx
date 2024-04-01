@@ -8,7 +8,9 @@ import {
     Select,
     SelectChangeEvent,
     Stack,
+    Switch,
     Toolbar,
+    Typography,
 } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 // utils
@@ -23,6 +25,9 @@ import Iconify from '../../../components/iconify/Iconify'
 import Logo from '../../../components/logo'
 import { useSettingsContext } from '../../../components/settings'
 //
+import Brightness4Icon from '@mui/icons-material/Brightness4'
+import Brightness7Icon from '@mui/icons-material/Brightness7'
+import { makeStyles } from '@mui/styles'
 import TenantController from 'controllers/tenantController'
 import UserController from 'controllers/userController'
 import { useRouter } from 'next/router'
@@ -32,6 +37,7 @@ import NoticeModal from 'src/components/NoticeModal'
 import { ITenantGet } from 'types/ITenant'
 import AccountPopover from './AccountPopover'
 import NotificationsPopover from './NotificationsPopover'
+import ThemeToggle from 'src/components/themeButton/themeButton'
 
 // ----------------------------------------------------------------------
 
@@ -39,10 +45,13 @@ type Props = {
     onOpenNav?: VoidFunction
 }
 
+
+
 export default function Header({ onOpenNav }: Props) {
     const theme = useTheme()
 
     const { themeLayout } = useSettingsContext()
+    const { themeMode, onToggleMode } = useSettingsContext()
 
     const isNavHorizontal = themeLayout === 'horizontal'
 
@@ -96,6 +105,8 @@ export default function Header({ onOpenNav }: Props) {
                 return true
             case '/empresas/':
                 return true
+            case '/treinamentos/':
+                return true
             default:
                 return false
         }
@@ -128,40 +139,49 @@ export default function Header({ onOpenNav }: Props) {
                 flexGrow={1}
                 direction="row"
                 alignItems="center"
-                justifyContent="flex-end"
+                justifyContent="space-between"
                 spacing={{ xs: 1.5, sm: 1.5 }}
             >
-                {user?.role.type === 'admin' && (
-                    <FormControl sx={{ width: '40%', marginTop: { xs: '8px', lg: '0px' } }}>
-                        <InputLabel id="select-label">Empresa</InputLabel>
-                        <Select
-                            labelId="select-label"
-                            id="select"
-                            value={tenantId}
-                            label="Empresa"
-                            onChange={handleChange}
-                        >
-                            {tenants.map(tenant => (
-                                <MenuItem key={tenant.id} value={tenant.id!}>
-                                    {tenant.description}
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
-                )}
-                <NotificationsPopover />
-                <AccountPopover />
-                <NoticeModal
-                    open={openModal}
-                    setOpen={setOpenModal}
-                    handleOk={handleModalOkButton}
-                    text={
-                        selectValue?.label
-                            ? `Tem certeza que deseja trocar para a empresa ${selectValue.label}?`
-                            : 'Tem certeza que deseja trocar de empresa?'
-                    }
-                    title="Aviso"
-                />
+                <Typography variant="h5" sx={{ color: 'text.primary' }}>
+                    Olá {user?.fullname}
+                </Typography>
+
+                <Stack direction="row" alignItems="center" justifyContent="flex-end" spacing={2}>
+                    {user?.role?.type === 'admin' && (
+                        <FormControl sx={{ width: '60%', marginTop: { xs: '8px', lg: '0px' } }}>
+                            <InputLabel id="select-label">Empresa</InputLabel>
+                            <Select
+                                labelId="select-label"
+                                id="select"
+                                value={tenantId}
+                                label="Empresa"
+                                onChange={handleChange}
+                                sx={{ borderRadius: '10px', paddingLeft: '0.3rem', backgroundColor:'card.default' }}
+                            >
+                                {tenants.map(tenant => (
+                                    <MenuItem key={tenant.id} value={tenant.id!}>
+                                        {tenant.description}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                    )}
+                    <ThemeToggle themeMode={themeMode} onToggleMode={onToggleMode} />
+                    
+                    <NotificationsPopover />
+                    <AccountPopover />
+                    <NoticeModal
+                        open={openModal}
+                        setOpen={setOpenModal}
+                        handleOk={handleModalOkButton}
+                        text={
+                            selectValue?.label
+                                ? `Tem certeza que deseja trocar para a empresa ${selectValue.label}?`
+                                : 'Tem certeza que deseja trocar de empresa?'
+                        }
+                        title="Aviso"
+                    />
+                </Stack>
             </Stack>
         </>
     )
@@ -182,7 +202,7 @@ export default function Header({ onOpenNav }: Props) {
                 ...(isDesktop && {
                     width: `calc(100% - ${NAV.W_DASHBOARD + 1}px)`,
                     height: HEADER.H_DASHBOARD_DESKTOP,
-                    bgcolor: 'background.paper',
+                    bgcolor: 'background.default',
                     ...(isOffset && {
                         height: HEADER.H_DASHBOARD_DESKTOP_OFFSET,
                     }),

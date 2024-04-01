@@ -26,7 +26,7 @@ export default function DrawerAppBar(props: { window?: () => Window; logoUrl: st
     const router = useRouter()
     const { query } = useRouter()
     const navItems = [
-        { label: 'REGISTRAR NOVO', path: `/ouvidoria/formulario?company=${query.company}` },
+        { label: 'NOVA DENÚNCIA', path: `/ouvidoria/formulario?company=${query.company}` },
         { label: 'STATUS DA DENÚNCIA', path: `/ouvidoria/status-denuncia?company=${query.company}` },
     ]
 
@@ -37,13 +37,13 @@ export default function DrawerAppBar(props: { window?: () => Window; logoUrl: st
     const drawer = (
         <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
             <Grid onClick={() => router.push(`/ouvidoria/${query.company}`)}>
-                {logoUrl && <Image src={logoUrl} alt="logo" width="118px" height="60px" />}
+                {logoUrl && <Image src={logoUrl} alt="logo" width="150px" height="60px" />}
             </Grid>
             <Divider />
             <List>
                 {navItems.map((item, index) => (
                     <ListItem key={index} disablePadding>
-                        <ListItemButton sx={{ textAlign: 'center' }}>
+                        <ListItemButton sx={{ textAlign: 'center', }}>
                             <Link href={item.path}>
                                 <a style={{ textDecoration: 'none', color: '#4D595A' }}> {item.label}</a>
                             </Link>
@@ -59,7 +59,7 @@ export default function DrawerAppBar(props: { window?: () => Window; logoUrl: st
     return (
         <Box sx={{ display: 'flex' }}>
             <CssBaseline />
-            <AppBar component="nav" sx={{ backgroundColor: 'white', padding: '10px 0' }}>
+            <AppBar component="nav" sx={{ backgroundColor: 'white', padding: '20px 0' }}>
                 <Toolbar>
                     <IconButton
                         color="success"
@@ -74,13 +74,13 @@ export default function DrawerAppBar(props: { window?: () => Window; logoUrl: st
                         sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' }, cursor: 'pointer' }}
                         onClick={() => router.push(`/ouvidoria/${query.company}`)}
                     >
-                        {logoUrl && <img width="130px" height="50px" src={logoUrl} alt="logo" />}
+                        {logoUrl && <img width="150px" height="50px" src={logoUrl} alt="logo" />}
                     </Grid>
                     <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
                         {navItems.map((item, index) => (
                             <Link key={index} href={item.path} passHref>
                                 <a style={{ textDecoration: 'none', color: '#4D595A' }}>
-                                    <Button>{item.label}</Button>
+                                    <Button sx={{border: '1px solid #7EB353', ml:'1rem', borderRadius: '25px', padding:'8px 20px'}}>{item.label}</Button>
                                 </a>
                             </Link>
                         ))}

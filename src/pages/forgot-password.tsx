@@ -28,7 +28,7 @@ function Form() {
 
         const pattern = /^\S+@\S+\.\S+$/
         if (!data.email.match(pattern)) {
-            setMesssage({ text: 'Email inválido', severity: 'error' })
+            setMesssage({ text: 'Tipo de Email inválido, tente novamente!', severity: 'error' })
             return
         }
 
@@ -52,13 +52,13 @@ function Form() {
     ]
 
     return (
-        <Card sx={{ maxWidth: '550px', height: '100%', boxShadow: '1px 1px 10px #cecece' }}>
+        <Card sx={{ maxWidth: '550px', height: '100%', border: '1px solid #777777', backgroundColor: "card.default" }}>
             <Grid p={3}>
                 <Grid item sx={{ textAlign: 'center', padding: '20px 0' }}>
-                    <Typography variant="h4">Esqueci minha senha</Typography>
-                    <Typography sx={{ marginTop: '10px' }} variant="body1">
-                        Para redefinir sua senha, informe o email cadastrado na sua conta e lhe enviaremos um link com
-                        as instruções
+                    <Typography variant="h4">Redefinir sua Senha</Typography>
+                    <Typography sx={{ marginTop: '1rem' }} variant="body1">
+                        Para redefinir sua senha, informe o email cadastrado em sua conta e lhe enviaremos um link com
+                        as instruções.
                     </Typography>
                 </Grid>
                 <Stack spacing={3}>{message && <Alert severity={message.severity}>{message.text}</Alert>}</Stack>

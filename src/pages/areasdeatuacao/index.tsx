@@ -1,7 +1,7 @@
 // next
 import Head from 'next/head'
 // @mui
-import { Button, Card, Container, Grid } from '@mui/material'
+import { Button, Card, Container, Dialog, DialogContent, DialogTitle, Divider, Grid, Typography } from '@mui/material'
 import { AreaController } from 'controllers/areaController'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
@@ -13,6 +13,7 @@ import { useSettingsContext } from 'src/components/settings'
 import DashboardLayout from 'src/layouts/dashboard'
 import CrudTable from 'src/sections/@dashboard/general/app/CrudTable'
 import { IArea } from 'types/IArea'
+import NewEditForm from './form/NewEditForm'
 
 // ----------------------------------------------------------------------
 
@@ -23,15 +24,16 @@ Areas.getLayout = (page: React.ReactElement) => <DashboardLayout>{page}</Dashboa
 export default function Areas() {
     const router = useRouter()
     const { themeStretch } = useSettingsContext()
-
+    const [loading, setLoading] = useState(false)
+    const [openModal, setOpenModal] = useState(false) 
     const [areaFilters, setAreaFilters] = useState()
+    const [areas, setAreas] = useState<IArea[]>([])
 
     function handleSetUserFilters(data: any) {
         setAreaFilters(data)
     }
 
-    const [loading, setLoading] = useState(false)
-    const [areas, setAreas] = useState<IArea[]>([])
+
 
     const { tenantId } = useAuthContext()
 
@@ -62,7 +64,7 @@ export default function Areas() {
                 </Head>
                 {loading && <LoadingScreen />}
                 <Container maxWidth={themeStretch ? false : 'xl'}>
-                    <Grid container spacing={4}>
+                    <Grid container spacing={6}>
                         <Grid item xs={12}>
                             <HeaderBreadcrumbs
                                 heading={'Área de atuação'}
@@ -78,9 +80,10 @@ export default function Areas() {
                                         <Grid item>
                                             <Button
                                                 variant="contained"
+                                                sx={{borderRadius: '25px', px: 4, py: 1.5}}
                                                 startIcon={<Iconify icon="material-symbols:add" />}
                                                 onClick={() => {
-                                                    router.push('/areasdeatuacao/cadastro')
+                                                    setOpenModal(true)
                                                 }}
                                             >
                                                 Adicionar área
@@ -89,28 +92,38 @@ export default function Areas() {
                                     </Grid>
                                 }
                             />
+                            <Divider />
                         </Grid>
-                        <Grid item xs={12}>
+                        {/* <Grid item xs={12}> */}
                             {/* <AccordionFilter
                                 schemaForm={UserFiltersFormSchema}
                                 setFilters={handleSetUserFilters}
                                 formData={userFilters}
                             /> */}
-                        </Grid>
+                        {/* </Grid> */}
 
-                        <Grid item xs={12}>
+                        <Grid item xs={7}>
                             <CrudTable
                                 tableData={areas}
                                 setTableData={setAreas}
                                 tableLabels={[
-                                    { id: 'description', label: 'Descrição' },
+                                    { id: 'description', label: 'Área de Atuação' },
                                     { id: 'action', label: 'Ações' },
                                 ]}
+                                sx={{width: '100%'}}
                             />
                         </Grid>
                     </Grid>
                 </Container>
             </Card>
+            <Dialog open={openModal} onClose={() => setOpenModal(false)} sx={{height:'100vh', py: '3rem'}}>
+                <DialogTitle sx={{textAlign:"center"}} >
+                    <Typography fontSize='1.5rem' fontWeight={600} color="text">Cadastrar Nova Empresa</Typography>
+                </DialogTitle>
+                <DialogContent sx={{paddingBottom: '2rem'}}>
+                    <NewEditForm /> 
+                </DialogContent>
+            </Dialog>
         </>
     )
 }

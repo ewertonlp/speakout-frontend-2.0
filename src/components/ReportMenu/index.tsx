@@ -14,6 +14,7 @@ function ReportMenu({
                 borderBottom: '2px solid #CCC',
                 marginBottom: '30px',
                 flexWrap: 'wrap',
+                gap:'1rem'
             }}
         >
             <p
@@ -21,11 +22,12 @@ function ReportMenu({
                 style={{
                     position: 'relative',
                     top: '2px',
-                    borderBottom: page === 'relato' ? '2px solid #3366FF' : '',
-                    color: page === 'relato' ? '#3366FF' : '#a7a7a7',
+                    borderBottom: page === 'relato' ? '2px solid #7EB353' : '',
+                    color: page === 'relato' ? '#7EB353' : '#a7a7a7',
                     margin: 0,
                     marginRight: '10px',
                     cursor: 'pointer',
+                    fontSize:'1.1rem',
                     transition: 'color 0.5s',
                     marginTop: '5px',
                 }}
@@ -40,8 +42,9 @@ function ReportMenu({
                     margin: 0,
                     marginLeft: '10px',
                     cursor: 'pointer',
-                    borderBottom: page === 'historico' ? '2px solid #3366FF' : '',
-                    color: page === 'historico' ? '#3366FF' : '#a7a7a7',
+                    fontSize:'1.1rem',
+                    borderBottom: page === 'historico' ? '2px solid #7EB353' : '',
+                    color: page === 'historico' ? '#7EB353' : '#a7a7a7',
                     transition: 'color 0.5s',
                     marginTop: '5px',
                 }}
@@ -56,8 +59,9 @@ function ReportMenu({
                     margin: 0,
                     marginLeft: '20px',
                     cursor: 'pointer',
-                    borderBottom: page === 'usuarios' ? '2px solid #3366FF' : '',
-                    color: page === 'usuarios' ? '#3366FF' : '#a7a7a7',
+                    fontSize:'1.1rem',
+                    borderBottom: page === 'usuarios' ? '2px solid #7EB353' : '',
+                    color: page === 'usuarios' ? '#7EB353' : '#a7a7a7',
                     transition: 'color 0.5s',
                     marginTop: '5px',
                 }}
@@ -72,8 +76,9 @@ function ReportMenu({
                     margin: 0,
                     marginLeft: '20px',
                     cursor: 'pointer',
-                    borderBottom: page === 'acoes' ? '2px solid #3366FF' : '',
-                    color: page === 'acoes' ? '#3366FF' : '#a7a7a7',
+                    fontSize:'1.1rem',
+                    borderBottom: page === 'acoes' ? '2px solid #7EB353' : '',
+                    color: page === 'acoes' ? '#7EB353' : '#a7a7a7',
                     transition: 'color 0.5s',
                     marginTop: '5px',
                 }}
@@ -88,8 +93,9 @@ function ReportMenu({
                     margin: 0,
                     marginLeft: '20px',
                     cursor: 'pointer',
-                    borderBottom: page === 'conclusao' ? '2px solid #3366FF' : '',
-                    color: page === 'conclusao' ? '#3366FF' : '#a7a7a7',
+                    fontSize:'1.1rem',
+                    borderBottom: page === 'conclusao' ? '2px solid #7EB353' : '',
+                    color: page === 'conclusao' ? '#7EB353' : '#a7a7a7',
                     transition: 'color 0.5s',
                     marginTop: '5px',
                 }}

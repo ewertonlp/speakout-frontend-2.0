@@ -15,25 +15,26 @@ import { Imessage } from 'types/Imessage'
 
 export default function Register() {
     return (
-        <Container
+        <Grid
             sx={{
                 height: '100%',
-                width: '100%',
+                width: '100vw',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 padding: 0,
+                backgroundColor: 'card.default'
             }}
         >
             <Head>
                 <title>Cadastro</title>
             </Head>
 
-            <Card sx={{ maxWidth: '850px', boxShadow: '1px 1px 10px #cecece', my: 5 }}>
+            <Card sx={{ maxWidth: '850px', border:'1px solid #777777', my: 5 }}>
                 <Grid p={3}>
                     <Stack spacing={2} sx={{ mb: 1, mt: 1, position: 'relative' }}>
-                        <Typography variant="h4">Cadastro</Typography>
-                        <Stack direction="row" spacing={0.5}>
+                        <Typography variant="h4"  textAlign='center'>Cadastro de Usuário</Typography>
+                        <Stack direction="row" spacing={0.5} sx={{display:'flex', justifyContent:'center', paddingBottom:'1rem'}} >
                             <Typography variant="body2">Já possui uma conta?</Typography>
                             <NextLink href={'/login'} passHref>
                                 <Link variant="subtitle2">Faça login</Link>
@@ -47,19 +48,19 @@ export default function Register() {
                         component="div"
                         sx={{ color: 'text.secondary', mt: 2, mb: 2, typography: 'caption', textAlign: 'center' }}
                     >
-                        {'By signing up, I agree to '}
+                        {'Ao fazer o cadastro o(a) usuário(a) aceita os  '}
                         <Link underline="always" color="text.primary">
-                            Terms of Service
+                            Termos de Serviço
                         </Link>
-                        {' and '}
+                        {' e a '}
                         <Link underline="always" color="text.primary">
-                            Privacy Policy
+                            Política de Privacidade
                         </Link>
                         .
                     </Typography>
                 </Grid>
             </Card>
-        </Container>
+        </Grid>
     )
 }
 
@@ -113,6 +114,7 @@ function AuthRegisterForm() {
             required: true,
             componenttype: ApolloFormSchemaComponentType.TEXT,
             mask: '999.999.999-99',
+            
         },
         {
             name: 'email',
@@ -124,7 +126,7 @@ function AuthRegisterForm() {
         {
             name: 'password',
             label: 'Digite a sua senha',
-            ui: { grid: 12 },
+            ui: { grid: 6 },
             required: true,
             componenttype: ApolloFormSchemaComponentType.PASSWORD,
         },
@@ -136,7 +138,7 @@ function AuthRegisterForm() {
             <ApolloForm
                 schema={formSchema}
                 onSubmit={onSubmit}
-                submitButtonText="Enviar"
+                submitButtonText="Cadastrar"
                 defaultExpandedGroup={false}
             />
         </>

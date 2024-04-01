@@ -1,3 +1,4 @@
+import { Grid } from '@mui/material'
 import { AreaController } from 'controllers/areaController'
 import { AreaFormSchema } from 'formSchemas/areaFormSchema'
 import { useRouter } from 'next/router'
@@ -15,10 +16,9 @@ type UserNewEditForm = {
 
 const NewEditForm = ({ values, customValues }: UserNewEditForm) => {
     const router = useRouter()
-
     const { enqueueSnackbar } = useSnackbar()
-
     const { tenantId } = useAuthContext()
+    const [openModal, setOpenModal] = useState(true)
 
     const onSubmit = async data => {
         setLoading(true)
@@ -31,13 +31,13 @@ const NewEditForm = ({ values, customValues }: UserNewEditForm) => {
             const areaController = new AreaController()
             if (data.id) {
                 await areaController.update(data, data.id)
-                enqueueSnackbar('Oba! Área editada com sucesso!', { variant: 'success' })
+                enqueueSnackbar('Área editada com sucesso!', { variant: 'success' })
             } else {
                 delete data.id
                 await areaController.create(data)
-                enqueueSnackbar('Oba! Cadastro realizado com sucesso!', {
+                enqueueSnackbar('Cadastro realizado com sucesso!', {
                     variant: 'success',
-                    autoHideDuration: null,
+                    // autoHideDuration: null,
                 })
             }
             router.push('/areasdeatuacao')
@@ -50,7 +50,7 @@ const NewEditForm = ({ values, customValues }: UserNewEditForm) => {
     const [loading, setLoading] = useState(false)
 
     return (
-        <>
+        <Grid sx={{display: 'flex', justifyContent:'center', }}>
             {loading && <LoadingScreen />}
             <ApolloForm
                 schema={AreaFormSchema}
@@ -62,7 +62,7 @@ const NewEditForm = ({ values, customValues }: UserNewEditForm) => {
                 defaultExpandedGroup={true}
                 customValues={customValues}
             />
-        </>
+        </Grid>
     )
 }
 

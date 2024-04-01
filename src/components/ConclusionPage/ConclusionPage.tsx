@@ -33,13 +33,11 @@ import ComplaintHistoryCard from '../ouvidoria/ComplaintHistoryCard'
 const StyledCard = styled(Card)({
     margin: '2rem auto',
     padding: '1rem',
-    borderRadius: 15,
-    boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
 })
 
 const FileList = styled(List)({
     width: '100%',
-    backgroundColor: '#f7fafc',
+    backgroundColor: 'background.default',
 })
 
 const FileIcon = styled(AttachFile)({
@@ -172,7 +170,6 @@ export const ConclusionPage = ({ histories, tenantId, postId, emailDenunciante }
             comment: message,
         }
 
-
         const createPostClosed = async (mediaId?: string) => {
             const postData: IPostClosed = {
                 comment: newMessage.comment,
@@ -218,10 +215,27 @@ export const ConclusionPage = ({ histories, tenantId, postId, emailDenunciante }
         <>
             <StyledCard>
                 <CardContent>
-                    <Grid container spacing={3}>
-                        <Grid item xs={12}>
-                            <Box display="flex" justifyContent="space-between" alignItems="center">
-                                <Typography variant="h4">Comentários</Typography>
+                    <Grid container display="flex" justifyContent="center" gap={5} spacing={3} mb="4rem">
+                        <Grid
+                            item
+                            xs={5}
+                            sx={{
+                                backgroundColor: 'card.default',
+                                borderRadius: '10px',
+                                boxShadow: '0 5px 10px  rgba(0, 0, 0, 0.1)',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                justifyContent: 'center',
+                                padding: '0 1rem 0 1rem',
+                            }}
+                        >
+                            <Box
+                                display="flex"
+                                justifyContent="space-between"
+                                alignItems="center"
+                                sx={{ padding: '1rem 0.5rem 2rem' }}
+                            >
+                                <Typography variant="h5">Comentários</Typography>
 
                                 {checkPermission(user?.role) && (
                                     <>
@@ -240,59 +254,99 @@ export const ConclusionPage = ({ histories, tenantId, postId, emailDenunciante }
                                 )}
                                 {selectedFile && <Typography variant="body1">{selectedFile.name}</Typography>}
                             </Box>
+
+                            <Grid item xs={12}>
+                            
+                                <TextField
+                                    value={message}
+                                    onChange={e => setMessage(e.target.value)}
+                                    placeholder="Todas as observações de conclusão do Relato devem ser inseridas neste campo."
+                                    multiline
+                                    rows={4}
+                                    fullWidth
+                                    sx={{
+                                        border: '1px solid #a3a3a3',
+                                        borderRadius: '8px',
+                                        backgroundColor: 'background.default',
+                                    }}
+                                />
+                            </Grid>
+
+                            <Grid item xs={5} paddingX="1rem" paddingY="0.7rem">
+                                <LoadingButton
+                                    loading={isLoading}
+                                    loadingPosition="start"
+                                    startIcon={<CheckCircle />}
+                                    variant="contained"
+                                    color="secondary"
+                                    onClick={handleFinalizeReport}
+                                    fullWidth
+                                    disabled={message.trim() === ''}
+                                >
+                                    Finalizar Relato
+                                </LoadingButton>
+                            </Grid>
                         </Grid>
 
-                        <Grid item xs={12}>
-                            {loadingComments ? (
-                                <CenteredBox>
-                                    <CircularProgress size={40} color="primary" />
-                                </CenteredBox>
-                            ) : (
-                                messages.map((message, index) => (
-                                    <Box key={index} marginBottom={3}>
-                                        <ComplaintHistoryCard
-                                            date={message.createdAt}
-                                            name={message.user ? message.user.fullname : 'Desconhecido'}
-                                            comment={message.comment}
-                                            lightShadow
-                                            biggerPadding
-                                        />
-                                    </Box>
-                                ))
-                            )}
+                        <Grid
+                            item
+                            xs={5}
+                            sx={{
+                                backgroundColor: 'card.default',
+                                borderRadius: '10px',
+                                boxShadow: '0 5px 10px  rgba(0, 0, 0, 0.1)',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                justifyContent: 'center',
+                            }}
+                        >
+                            <Typography variant="h5" mt='1rem'>Histórico de comentários</Typography>
+                            <Grid item xs={12} px="1rem">
+                                {loadingComments ? (
+                                    <CenteredBox>
+                                        <CircularProgress size={40} color="primary" />
+                                    </CenteredBox>
+                                ) : (
+                                    messages.map((message, index) => (
+                                        <Box key={index} marginBottom={3}>
+                                            <ComplaintHistoryCard
+                                                date={message.createdAt}
+                                                name={message.user ? message.user.fullname : 'Desconhecido'}
+                                                comment={message.comment}
+                                                lightShadow
+                                                biggerPadding
+                                            />
+                                        </Box>
+                                    ))
+                                )}
+                            </Grid>
                         </Grid>
-
-                        <Grid item xs={12}>
-                            <TextField
-                                value={message}
-                                onChange={e => setMessage(e.target.value)}
-                                placeholder="Escreva sua mensagem aqui"
-                                variant="outlined"
-                                multiline
-                                rows={4}
-                                fullWidth
-                            />
-                        </Grid>
-
-                        <Grid item xs={12}>
-                            <LoadingButton
-                                loading={isLoading}
-                                loadingPosition="start"
-                                startIcon={<CheckCircle />}
-                                variant="contained"
-                                color="secondary"
-                                onClick={handleFinalizeReport}
-                                fullWidth
-                                disabled={message.trim() === ''}
+                    </Grid>
+                    <Grid container display="flex" justifyContent="center" gap={5} spacing={3}>
+                        {isReportFinalized && reportUrl && (
+                            <Grid
+                                item
+                                xs={5}
+                                sx={{
+                                    backgroundColor: 'card.default',
+                                    borderRadius: '10px',
+                                    boxShadow: '0 5px 10px  rgba(0, 0, 0, 0.1)',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    position: 'relative',
+                                    
+                                    justifyContent: 'center',
+                                    padding: '1rem',
+                                }}
                             >
-                                Finalizar Relato
-                            </LoadingButton>
-                            {isReportFinalized && reportUrl && (
+                                <Typography sx={{ marginY: '10px' }} variant="h6">
+                                    Relato concluído
+                                </Typography>
                                 <ButtonDownloadPDF
                                     variant="contained"
                                     color="primary"
-                                    fullWidth
                                     className=""
+                                    sx={{ width: '250px', paddingY: '0.5rem' }}
                                     onClick={() => {
                                         const link = document.createElement('a')
                                         link.href = reportUrl
@@ -302,35 +356,44 @@ export const ConclusionPage = ({ histories, tenantId, postId, emailDenunciante }
                                 >
                                     Download do relatório
                                 </ButtonDownloadPDF>
-                            )}
-                            {files.length > 0 && (
-                                <Grid item xs={12}>
-                                    <Typography sx={{ marginY: '20px' }} variant="h5">
-                                        Arquivos anexados:
-                                    </Typography>
-                                    <FileList>
-                                        {files.map(file => (
-                                            <Fragment key={file.id}>
-                                                <ListItem>
-                                                    <ListItemIcon>
-                                                        <FileIcon />
-                                                    </ListItemIcon>
-                                                    <ListItemText primary={file.name} />
-                                                    <IconButton
-                                                        onClick={() => downloadFile(file)}
-                                                        color="primary"
-                                                        aria-label="download file"
-                                                    >
-                                                        <GetApp />
-                                                    </IconButton>
-                                                </ListItem>
-                                                <Divider />
-                                            </Fragment>
-                                        ))}
-                                    </FileList>
-                                </Grid>
-                            )}
-                        </Grid>
+                            </Grid>
+                        )}
+
+                        {files.length > 0 && (
+                            <Grid
+                                item
+                                xs={5}
+                                sx={{
+                                    backgroundColor: 'card.default',
+                                    borderRadius: '10px',
+                                    boxShadow: '0 5px 10px  rgba(0, 0, 0, 0.1)',
+                                }}
+                            >
+                                <Typography sx={{ marginY: '10px' }} variant="h6">
+                                    Arquivos anexados
+                                </Typography>
+                                <FileList>
+                                    {files.map(file => (
+                                        <Fragment key={file.id}>
+                                            <ListItem>
+                                                <ListItemIcon>
+                                                    <FileIcon />
+                                                </ListItemIcon>
+                                                <ListItemText primary={file.name} />
+                                                <IconButton
+                                                    onClick={() => downloadFile(file)}
+                                                    color="primary"
+                                                    aria-label="download file"
+                                                >
+                                                    <GetApp />
+                                                </IconButton>
+                                            </ListItem>
+                                            <Divider />
+                                        </Fragment>
+                                    ))}
+                                </FileList>
+                            </Grid>
+                        )}
                     </Grid>
                 </CardContent>
             </StyledCard>

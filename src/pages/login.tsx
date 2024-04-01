@@ -1,4 +1,4 @@
-import { Alert, Box, Container, Grid, Link, Paper, Stack, Typography } from '@mui/material'
+import { Alert, Box, Grid, Link, Stack, Typography } from '@mui/material'
 import AuthController from 'controllers/authController'
 import Head from 'next/head'
 import NextLink from 'next/link'
@@ -14,17 +14,25 @@ import { Imessage } from 'types/Imessage'
 
 export default function Login() {
     return (
-        <Container sx={{ height: '100vh', display: 'flex', alignItems: 'center' }}>
+        <Grid
+            sx={{
+                height: '100vh',        
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                backgroundColor: '#FFFFFF',
+            }}
+        >
             <Head>
                 <title>Login</title>
             </Head>
 
-            <Grid container justifyContent={'center'} alignItems={'center'}>
-                <Grid item xs={12} md={10} lg={8}>
+            <Grid justifyContent={'center'} alignItems={'center'}>
+                <Grid item xs={12} md={10} lg={8} sx={{ backgroundColor: '#FFFFFF' }}>
                     <AuthLoginForm />
                 </Grid>
             </Grid>
-        </Container>
+        </Grid>
     )
 }
 
@@ -46,7 +54,6 @@ function AuthLoginForm() {
             label: 'E-mail',
             ui: { grid: 12 },
             componenttype: ApolloFormSchemaComponentType.TEXT,
-
             required: true,
         },
         {
@@ -54,63 +61,81 @@ function AuthLoginForm() {
             label: 'Senha',
             ui: { grid: 12 },
             componenttype: ApolloFormSchemaComponentType.PASSWORD,
-
             required: true,
         },
     ]
 
     return (
-        <Paper
-            elevation={3}
+        <Grid
             sx={{
                 display: 'flex',
-                flexDirection: { xs: 'column-reverse', sm: 'row' },
-                borderRadius: 2,
+                flexDirection: { sm: 'row', xs: 'column' },
                 paddingTop: { xs: '20px', sm: '0px' },
+                width: '100vw',
+                height: '100vh',
             }}
         >
-            <Box
-                sx={{
-                    height: '100%',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    width: { xs: '60%', sm: '50%' },
-                    margin: { xs: '0 auto', sm: '0px' },
-                }}
+            <Grid
+                item
+                xs={6}
+                sx={{ backgroundColor: '#F0F2F5', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
             >
-                <img
-                    src="/assets/images/login/woman-job.jpg"
-                    alt="Image"
-                    style={{ maxHeight: '100%', maxWidth: '100%', objectFit: 'cover', borderRadius: '2px 0 0 2px' }}
-                />
-            </Box>
-
-            <Grid p={3} sx={{ width: { xs: '100%', sm: '50%' } }}>
-                <Grid item sx={{ textAlign: 'center', padding: '20px 0' }}>
-                    <Typography sx={{ color: '#2D7999' }} variant="h4">
-                        Bem vindo a Speak-out
+                <Box
+                    sx={{
+                        height: { sm: '100vh', xs: '50vh' },
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        width: { xs: '50%', sm: '35%' },
+                        margin: { xs: '0 auto', sm: '0px' },
+                        backgroundColor: '#F0F2F5',
+                    }}
+                >
+                    <Typography sx={{ color: '#2D7999', mb: '2rem' }} variant="h3">
+                        Sistema de Relatos
                     </Typography>
-                </Grid>
-
-                <Stack spacing={3}>{message && <Alert severity={message.severity}>{message.text}</Alert>}</Stack>
-
-                <ApolloForm
-                    schema={formSchema}
-                    onSubmit={onSubmit}
-                    submitButtonText="Entrar"
-                    defaultExpandedGroup={false}
-                    noRenderCardInForm
-                />
-
-                <Stack alignItems="flex-end" sx={{ mt: 2 }}>
-                    <NextLink href={'/forgot-password'} passHref>
-                        <Link variant="body2" color="inherit" underline="always">
-                            Esqueceu sua senha?
-                        </Link>
-                    </NextLink>
-                </Stack>
+                    <img
+                        src="/logo/logo_speakout.svg"
+                        alt="Logo Speakout"
+                        // style={{ maxHeight: '100%', maxWidth: '100%', objectFit: 'cover',  }}
+                    />
+                </Box>
             </Grid>
-        </Paper>
+
+            <Grid item xs={6} sm={12} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Grid p={0} sx={{ width: { xs: '90%', sm: '100%', md: '60%' } }}>
+                    <Grid item sx={{ textAlign: 'center', padding: '25px 0' }}>
+                        <Typography sx={{ color: '#2D7999' }} variant="h3">
+                            LOGIN
+                        </Typography>
+                    </Grid>
+
+                    <Stack spacing={2} sx={{ marginBottom: 3 }}>
+                        {message && (
+                            <Alert severity={message.severity} sx={{ fontSize: '1.2rem' }}>
+                                {message.text}
+                            </Alert>
+                        )}
+                    </Stack>
+
+                    <ApolloForm
+                        schema={formSchema}
+                        onSubmit={onSubmit}
+                        submitButtonText="Entrar"
+                        defaultExpandedGroup={false}
+                        noRenderCardInForm
+                    />
+
+                    <Stack alignItems="center" sx={{ mt: 6, pb:{xs:'2rem'} }}>
+                        <NextLink href={'/forgot-password'} passHref>
+                            <Link variant="body2" color="#2D7999" underline="always">
+                                Esqueceu sua senha?
+                            </Link>
+                        </NextLink>
+                    </Stack>
+                </Grid>
+            </Grid>
+        </Grid>
     )
 }

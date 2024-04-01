@@ -27,28 +27,34 @@ function ReportHistory({ histories, getPost }: { histories: IPostHistory[]; getP
                 }}
             >
                 {checkPermission(user?.role) && (
-                    <Button variant="contained" onClick={() => setOpenModal(true)}>
-                        <AddIcon /> Nova mensagem
+                    <Button
+                        variant="contained"
+                        sx={{ paddingX: '2rem', paddingY: '0.6rem' }}
+                        onClick={() => setOpenModal(true)}
+                    >
+                        <AddIcon sx={{ mr: 1 }} /> Nova Mensagem
                     </Button>
                 )}
             </Grid>
-            {(histories &&
-                histories.length > 0 &&
-                histories.map((post, index) => (
-                    <ComplaintHistoryCard
-                        key={index}
-                        date={post.createdAt!}
-                        name={post.user ? post.user.fullname : 'Desconhecido'}
-                        comment={post.comment}
-                        files={post.media}
-                        lightShadow
-                        biggerPadding
-                    />
-                ))) || (
-                <Typography variant="body1" textAlign={'center'} fontWeight={600}>
-                    Ainda não existe histórico para exibir
-                </Typography>
-            )}
+            <Grid xs={8}>
+                {(histories &&
+                    histories.length > 0 &&
+                    histories.map((post, index) => (
+                        <ComplaintHistoryCard
+                            key={index}
+                            date={post.createdAt!}
+                            name={post.user ? post.user.fullname : 'Desconhecido'}
+                            comment={post.comment}
+                            files={post.media}
+                            lightShadow
+                            biggerPadding
+                        />
+                    ))) || (
+                    <Typography variant="body1" textAlign={'center'} fontWeight={600}>
+                        Ainda não existe histórico para exibir
+                    </Typography>
+                )}
+            </Grid>
             <NewCommentModal setOpen={setOpenModal} open={openModal} getPost={getPost} />
         </Grid>
     )

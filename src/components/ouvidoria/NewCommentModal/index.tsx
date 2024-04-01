@@ -118,7 +118,7 @@ export function NewCommentModal({
                 return (
                     <Grid item>
                         <Grid item xs={12}>
-                            <InputLabel>Selecione o arquivo</InputLabel>
+                            <InputLabel sx={{ml: '1rem'}}>Selecione o arquivo</InputLabel>
                         </Grid>
                         <TextField
                             type="file"
@@ -149,10 +149,10 @@ export function NewCommentModal({
         <>
             {loading && <LoadingScreen />}
             <Dialog open={open} onClose={handleClose}>
-                <DialogTitle sx={{ padding: '20px 18px 5px 18px' }} color="#727272" id="scroll-dialog-title">
-                    Cadastrar nova ocorrência
+                <DialogTitle sx={{ textAlign:'center' }} color="text" fontSize='1.5rem' id="scroll-dialog-title">
+                    Inserir nova Mensagem
                 </DialogTitle>
-                <DialogContent sx={{ padding: '0' }}>
+                <DialogContent sx={{ padding: '15px' }}>
                     <Grid
                         display="flex"
                         flexDirection="column"
@@ -162,7 +162,8 @@ export function NewCommentModal({
                         xs={12}
                         margin="0 auto"
                         minHeight={'auto'}
-                        sx={{ minWidth: { xs: '100%', md: '500px' } }}
+                        sx={{ minWidth: { xs: '100%', md: '500px' }, backgroundColor:'card.default' }}
+                        
                     >
                         <ApolloForm
                             schema={formSchema}

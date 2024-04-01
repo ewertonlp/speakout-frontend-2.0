@@ -1,7 +1,7 @@
 // next
 import Head from 'next/head'
 // @mui
-import { Container, Grid } from '@mui/material'
+import { Container, Divider, Grid } from '@mui/material'
 // layouts
 // components
 import React from 'react'
@@ -37,9 +37,10 @@ export default function Cadastro() {
                             { name: 'Cadastro' },
                         ]}
                     />
+                    <Divider />
                 </Grid>
-                <Grid item xs={12}>
-                    <NewEditForm values={[]} />
+                <Grid item xs={12} sx={{display: 'flex', justifyContent: 'center', paddingTop:'50px', alignItems:'center'}}>
+                    <NewEditForm values={[]}/>
                 </Grid>
             </Container>
         </CustomCard>

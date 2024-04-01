@@ -1,3 +1,5 @@
+import { Grid } from '@mui/material'
+import { makeStyles } from '@mui/styles'
 import { AreaController } from 'controllers/areaController'
 import UserController from 'controllers/userController'
 import { UserFormSchema } from 'formSchemas/userFormSchema'
@@ -20,8 +22,20 @@ type UserNewEditForm = {
     areas?: string[]
 }
 
+const useStyles = makeStyles(theme => ({
+    gridContainer: {
+        minHeight: '50vh', 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        width: '100%',  
+        borderRadius: '16px', 
+    },
+}))
+
 const NewEditForm = ({ values, customValues, editMode, areas = [] }: UserNewEditForm) => {
     const router = useRouter()
+    const classes = useStyles()
 
     const { tenantId } = useAuthContext()
 
@@ -98,7 +112,7 @@ const NewEditForm = ({ values, customValues, editMode, areas = [] }: UserNewEdit
             if (data.id) {
                 delete data.password
                 await userController.update(data.id, data)
-                enqueueSnackbar('Oba! Usuário editado com sucesso!', { variant: 'success' })
+                enqueueSnackbar('Usuário editado com sucesso!', { variant: 'success' })
             } else {
                 delete data.id
                 if (data.password != data.confirmPassword) {
@@ -107,7 +121,7 @@ const NewEditForm = ({ values, customValues, editMode, areas = [] }: UserNewEdit
                 }
                 await userController.create(data)
                 enqueueSnackbar(
-                    'Oba! Cadastro realizado com sucesso! Um email de confirmação foi enviado para o usuário',
+                    'Cadastro realizado com sucesso! Um email de confirmação foi enviado para o usuário',
                     {
                         variant: 'success',
                         autoHideDuration: null,
@@ -163,7 +177,7 @@ const NewEditForm = ({ values, customValues, editMode, areas = [] }: UserNewEdit
     const [loading, setLoading] = useState(false)
 
     return (
-        <>
+        <Grid container className={classes.gridContainer}>
             {loading && <LoadingScreen />}
             <ApolloForm
                 schema={formSchema}
@@ -175,7 +189,7 @@ const NewEditForm = ({ values, customValues, editMode, areas = [] }: UserNewEdit
                 defaultExpandedGroup={true}
                 customValues={customValues}
             />
-        </>
+        </Grid>
     )
 }
 

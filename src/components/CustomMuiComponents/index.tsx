@@ -2,26 +2,33 @@ import ModeEditIcon from '@mui/icons-material/ModeEdit'
 import { Button, FormControl, Grid, InputLabel, MenuItem, Select, SelectChangeEvent, Typography } from '@mui/material'
 import { ReactNode, useState } from 'react'
 import { ISelectOption } from 'types/ISelectOption'
+import { useTheme } from '@mui/material/styles';
 
 export function GrayTypography({ children, ...other }: { children: ReactNode }) {
+    const theme = useTheme();
+    const titleColor = theme.palette.mode === 'dark' ? theme.palette.text.secondary : theme.palette.text.secondary;
     return (
-        <Typography color="#a7a7a7" {...other}>
+        <Typography style={{ color: titleColor }} {...other}>
             {children}
         </Typography>
     )
 }
 
 export function BlackTypography({ children, ...other }: { children: ReactNode }) {
+    const theme = useTheme();
+    const titleColor = theme.palette.mode === 'dark' ? theme.palette.text.disabled : theme.palette.text.disabled;
     return (
-        <Typography color="#727272" {...other}>
+        <Typography style={{ color: titleColor }} {...other}>
             {children}
         </Typography>
     )
 }
 
 export function TitleTypography({ children, ...other }: { children: ReactNode }) {
+    const theme = useTheme();
+    const titleColor = theme.palette.mode === 'dark' ? theme.palette.text.primary : theme.palette.text.primary;
     return (
-        <Typography variant="h5" color="#727272" {...other}>
+        <Typography variant="h5" style={{ color: titleColor }} {...other}>
             {children}
         </Typography>
     )
@@ -118,10 +125,10 @@ export function EditableCardItem({
     }
 
     return (
-        <Grid sx={{ display: 'flex', flexDirection: 'column', marginY: '12px', rowGap: '5px' }}>
+        <Grid sx={{ display: 'flex', flexDirection: 'column', marginY: '12px', rowGap: '5px', width: '100%' }}>
             <GrayTypography>{title}</GrayTypography>
             {!editMode ? (
-                <Grid display="flex" alignItems="center">
+                <Grid display="flex" alignItems="center" justifyContent="space-between">
                     {!filled ? (
                         <BlackTypography>
                             {value === '' || value === undefined ? '-' : convertText(value)}
@@ -130,13 +137,19 @@ export function EditableCardItem({
                         <Button
                             variant="contained"
                             color={backgroundColors[value]}
-                            sx={{ width: '50px', color: 'white' }}
+                            sx={{ width: '80px', color: 'white' }}
                         >
                             {convertText(value)}
                         </Button>
                     )}
                     <div
-                        style={{ marginLeft: '5px', display: 'flex', alignItems: 'center', cursor: 'pointer' }}
+                        style={{
+                            marginLeft: '25px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'end',
+                            cursor: 'pointer',
+                        }}
                         onClick={() => setEditMode(true)}
                     >
                         <ModeEditIcon sx={{ color: '#a7a7a7' }} />
@@ -153,6 +166,7 @@ export function EditableCardItem({
                         value={selectedValue}
                         label={title}
                         onChange={handleChange}
+                        sx={{ height: '3rem' }}
                     >
                         {selectOptions.map((item, index) => (
                             <MenuItem key={index} value={item.value}>
@@ -164,7 +178,7 @@ export function EditableCardItem({
                         <Button
                             sx={{ width: '40%' }}
                             variant="outlined"
-                            color="secondary"
+                            color="error"
                             onClick={() => setEditMode(false)}
                         >
                             Cancelar
@@ -172,7 +186,7 @@ export function EditableCardItem({
                         <Button
                             sx={{ width: '40%' }}
                             variant="outlined"
-                            color="secondary"
+                            color="success"
                             onClick={() => handleSave(selectedValue, handleCloseEditMode)}
                         >
                             Salvar

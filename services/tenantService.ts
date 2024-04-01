@@ -5,7 +5,6 @@ import api from './api'
 export default class TenantService {
     urlBaseService
     getBasicInformation(companyName: string): Promise<ICompanyInfo> {
-        console.log(companyName)
         return api.get(`api/gettenantbyidentity/${companyName}`)
     }
 

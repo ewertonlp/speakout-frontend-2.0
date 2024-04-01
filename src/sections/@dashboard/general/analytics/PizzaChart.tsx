@@ -27,7 +27,7 @@ const StyledChart = styled('div')(({ theme }) => ({
         // alignContent: 'center',
         display: 'block',
         position: 'relative !important' as 'relative',
-        borderTop: `solid 1px ${theme.palette.divider}`,
+        borderTop: `solid 2px ${theme.palette.divider}`,
         paddingTop: '8px',
         top: `calc(${CHART_HEIGHT - LEGEND_HEIGHT}px) !important`,
     },
@@ -45,6 +45,16 @@ interface Props extends CardProps {
             value: number
         }[]
         options?: ApexOptions
+        dropShadow?: {
+            enabled: boolean,
+            enabledOnSeries: undefined,
+            top: number,
+            left: number,
+            blur: number,
+            color: string,
+            opacity: number
+        }
+        
     }
 }
 
@@ -63,6 +73,7 @@ export default function PizzaChart({ title, subheader, chart, ...other }: Props)
         },
         colors,
         labels: series.map(i => i.label),
+        
         stroke: {
             colors: [theme.palette.background.paper],
         },

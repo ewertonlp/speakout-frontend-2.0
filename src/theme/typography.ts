@@ -24,14 +24,14 @@ export function responsiveFontSizes({ sm, md, lg }: { sm: number; md: number; lg
 
 // ----------------------------------------------------------------------
 
-const FONT_PRIMARY = 'Public Sans, sans-serif' // Google Font
+const FONT_PRIMARY = 'Inter, sans-serif' // Google Font
 // const FONT_SECONDARY = 'CircularStd, sans-serif'; // Local Font
 
 const typography = {
     fontFamily: FONT_PRIMARY,
     fontWeightRegular: 400,
-    fontWeightMedium: 600,
-    fontWeightBold: 700,
+    fontWeightMedium: 500,
+    fontWeightBold: 600,
     h1: {
         fontWeight: 800,
         lineHeight: 80 / 64,
@@ -84,7 +84,7 @@ const typography = {
     },
     body2: {
         lineHeight: 22 / 14,
-        fontSize: pxToRem(14),
+        fontSize: pxToRem(15),
     },
     caption: {
         lineHeight: 1.5,
@@ -99,7 +99,7 @@ const typography = {
     button: {
         fontWeight: 700,
         lineHeight: 24 / 14,
-        fontSize: pxToRem(14),
+        fontSize: pxToRem(15),
         textTransform: 'none',
     },
 } as const

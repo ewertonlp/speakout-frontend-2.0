@@ -1,4 +1,4 @@
-import { Box, Card, Container, Grid, Typography } from '@mui/material'
+import { Box, Card, Container, Divider, Grid, Typography } from '@mui/material'
 import { TrainingController } from 'controllers/trainingController'
 import Head from 'next/head'
 import { useEffect, useState } from 'react'
@@ -47,6 +47,7 @@ const Treinamentos = () => {
                 <Typography variant="h4" sx={{ margin: '20px' }}>
                     Treinamentos
                 </Typography>
+                <Divider />
                 {loading && <LoadingScreen />}
                 <Container sx={{ marginTop: '20px' }} maxWidth={themeStretch ? false : 'xl'}>
                     <Grid rowGap={{ xs: '15px', lg: '25px' }}>
@@ -75,7 +76,19 @@ const Treinamentos = () => {
                                         </Box>
                                     )} */}
 
-                                    <Box sx={{ minWidth: 300, marginTop: 8, marginBottom: 4 }}>
+                                    <Box
+                                        sx={{
+                                            display: 'grid',
+                                            gridTemplateColumns: '1fr 1fr',
+                                            alignItems: 'center',
+                                            gap: 5,
+                                            marginTop: 8,
+                                            marginBottom: 4,
+                                            backgroundColor: 'card.default',
+                                            borderRadius: '10px',
+                                            boxShadow: '2px 2px 10px -1px rgba(0, 0, 0, .08)',
+                                        }}
+                                    >
                                         {loading ? (
                                             <p>Carregando...</p>
                                         ) : status === undefined ? (
@@ -106,7 +119,18 @@ const Treinamentos = () => {
                                             </div>
                                         ) : (
                                             trainingData.map((item, index) => (
-                                                <div key={index}>
+                                                <Grid
+                                                    key={index}
+                                                    sx={{
+                                                        display: 'flex',
+                                                        flexDirection: 'column',
+                                                        alignItems: 'center',
+                                                        JustifyContent: 'center',
+
+                                                        padding: '1rem',
+                                                        overflow: 'hidden',
+                                                    }}
+                                                >
                                                     <ReactPlayer
                                                         url={item.Link}
                                                         controls={false}
@@ -117,7 +141,7 @@ const Treinamentos = () => {
                                                         }}
                                                     />
                                                     <p style={{ fontSize: '1.2rem' }}>{item.Treinamento}</p>
-                                                </div>
+                                                </Grid>
                                             ))
                                         )}
                                     </Box>

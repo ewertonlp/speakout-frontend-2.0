@@ -18,11 +18,12 @@ const Logo = forwardRef<HTMLDivElement, LogoProps>(({ disabledLink = false, sx, 
         <Box
             component="img"
             ref={ref}
-            src="/logo/logo_speakout.svg"
+            src="/logo/logo_speakout_branco.png"
             alt="SpeakOut Logo"
             sx={{
                 width: '70px',
                 height: '70px',
+                marginTop: '0.5rem',
                 cursor: 'pointer',
                 ...sx,
             }}

@@ -20,6 +20,7 @@ import styled from 'styled-components'
 import { IPostHistory } from 'types/IPostHistory'
 import { IPostListing } from 'types/IPostListing'
 import ActionsPage from 'src/components/ActionsPage'
+import { useTheme } from '@mui/material/styles'
 
 // ----------------------------------------------------------------------
 
@@ -30,6 +31,8 @@ export default function Detalhes() {
     const { themeStretch } = useSettingsContext()
     const { query, back } = useRouter()
     const [loading, setLoading] = useState<boolean>(false)
+    const theme = useTheme();
+    const titleColor = theme.palette.mode === 'dark' ? theme.palette.text.secondary : theme.palette.text.secondary;
 
     const [page, setPage] = useState<'relato' | 'historico' | 'usuarios' | 'conclusao' | 'acoes'>('relato')
 
@@ -72,8 +75,8 @@ export default function Detalhes() {
                                     fontSize: '30px',
                                     color: '#727272',
                                     '&:hover': {
-                                        color: '#272727',
-                                        transition: 'color 0.5s',
+                                        color: '#7EB353',
+                                        transition: 'color 0.3s',
                                     },
                                 }}
                             />
@@ -83,10 +86,9 @@ export default function Detalhes() {
                             sx={{
                                 marginLeft: '10px',
                             }}
-                            color="#727272"
                             variant="h5"
                         >
-                            {post.protocol} - Em andamento
+                            {post.protocol} {post.status}
                         </Typography>
                     </Grid>
                     <Container maxWidth={themeStretch ? false : 'xl'}>

@@ -43,19 +43,20 @@ function ComplaintHistoryCard({
         <Grid item>
             <Card
                 sx={{
-                    boxShadow: !lightShadow
-                        ? '0 10px 50px 5px rgba(0, 0, 0, .3)'
-                        : '0 5px 20px 5px rgba(88, 88, 88, 0.3)',
+                    border: '1px solid #a3a3a3',
+                    backgroundColor: 'background.default',
+                    borderRadius: '8px',
+                    mt: '2rem',
                 }}
             >
                 <Grid p={!biggerPadding ? 1.5 : 2.5}>
                     <Grid>
                         <Grid display="flex" columnGap="10px" alignItems="center" marginBottom="15px">
                             <CustomAvatar alt={name} name={name} />
-                            <Typography variant="body2" fontWeight="bold">
+                            <Typography variant="body2" fontSize="1rem" fontWeight="bold">
                                 {name}
                             </Typography>
-                            <Typography variant="body2" fontSize="12px" sx={{ position: 'relative', top: '1px' }}>
+                            <Typography variant="body2" fontSize="0.85rem" sx={{ position: 'relative', top: '1px' }}>
                                 {formattedDate}h
                             </Typography>
                         </Grid>
@@ -87,7 +88,9 @@ function ComplaintHistoryCard({
                             </Grid>
                         )}
                     </Grid>
-                    <Typography variant="body2">{comment}</Typography>
+                    <Typography variant="body2" fontSize="1rem">
+                        {comment}
+                    </Typography>
                 </Grid>
             </Card>
         </Grid>

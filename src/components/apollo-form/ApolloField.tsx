@@ -2,8 +2,8 @@ import React, { useState } from 'react'
 
 import Grid from '@mui/material/Grid'
 import MenuItem from '@mui/material/MenuItem'
-
-import { Button, Dialog, DialogTitle, IconButton, InputAdornment, Typography } from '@mui/material'
+import { useTheme } from '@mui/material/styles'
+import { Button, Dialog, DialogTitle, InputAdornment, Typography } from '@mui/material'
 import CurrencyFormat from 'react-currency-format'
 import { Controller, useFormContext } from 'react-hook-form'
 import { RHFCheckbox, RHFRadioGroup, RHFSelect, RHFSwitch, RHFTextField } from '../hook-form'
@@ -20,7 +20,9 @@ interface ApolloFieldProps {
 
 export const ApolloField: React.FC<ApolloFieldProps> = ({ formField, isDesktop }: ApolloFieldProps) => {
     const [dialogOpen, setDialogOpen] = useState(false)
-
+    const theme = useTheme()
+    const backgroundColor =
+        theme.palette.mode === 'dark' ? theme.palette.card.default : theme.palette.card.paper
     const { setValue } = useFormContext()
 
     const [showPassword, setShowPassword] = useState(false)
@@ -73,6 +75,11 @@ export const ApolloField: React.FC<ApolloFieldProps> = ({ formField, isDesktop }
                             setValue(fieldSchema.name, event.target.value)
                             if (fieldSchema.onChange) fieldSchema.onChange(event)
                         }}
+                        sx={{
+                            borderRadius: '10px',
+                            backgroundColor: backgroundColor, 
+                        }}
+                        placeholder="#000"
                     />
                 )
             case ApolloFormSchemaComponentType.HIDDEN:
@@ -88,6 +95,7 @@ export const ApolloField: React.FC<ApolloFieldProps> = ({ formField, isDesktop }
                             native: false,
                             sx: {
                                 textTransform: 'none',
+                                backgroundColor: backgroundColor
                             },
                         }}
                         {...field}
@@ -107,6 +115,7 @@ export const ApolloField: React.FC<ApolloFieldProps> = ({ formField, isDesktop }
                                     borderRadius: 0.75,
                                     typography: 'body2',
                                     textTransform: 'none',
+                                    backgroundColor: backgroundColor, 
                                 }}
                             >
                                 {option.label}
@@ -153,6 +162,7 @@ export const ApolloField: React.FC<ApolloFieldProps> = ({ formField, isDesktop }
                         onBlur={fieldSchema.onBlur}
                         multiline
                         rows={3}
+                        style={{ backgroundColor: backgroundColor, borderRadius: '10px' }}
                     />
                 )
             case ApolloFormSchemaComponentType.NUMBER:
@@ -170,6 +180,7 @@ export const ApolloField: React.FC<ApolloFieldProps> = ({ formField, isDesktop }
                         }
                         disabled={fieldSchema.disabled && fieldSchema.disabled === true ? true : false}
                         onChange={(event: any) => setValue(fieldSchema.name, Number(event.target.value))}
+                        style={{ backgroundColor: backgroundColor, borderRadius: '10px' }}
                     />
                 )
             case ApolloFormSchemaComponentType.CURRENCY:
@@ -196,6 +207,7 @@ export const ApolloField: React.FC<ApolloFieldProps> = ({ formField, isDesktop }
                                 fieldSchema.onChange(event.target.value)
                             }
                         }}
+                        style={{ backgroundColor: backgroundColor, borderRadius: '10px' }}
                     />
                 )
             case ApolloFormSchemaComponentType.PERCENTAGE:
@@ -215,6 +227,7 @@ export const ApolloField: React.FC<ApolloFieldProps> = ({ formField, isDesktop }
                                 </InputAdornment>
                             ),
                         }}
+                        style={{ backgroundColor: backgroundColor, borderRadius: '10px' }}
                     />
                 )
             case ApolloFormSchemaComponentType.DATE:
@@ -222,7 +235,13 @@ export const ApolloField: React.FC<ApolloFieldProps> = ({ formField, isDesktop }
             case ApolloFormSchemaComponentType.DATETIME:
                 return <RHFDateTimePicker {...fieldSchema} {...field} />
             case ApolloFormSchemaComponentType.EMAIL:
-                return <RHFTextField {...fieldSchema} {...field} type="email" />
+                return (
+                    <RHFTextField
+                        {...fieldSchema}
+                        {...field}
+                        type="email"  
+                    />
+                )
             case ApolloFormSchemaComponentType.DECIMAL:
                 return (
                     <RHFTextField
@@ -230,6 +249,7 @@ export const ApolloField: React.FC<ApolloFieldProps> = ({ formField, isDesktop }
                         {...field}
                         type="number"
                         onChange={(event: any) => setValue(fieldSchema.name, Number(event.target.value))}
+                        style={{ backgroundColor: backgroundColor, borderRadius: '10px' }}
                     />
                 )
             case ApolloFormSchemaComponentType.PASSWORD:
@@ -240,13 +260,7 @@ export const ApolloField: React.FC<ApolloFieldProps> = ({ formField, isDesktop }
                         {...field}
                         type={showPassword ? 'text' : 'password'}
                         InputProps={{
-                            endAdornment: (
-                                <InputAdornment position="end">
-                                    <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
-                                        <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
-                                    </IconButton>
-                                </InputAdornment>
-                            ),
+                            sx: { borderRadius: '10px', backgroundColor: backgroundColor, paddingx: '1rem' },
                         }}
                     />
                 )

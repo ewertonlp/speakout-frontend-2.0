@@ -1,10 +1,11 @@
 // @mui
-import { alpha, styled } from '@mui/material/styles';
+import {  styled } from '@mui/material/styles';
 import { ListItemIcon, ListSubheader, ListItemButton } from '@mui/material';
 // config
 import { ICON, NAV } from '../../../config';
 //
 import { NavItemProps } from '../types';
+
 
 // ----------------------------------------------------------------------
 
@@ -21,11 +22,9 @@ export const StyledItem = styled(ListItemButton, {
   const subItem = depth !== 1;
 
   const activeStyle = {
-    color: theme.palette.primary.main,
-    backgroundColor: alpha(theme.palette.primary.main, theme.palette.action.selectedOpacity),
-    ...(!isLight && {
-      color: theme.palette.primary.light,
-    }),
+    color: theme.palette.grey[0],
+    backgroundColor: theme.palette.primary.main,
+    
   };
 
   const activeSubStyle = {
@@ -39,8 +38,9 @@ export const StyledItem = styled(ListItemButton, {
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(1.5),
     marginBottom: theme.spacing(0.5),
-    color: theme.palette.text.secondary,
-    borderRadius: theme.shape.borderRadius,
+    marginTop: theme.spacing(0.5),
+    color: theme.palette.grey[400],
+    borderRadius: '50px',
     height: NAV.H_DASHBOARD_ITEM,
     // Sub item
     ...(subItem && {
@@ -97,7 +97,7 @@ export const StyledDotIcon = styled('span', {
 })<StyledDotIconProps>(({ active, theme }) => ({
   width: 4,
   height: 4,
-  borderRadius: '50%',
+  borderRadius: '50px',
   backgroundColor: theme.palette.text.disabled,
   transition: theme.transitions.create('transform', {
     duration: theme.transitions.duration.shorter,
@@ -113,7 +113,7 @@ export const StyledDotIcon = styled('span', {
 export const StyledSubheader = styled(ListSubheader)(({ theme }) => ({
   ...theme.typography.overline,
   fontSize: 11,
-  paddingTop: theme.spacing(3),
+  paddingTop: theme.spacing(5),
   paddingBottom: theme.spacing(1),
   color: theme.palette.text.secondary,
 }));

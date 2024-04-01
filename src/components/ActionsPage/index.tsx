@@ -49,8 +49,13 @@ function ActionsPage({ post, getPost }: { post: IPostListing; getPost: (id: stri
                 }}
             >
                 {checkPermission(user?.role) && (
-                    <Button variant="contained" color="secondary" onClick={() => setOpenModal(true)}>
-                        <AddIcon /> Nova ação
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        sx={{ paddingX: '1rem', paddingY: '0.7rem' }}
+                        onClick={() => setOpenModal(true)}
+                    >
+                        <AddIcon /> Cadastrar Nova ação
                     </Button>
                 )}
             </Grid>
@@ -72,6 +77,7 @@ function ActionsPage({ post, getPost }: { post: IPostListing; getPost: (id: stri
                             files={action.media}
                             lightShadow
                             biggerPadding
+                      
                         />
                         {/* <div>
                             <Tooltip title="Enviar convite">

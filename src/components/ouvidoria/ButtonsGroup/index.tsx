@@ -8,7 +8,7 @@ export interface ButtonsGroupProps {
 export function ButtonsGroup({ text }: ButtonsGroupProps) {
     const { push, query } = useRouter()
     const CustomButtom = ({ onClick, children }) => (
-        <Button variant="contained" onClick={onClick} sx={{ padding: '10px 20px', fontSize: '16px' }}>
+        <Button variant="contained" onClick={onClick} sx={{ padding: '10px 40px', fontSize: '18px', borderRadius: '25px' }}>
             {children}
         </Button>
     )
@@ -16,7 +16,7 @@ export function ButtonsGroup({ text }: ButtonsGroupProps) {
     return (
         <Grid
             item
-            sx={{ display: 'flex', gap: '10px', margin: '30px 0 70px 0', flexWrap: 'wrap', justifyContent: 'center' }}
+            sx={{ display: 'flex', gap: '10px', margin: '50px 0 70px 0', flexWrap: 'wrap', justifyContent: 'left' }}
         >
             <CustomButtom onClick={() => push(`/ouvidoria/formulario?company=${query.company}`)}>{text}</CustomButtom>
         </Grid>

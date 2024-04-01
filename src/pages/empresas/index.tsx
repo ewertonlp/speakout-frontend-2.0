@@ -1,7 +1,7 @@
 // next
 import Head from 'next/head'
 // @mui
-import { Button, Card, Container, Grid } from '@mui/material'
+import { Button, Card, Container, Dialog, DialogContent, DialogTitle, Divider, Grid, Typography } from '@mui/material'
 import TenantController from 'controllers/tenantController'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
@@ -12,6 +12,7 @@ import { useSettingsContext } from 'src/components/settings'
 import DashboardLayout from 'src/layouts/dashboard'
 import CrudTable from 'src/sections/@dashboard/general/app/CrudTable'
 import { ITenantGet } from 'types/ITenant'
+import NewEditForm from './form/NewEditForm'
 
 // ----------------------------------------------------------------------
 
@@ -22,9 +23,9 @@ Empresas.getLayout = (page: React.ReactElement) => <DashboardLayout>{page}</Dash
 export default function Empresas() {
     const router = useRouter()
     const { themeStretch } = useSettingsContext()
-
     const [loading, setLoading] = useState(false)
     const [tenants, setTenants] = useState<ITenantGet[]>([])
+    const [openModal, setOpenModal] = useState(false) 
 
     const getTenants = async () => {
         setLoading(true)
@@ -59,7 +60,7 @@ export default function Empresas() {
             {loading && <LoadingScreen />}
             <Card sx={{ height: '100%', px: '1%', py: '18px' }}>
                 <Head>
-                    <title>Empresas</title>
+                    <title>Empresas | Canal Speakout</title>
                 </Head>
 
                 <Container maxWidth={themeStretch ? false : 'xl'}>
@@ -79,9 +80,10 @@ export default function Empresas() {
                                         <Grid item>
                                             <Button
                                                 variant="contained"
+                                                sx={{borderRadius: '25px', px: 4, py: 1.5}}
                                                 startIcon={<Iconify icon="material-symbols:add" />}
                                                 onClick={() => {
-                                                    router.push('/empresas/cadastro')
+                                                    setOpenModal(true)
                                                 }}
                                             >
                                                 Adicionar empresa
@@ -90,6 +92,7 @@ export default function Empresas() {
                                     </Grid>
                                 }
                             />
+                            <Divider/>
                         </Grid>
                         {/* <Grid item xs={12}>
                             <AccordionFilter
@@ -111,11 +114,20 @@ export default function Empresas() {
                                 ]}
                                 removeFunction={disableTenant}
                                 getItems={getTenants}
+                                sx={{width: '100%', color: '#1D1D1E'}}
                             />
                         </Grid>
                     </Grid>
                 </Container>
             </Card>
+            <Dialog open={openModal} onClose={() => setOpenModal(false)} sx={{height:'100vh', py: '5rem'}}>
+                <DialogTitle sx={{textAlign:"center"}} >
+                    <Typography fontSize='1.5rem' fontWeight={600} color="gray">Cadastrar Nova Empresa</Typography>
+                </DialogTitle>
+                <DialogContent sx={{paddingBottom: '2rem'}}>
+                    <NewEditForm /> 
+                </DialogContent>
+            </Dialog>
         </>
     )
 }

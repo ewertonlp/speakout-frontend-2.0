@@ -75,7 +75,7 @@ export default function NotificationsPopover() {
             <IconButtonAnimate
                 color={openPopover ? 'primary' : 'default'}
                 onClick={handleOpenPopover}
-                sx={{ width: 40, height: 40 }}
+                sx={{ width: 40, height: 40, pr: 2 }}
             >
                 <Badge badgeContent={totalUnRead} color="error">
                     <Iconify icon="eva:bell-fill" />
@@ -83,7 +83,7 @@ export default function NotificationsPopover() {
             </IconButtonAnimate>
 
             <MenuPopover open={openPopover} onClose={handleClosePopover} sx={{ width: 360, p: 0 }}>
-                <Box sx={{ display: 'flex', alignItems: 'center', py: 2, px: 2.5 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', py: 2, px: 3 }}>
                     <Box sx={{ flexGrow: 1 }}>
                         <Typography variant="subtitle1">Notificações</Typography>
 

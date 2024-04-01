@@ -29,8 +29,8 @@ export default function Table(theme: Theme) {
           borderBottom: 'none',
         },
         head: {
-          color: theme.palette.text.secondary,
-          backgroundColor: theme.palette.background.neutral,
+          color: theme.palette.grey[200],
+          backgroundColor: '#1F283E',
         },
         stickyHeader: {
           backgroundColor: theme.palette.background.paper,

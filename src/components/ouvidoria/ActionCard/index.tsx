@@ -52,27 +52,31 @@ function ActionCard({
             <Card
                 sx={{
                     boxShadow: !lightShadow
-                        ? '0 10px 50px 5px rgba(0, 0, 0, .3)'
-                        : '0 5px 20px 5px rgba(88, 88, 88, 0.3)',
+                    ? '0 5px 5px rgba(0, 0, 0, .08)'
+                    : '0 5px 10px  rgba(0, 0, 0, 0.1)',
+                    borderRadius: '15px',
+                    backgroundColor: 'card.default',
+                    padding: '1rem',
+                    mt: '2rem',
                 }}
             >
                 <Grid p={!biggerPadding ? 1.5 : 2.5}>
                     <Grid display="flex" justifyContent="space-between">
                         <Grid display="flex" columnGap="10px" alignItems="center" marginBottom="15px">
                             <CustomAvatar alt={name} name={name} />
-                            <Typography variant="body2" fontWeight="bold">
+                            <Typography variant="body2" fontSize="1rem" textTransform='capitalize' fontWeight="bold">
                                 {name}
                             </Typography>
-                            <Typography variant="body2" fontSize="12px" sx={{ position: 'relative', top: '1px' }}>
+                            <Typography variant="body2" fontSize="0.85rem" sx={{ position: 'relative', top: '1px' }}>
                                 {formattedDate}h
                             </Typography>
                         </Grid>
                     </Grid>
-                    <Typography variant="subtitle2">{title}</Typography>
-                    <Typography variant="body2" sx={{ wordWrap: 'break-word' }}>
+                    <Typography variant="subtitle2" fontSize="1rem">{title}</Typography>
+                    <Typography variant="body2"  sx={{ wordWrap: 'break-word' }}>
                         {description}
                     </Typography>
-                    <Typography variant="body2">
+                    <Typography variant="body2" fontSize="1rem" pt={3}>
                         <strong>Status: </strong>
                         {statusEnum[status]}
                     </Typography>

@@ -2,7 +2,7 @@ import { alpha } from '@mui/material/styles'
 
 // ----------------------------------------------------------------------
 
-export type ColorSchema = 'primary' | 'secondary' | 'info' | 'success' | 'warning' | 'error'
+export type ColorSchema = 'primary' | 'secondary' | 'info' | 'success' | 'warning' | 'error' | 'product' | 'menu'
 
 declare module '@mui/material/styles/createPalette' {
     interface TypeBackground {
@@ -19,18 +19,18 @@ declare module '@mui/material/styles/createPalette' {
 }
 
 // SETUP COLORS
-
 const GREY = {
     0: '#FFFFFF',
-    100: '#F9FAFB',
-    200: '#F4F6F8',
+    100: '#F0F2F5',
+    200: '#E1E1E6',
     300: '#DFE3E8',
     400: '#C4CDD5',
     500: '#919EAB',
     600: '#637381',
-    700: '#454F5B',
-    800: '#212B36',
-    900: '#161C24',
+    700: '#8D8D99',
+    800: '#424249',
+    900: '#1D1D1E',
+    bg: '#F0F2F5',
 }
 
 const PRIMARY = {
@@ -40,6 +40,19 @@ const PRIMARY = {
     dark: '#6A9546',
     darker: '#587D3A',
     contrastText: '#fff',
+}
+
+const PRODUCT = {
+    link: '#2E97BA',
+    button: '#59B15E',
+    text: '#8D8D99',
+    hover: '#59595A',
+    menu: '#1F283E',
+}
+
+const BUTTON = {
+    normal: '#59B15E',
+    hover: '#458748',
 }
 
 const SECONDARY = {
@@ -96,7 +109,8 @@ const COMMON = {
     warning: WARNING,
     error: ERROR,
     grey: GREY,
-    divider: alpha(GREY[500], 0.24),
+    product: PRODUCT,
+    divider: alpha(GREY[700], 0.32),
     action: {
         hover: alpha(GREY[500], 0.08),
         selected: alpha(GREY[500], 0.16),
@@ -106,6 +120,9 @@ const COMMON = {
         hoverOpacity: 0.08,
         disabledOpacity: 0.48,
     },
+    placeholder: {
+        color: '#C4CDD5', 
+    }
 }
 
 export default function palette(themeMode: 'light' | 'dark') {
@@ -114,10 +131,12 @@ export default function palette(themeMode: 'light' | 'dark') {
         mode: 'light',
         text: {
             primary: GREY[800],
-            secondary: GREY[600],
-            disabled: GREY[500],
+            secondary: GREY[700],
+            disabled: GREY[600],
         },
-        background: { paper: '#fff', default: '#F6F6F6', neutral: GREY[200] },
+        background: { paper: '#fff', default: '#F0F2F5', neutral: GREY[200] },
+        menu: { paper: '#C4C4CC', default: '#1F283E', neutral: GREY[200] },
+        card: {paper: '#C4C4CC', default: '#FFFFFF', neutral: GREY[200]},
         action: {
             ...COMMON.action,
             active: GREY[600],
@@ -128,15 +147,16 @@ export default function palette(themeMode: 'light' | 'dark') {
         ...COMMON,
         mode: 'dark',
         text: {
-            primary: '#fff',
-            secondary: GREY[500],
+            primary: '#F0F2F5',
+            secondary: GREY[400],
             disabled: GREY[600],
         },
         background: {
-            paper: GREY[800],
-            default: GREY[900],
+            paper: '#1F283E',
+            default: '#141A29',
             neutral: alpha(GREY[500], 0.16),
         },
+        card: {paper: '#C4C4CC', default: '#1F283E', neutral: GREY[200]},
         action: {
             ...COMMON.action,
             active: GREY[500],

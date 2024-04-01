@@ -17,13 +17,11 @@ type TenantForm = {
 
 const NewEditForm = ({ values, customValues, currentBannerId, currentLogoId }: TenantForm) => {
     const router = useRouter()
-
     const { enqueueSnackbar } = useSnackbar()
-
     const [logoFile, setLogoFile] = useState<File>()
     const [bannerFile, setBannerFile] = useState<File>()
-
     const [loading, setLoading] = useState(false)
+    const [openModal, setOpenModal] = useState(true) 
 
     async function deleteImage(id: string) {
         const uploadController = new UploadController()
@@ -52,7 +50,7 @@ const NewEditForm = ({ values, customValues, currentBannerId, currentLogoId }: T
                     }
 
                     await tenantController.create(formattedData)
-                    enqueueSnackbar('Oba! Empresa criada com sucesso', { variant: 'success' })
+                    enqueueSnackbar(' Empresa criada com sucesso', { variant: 'success' })
                     router.push('/empresas')
                 } catch (error) {
                     enqueueSnackbar('Erro ao cadastrar empresa', { variant: 'error' })
@@ -89,7 +87,7 @@ const NewEditForm = ({ values, customValues, currentBannerId, currentLogoId }: T
                 if (currentLogoId && currentLogoId !== logoId) deleteImage(currentLogoId)
                 if (currentBannerId && currentBannerId !== bannerId) deleteImage(currentBannerId)
 
-                enqueueSnackbar('Oba! Empresa editada com sucesso', { variant: 'success' })
+                enqueueSnackbar('Empresa editada com sucesso', { variant: 'success' })
                 router.push('/empresas')
             } catch (error) {
                 enqueueSnackbar('Erro ao editar empresa', { variant: 'error' })
@@ -122,6 +120,22 @@ const NewEditForm = ({ values, customValues, currentBannerId, currentLogoId }: T
             required: true,
             label: 'Nome',
             componenttype: ApolloFormSchemaComponentType.TEXT,
+            ui: { grid: 12 },
+        },
+        
+        
+        {
+            name: 'title_banner',
+            required: true,
+            label: 'Razão Social',
+            componenttype: ApolloFormSchemaComponentType.TEXT,
+            ui: { grid: 12 },
+        },
+        {
+            name: 'identity',
+            required: true,
+            label: 'CNPJ',
+            componenttype: ApolloFormSchemaComponentType.TEXT,
             ui: { grid: 6 },
         },
         {
@@ -136,33 +150,21 @@ const NewEditForm = ({ values, customValues, currentBannerId, currentLogoId }: T
             ],
         },
         {
-            name: 'identity',
+            name: 'linkcondutecode',
             required: true,
-            label: 'CNPJ',
+            label: 'Link para o código de conduta',
             componenttype: ApolloFormSchemaComponentType.TEXT,
-            ui: { grid: 6 },
+            ui: { grid: 12 },
         },
-        {
-            name: 'title_banner',
-            required: true,
-            label: 'Razão Social',
-            componenttype: ApolloFormSchemaComponentType.TEXT,
-            ui: { grid: 6 },
-        },
+       
         {
             name: 'subtitle_banner',
             required: true,
             label: 'Descrição',
             componenttype: ApolloFormSchemaComponentType.TEXTAREA,
-            ui: { grid: 6 },
+            ui: { grid: 20 },
         },
-        {
-            name: 'linkcondutecode',
-            required: true,
-            label: 'Link para o código de conduta',
-            componenttype: ApolloFormSchemaComponentType.TEXT,
-            ui: { grid: 6 },
-        },
+       
         {
             name: 'logo',
             label: 'Logo',
@@ -219,8 +221,8 @@ const NewEditForm = ({ values, customValues, currentBannerId, currentLogoId }: T
                 initialValues={values}
                 onSubmit={onSubmit}
                 showCancelButtom={true}
-                onCancel={() => router.push('/empresas')}
-                submitButtonText="Salvar"
+                onCancel={() => setOpenModal(false)}
+                submitButtonText="Cadastrar"
                 defaultExpandedGroup={true}
                 isEdit
                 customValues={customValues}

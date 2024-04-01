@@ -47,44 +47,53 @@ function Home() {
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
             <Head>
-                <title>Início</title>
+                <title>Página de Relatos {companyInfo?.description}</title>
             </Head>
-
-            <AppBar logoUrl={companyInfo?.logo.url ? (companyInfo?.logo.url as string) : ''} />
+            <Grid container>
+                <AppBar logoUrl={companyInfo?.logo?.url ? (companyInfo?.logo.url as string) : ''} />
+            </Grid>
             <Box sx={{ padding: '30px 10px' }}>
-                <Grid container alignItems="center" justifyContent="center" rowGap={'10px'}>
-                    <Grid item xs={12} lg={6}>
-                        <img src={companyInfo?.banner.url} alt="" />
-                    </Grid>
-                    <Grid item xs={12} lg={6}>
-                        <Grid container spacing={2}>
+                <Grid container alignItems="start" justifyContent="space-between" rowGap={'2rem'} mt={'4rem'}>
+                    <Grid item xs={12} lg={5} sx={{ ml: '7rem' }}>
+                        <Grid container spacing={1}>
                             <Grid item xs={12}>
-                                <Typography variant="h4" color={'black'} textAlign={'center'}>
+                                <Typography variant="h3" color={'#1D1D1E'} textAlign={'left'}>
                                     {companyInfo?.title_banner}
                                 </Typography>
                             </Grid>
                             <Grid item xs={12}>
-                                <Typography variant="body1" color={'black'} fontWeight="300" textAlign={'center'}>
+                                <Typography variant="h4" color={'black'} fontWeight="300" textAlign={'left'}>
                                     {companyInfo?.subtitle_banner}
                                 </Typography>
                             </Grid>
+                            <Grid item xs={12}>
+                                <ButtonsGroup text="Denuncie aqui" />
+                            </Grid>
                         </Grid>
+                    </Grid>
+                    <Grid item xs={12} lg={6}>
+                        <img src={companyInfo?.banner?.url} alt="" style={{ borderRadius: '10px' }} />
                     </Grid>
                 </Grid>
                 <Grid
                     container
-                    style={{ height: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                    style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', paddingTop: '3rem' }}
                 >
-                    <Grid item xs={12}>
-                        <Typography variant="h3" color="#555555" textAlign="center" sx={{ margin: '25px 0' }}>
+                    <Grid
+                        item
+                        xs={10.5}
+                        sx={{ border: '1px solid #637381', borderRadius: '10px', backgroundColor: '#E1E1E6' }}
+                    >
+                        <Typography variant="h3" color="#1D1D1E" textAlign="center" sx={{ margin: '20px 0' }}>
                             Como funciona
                         </Typography>
                         <Typography
                             variant="h6"
-                            marginBottom={10}
+                            marginBottom={6}
                             fontWeight="normal"
                             textAlign={'justify'}
                             paddingX={'6%'}
+                            color="#1D1D1E"
                         >
                             O canal de relatos é mais que um canal para atendimento da legislação. Levamos a sério o
                             compromisso da dignidade da pessoa humana, e por isso, o canal torna-se a maior ferramenta
@@ -95,14 +104,13 @@ function Home() {
                             roubos e furtos; uso indevido de informações privilegiadas ou confidenciais.
                             <br /> As informações registradas neste canal serão recebidas e tratadas por uma empresa
                             independente e especializada que tem por obrigação assegurar o{' '}
-                            <strong>sigilo absoluto</strong> e o tratamento adequado das informações, sem conflito de
+                            <strong color='#000'>sigilo absoluto</strong> e o tratamento adequado das informações, sem conflito de
                             interesses. Caso prefira denunciar via WhatsApp também é possível. É comum os casos em que
                             mulheres são vítimas de assédio sexual e assédio moral no trabalho, tendo que esconderem a
                             situação de sua família e colegas, com medo de represália e perda do emprego. Aqui,
                             garantimos seu direito de ser ouvido, bem como, tratamos de forma profissional os casos
                             denunciados em nosso portal
                         </Typography>
-                        <ButtonsGroup text="Denuncie aqui" />
                     </Grid>
                 </Grid>
             </Box>

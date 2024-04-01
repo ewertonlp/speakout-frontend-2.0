@@ -16,9 +16,8 @@ export default function Index() {
     const { user } = useAuthContext()
 
     useEffect(() => {
-        if (user?.role.type === 'Administrador') push('/home')
+        if (user?.role?.type === 'Administrador') push('/home')
         else push('/relatos')
-        // push('/home')
     }, [])
 
     return <></>

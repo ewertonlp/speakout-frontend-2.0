@@ -41,6 +41,7 @@
         "@mui/joy": "^5.0.0-beta.23",
         "@mui/lab": "^5.0.0-alpha.103",
         "@mui/material": "^5.10.9",
+        "@mui/styles": "^5.15.11",
         "@mui/x-data-grid": "^5.17.7",
         "@mui/x-date-pickers": "^5.0.4",
         "@react-pdf/renderer": "^3.1.12",

@@ -33,7 +33,7 @@ export default function NavVertical({ openNav, onCloseNav }: Props) {
     }, [pathname])
 
     const renderContent = (
-        <div style={{ backgroundColor: '#fff', height: '100%' }}>
+        <div style={{ backgroundColor: '#1F283E', height: '97%', borderRadius: '10px', marginLeft: '0.75rem', marginTop: '0.65rem',marginRight: '0.65rem', boxShadow: '4px 4px 10px rgba(0, 0, 0, 0.5)'}}>
             <Scrollbar
                 sx={{
                     height: 1,
@@ -57,7 +57,7 @@ export default function NavVertical({ openNav, onCloseNav }: Props) {
                     <Logo
                         sx={{
                             position: 'absolute',
-                            ml: 10,
+                            ml: 9,
                             width: 80,
                             height: 80,
                         }}

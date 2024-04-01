@@ -15,16 +15,17 @@ export default function StyledNotistack() {
         '#__next': {
           '.SnackbarContent-root': {
             width: '100%',
-            padding: theme.spacing(1),
-            margin: theme.spacing(0.25, 0),
-            boxShadow: theme.customShadows.z8,
+            padding: theme.spacing(1.5),
+            margin: theme.spacing(0.5, 0),
+            boxShadow: theme.customShadows.dialog,
             borderRadius: theme.shape.borderRadius,
-            color: isLight ? theme.palette.common.white : theme.palette.grey[800],
+            color: isLight ? theme.palette.common.white : theme.palette.grey[900],
             backgroundColor: isLight ? theme.palette.grey[900] : theme.palette.common.white,
             '&.SnackbarItem-variantSuccess, &.SnackbarItem-variantError, &.SnackbarItem-variantWarning, &.SnackbarItem-variantInfo':
               {
                 color: theme.palette.text.primary,
                 backgroundColor: theme.palette.background.paper,
+                
               },
             [theme.breakpoints.up('md')]: {
               minWidth: 240,
@@ -33,6 +34,7 @@ export default function StyledNotistack() {
           '.SnackbarItem-message': {
             padding: '0 !important',
             fontWeight: theme.typography.fontWeightMedium,
+            FontSize:theme.typography.h2
           },
           '.SnackbarItem-action': {
             marginRight: 0,

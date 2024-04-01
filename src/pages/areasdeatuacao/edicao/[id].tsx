@@ -1,7 +1,7 @@
 // next
 import Head from 'next/head'
 // @mui
-import { Container, Grid } from '@mui/material'
+import { Container, Divider, Grid } from '@mui/material'
 import { AreaController } from 'controllers/areaController'
 import { useRouter } from 'next/router'
 import { useSnackbar } from 'notistack'
@@ -26,6 +26,7 @@ export default function Edicao() {
     const [loading, setLoading] = useState<boolean>(false)
     const { enqueueSnackbar } = useSnackbar()
     const [initialValues, setInitialValues] = useState<IArea>()
+    const [openModal, setOpenModal] = useState(false)
 
     const [customValues, setCustomValues] = useState<ApolloFormSchemaCustomValues[]>()
 
@@ -52,7 +53,7 @@ export default function Edicao() {
     return (
         <CustomCard>
             <Head>
-                <title>Edição de área de atuação</title>
+                <title>Editar área de atuação</title>
             </Head>
             {loading && <LoadingScreen />}
             <Container maxWidth={themeStretch ? false : 'xl'}>
@@ -68,7 +69,20 @@ export default function Edicao() {
                         ]}
                     />
                 </Grid>
-                <NewEditForm customValues={customValues} />
+                <Divider />
+                <Grid
+                    xs={6}
+                    sx={{
+                        maxWidth: '800px',
+                        margin: '10rem auto',
+                        border: '1px solid #777777',
+                        borderRadius: '10px',
+                        padding: '4rem 2rem',
+                        backgroundColor: 'card.default',
+                    }}
+                >
+                    <NewEditForm />
+                </Grid>
             </Container>
         </CustomCard>
     )

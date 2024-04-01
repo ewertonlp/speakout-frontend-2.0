@@ -1,7 +1,7 @@
 // next
 import Head from 'next/head'
 // @mui
-import { Button, Card, Container, Dialog, DialogActions, DialogContent, DialogTitle, Grid } from '@mui/material'
+import { Button, Container, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Grid } from '@mui/material'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { useAuthContext } from 'src/auth/useAuthContext'
@@ -31,13 +31,15 @@ export default function ReportsListing() {
     const [selectedStatus, setSelectedStatus] = useState('')
     const [loading, setLoading] = useState(false)
     const [posts, setPosts] = useState<IPostListing[]>([])
-
     const { tenantId } = useAuthContext()
+    const [activeButton, setActiveButton] = useState('')
 
-    function convertStatusText(text:string) {
+    function convertStatusText(text: string) {
         switch (text) {
             case 'em_progresso':
                 return 'Em andamento'
+            case 'abertos_no_mes':
+                return 'Abertos no Mês'
             case 'novo':
                 return 'Novo'
             case 'concluido_procedente':
@@ -75,7 +77,7 @@ export default function ReportsListing() {
                                 ? moment(item.postcloseds[0].date_close).format('DD/MM/YYYY')
                                 : '--',
                         sensibilidadeNum: getSensibilidadeNum(item.sensibilidade),
-                    };
+                    }
                 })
                 .filter(item => selectedStatus === '' || item.status === selectedStatus)
             setPosts(filteredPosts)
@@ -86,14 +88,14 @@ export default function ReportsListing() {
         }
     }
 
-    const getDiasEmAberto = (createdAt:string) => {
+    const getDiasEmAberto = (createdAt: string) => {
         const dataAtual = moment()
         const dataCriacao = moment(createdAt, 'DD/MM/YYYY')
         const diasEmAberto = dataAtual.diff(dataCriacao, 'days')
         return diasEmAberto
     }
 
-    const getSensibilidadeNum = (sensibilidade:string) => {
+    const getSensibilidadeNum = (sensibilidade: string) => {
         switch (sensibilidade) {
             case 'alta':
                 return 3
@@ -106,11 +108,6 @@ export default function ReportsListing() {
         }
     }
 
-    const handleButtonClick = (status:string) => {
-        setSelectedStatus(status)
-        getPosts()
-    }
-
     useEffect(() => {
         const fetchData = async () => {
             await getPosts()
@@ -118,7 +115,7 @@ export default function ReportsListing() {
         fetchData()
     }, [tenantId, selectedStatus])
 
-    const filterPostsByDate = (posts) => {
+    const filterPostsByDate = posts => {
         const date = moment()
         const firstDayOfMonth = date.clone().startOf('month')
         const lastDayOfMonth = date.clone().endOf('month')
@@ -157,96 +154,119 @@ export default function ReportsListing() {
         }
     }
 
+    const handleButtonClick = (status: string) => {
+        setSelectedStatus(status)
+        setActiveButton(status)
+        getPosts()
+    }
+
     return (
         <>
-            <Card sx={{ height: '100%', px: '1%', py: '18px' }}>
-                <Head>
-                    <title>Relatos</title>
-                </Head>
-                {loading && <LoadingScreen />}
-                <Container maxWidth={themeStretch ? false : 'xl'}>
-                    <Grid container spacing={4}>
-                        <Grid item xs={12}>
-                            <HeaderBreadcrumbs
-                                heading={'Relatos'}
-                                links={[
-                                    {
-                                        name: 'Relatos',
-                                        href: '/relatos',
-                                    },
-                                    { name: 'Lista' },
-                                ]}
-                            />
-                        </Grid>
-                        <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'center' }}>
-                            <Button variant="contained" sx={{ mx: '0.5rem' }} onClick={() => handleButtonClick('')}>
-                                Todos
-                            </Button>
-                            <Button variant="contained" sx={{ mx: '0.5rem' }} onClick={() => handleFilterByDate()}>
-                                Abertos no mês
-                            </Button>
-                            <Button variant="contained" sx={{ mx: '0.5rem' }} onClick={() => handleButtonClick('Novo')}>
-                                Novos
-                            </Button>
-                            <Button
-                                variant="contained"
-                                sx={{ mx: '0.5rem' }}
-                                onClick={() => handleButtonClick('Em andamento')}
-                            >
-                                Em andamento
-                            </Button>
-                            <Button
-                                variant="contained"
-                                sx={{ mx: '0.5rem' }}
-                                onClick={() => handleButtonClick('Concluído Procedente')}
-                            >
-                                Finalizado procedente
-                            </Button>
-                            <Button
-                                variant="contained"
-                                sx={{ mx: '0.5rem' }}
-                                onClick={() => handleButtonClick('Concluído Improcedente')}
-                            >
-                                Finalizado improcedente
-                            </Button>
-                            <Button
-                                variant="contained"
-                                sx={{ mx: '0.5rem' }}
-                                onClick={() => handleButtonClick('Cancelado')}
-                            >
-                                Cancelados
-                            </Button>
-                        </Grid>
+            <Head>
+                <title>Relatos | Speakout</title>
+            </Head>
+            {loading && <LoadingScreen />}
+            <Container maxWidth={themeStretch ? false : 'xl'}>
+                <Grid container spacing={4}>
+                    <Grid item xs={12}>
+                        <HeaderBreadcrumbs
+                            heading={'Relatos'}
+                            links={[
+                                {
+                                    name: 'Relatos',
+                                    href: '/relatos',
+                                },
+                                { name: 'Lista' },
+                            ]}
+                        />
+                        <Divider />
+                    </Grid>
 
-                        <Grid item xs={12}>
-                            {/* <AccordionFilter
+                    <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'center', marginTop: '30px' }}>
+                        <Button
+                            variant={selectedStatus === '' ? 'contained' : 'outlined'}
+                            sx={{ mx: '0.5rem', borderRadius: '25px', px: '25px', py: '10px' }}
+                            onClick={() => handleButtonClick('')}
+                        >
+                            {' '}
+                            Todos{' '}
+                        </Button>
+
+                        <Button
+                            variant={selectedStatus === 'Abertos no mês' ? 'contained' : 'outlined'}
+                            sx={{ mx: '0.5rem', borderRadius: '25px', px: '25px', py: '10px' }}
+                            onClick={() => handleFilterByDate()}
+                        >
+                            Abertos no mês
+                        </Button>
+
+                        <Button
+                            variant={selectedStatus === 'Novo' ? 'contained' : 'outlined'}
+                            sx={{ mx: '0.5rem', borderRadius: '25px', px: '25px', py: '10px' }}
+                            onClick={() => handleButtonClick('Novo')}
+                        >
+                            Novos
+                        </Button>
+                        <Button
+                            variant={selectedStatus === 'Em andamento' ? 'contained' : 'outlined'}
+                            sx={{ mx: '0.5rem', borderRadius: '25px', px: '25px', py: '10px' }}
+                            onClick={() => handleButtonClick('Em andamento')}
+                        >
+                            Em andamento
+                        </Button>
+                        <Button
+                            variant={selectedStatus === 'Concluído Procedente' ? 'contained' : 'outlined'}
+                            sx={{ mx: '0.5rem', borderRadius: '25px', px: '25px', py: '10px' }}
+                            onClick={() => handleButtonClick('Concluído Procedente')}
+                        >
+                            Finalizado procedente
+                        </Button>
+                        <Button
+                            variant={selectedStatus === 'Concluído Improcedente' ? 'contained' : 'outlined'}
+                            sx={{ mx: '0.5rem', borderRadius: '25px', px: '25px', py: '10px' }}
+                            onClick={() => handleButtonClick('Concluído Improcedente')}
+                        >
+                            Finalizado improcedente
+                        </Button>
+                        <Button
+                            variant={selectedStatus === 'Cancelado' ? 'contained' : 'outlined'}
+                            sx={{ mx: '0.5rem', borderRadius: '25px', px: '25px', py: '10px' }}
+                            onClick={() => handleButtonClick('Cancelado')}
+                        >
+                            Cancelados
+                        </Button>
+                    </Grid>
+
+                    {/* <Grid item xs={12}> */}
+                    {/* <AccordionFilter
                                 schemaForm={BusinessFilterFormSchema}
                                 setFilters={handleSetBusinessFilters}
                                 formData={businessFilters}
                             /> */}
-                        </Grid>
+                    {/* </Grid> */}
 
-                        <Grid item xs={12}>
-                            <CrudTable
-                                editPagePath="/detalhes/"
-                                tableData={posts || []}
-                                setTableData={setPosts}
-                                clickableRow
-                                onDelete={handleDeleteConfirmation}
-                                tableLabels={[
-                                    { id: 'email', label: 'Email' },
-                                    { id: 'createdAt', label: 'Data Criação' },
-                                    { id: 'status', label: 'Status' },
-                                    { id: 'type', label: 'Tipo de denúncia' },
-                                    { id: 'openDays', label: 'Dias em aberto' },
-                                    { id: 'date_closed', label: 'Data Fechamento' },
-                                    { id: 'sensibilidade', label: 'Sensibilidade' },
-                                ]}
-                            />
-                        </Grid>
+                    <Grid item xs={12} sx={{}}>
+                        <CrudTable
+                            editPagePath="/detalhes/"
+                            tableData={posts || []}
+                            setTableData={setPosts}
+                            clickableRow
+                            onDelete={handleDeleteConfirmation}
+                            sx={{ boxShadow: '2px 2px 10px rgba(1,0,0,0.5)' }}
+                            tableLabels={[
+                                { id: 'email', label: 'Email' },
+                                { id: 'createdAt', label: 'Data Criação' },
+                                { id: 'status', label: 'Status' },
+                                { id: 'type', label: 'Tipo de denúncia' },
+                                { id: 'openDays', label: 'Dias em aberto' },
+                                { id: 'date_closed', label: 'Data Fechamento' },
+                                { id: 'sensibilidade', label: 'Sensibilidade' },
+                            ]}
+                        />
                     </Grid>
-                </Container>
-            </Card>
+                </Grid>
+            </Container>
+
             <Dialog open={isDeleteModalOpen} onClose={() => setDeleteModalOpen(false)}>
                 <DialogTitle textAlign={'center'}>Confirmar Exclusão</DialogTitle>
                 <DialogContent>Tem certeza que deseja excluir este relato?</DialogContent>

@@ -1,4 +1,5 @@
-
+import { Grid } from '@mui/material'
+import { makeStyles } from '@mui/styles'
 import UserController from 'controllers/userController'
 import { UserTempFormSchema } from 'formSchemas/userTempFormSchema'
 import { useRouter } from 'next/router'
@@ -9,7 +10,7 @@ import { ApolloForm, ApolloFormSchemaItem } from 'src/components'
 import { formError } from 'src/components/JsonForm'
 import { ApolloFormSchemaComponentType } from 'src/components/apollo-form/ApolloForm.component'
 import LoadingScreen from 'src/components/loading-screen/LoadingScreen'
-
+import { useTheme } from '@mui/material/styles'
 
 type UserNewEditForm = {
     values?: any
@@ -17,8 +18,22 @@ type UserNewEditForm = {
     editMode?: boolean
 }
 
+const useStyles = makeStyles(theme => ({
+    gridContainer: {
+        minHeight: '50vh', 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        width: '100%',  
+        borderRadius: '10px'
+    },
+}))
+
 const NewUserTemp = ({ values, customValues, editMode }: UserNewEditForm) => {
     const router = useRouter()
+    const classes = useStyles()
+    const theme = useTheme();
+    const backgroundColor = theme.palette.mode === 'dark' ? theme.palette.background.default : theme.palette.background.default;
 
     const { tenantId } = useAuthContext()
 
@@ -41,7 +56,7 @@ const NewUserTemp = ({ values, customValues, editMode }: UserNewEditForm) => {
         {
             name: 'blocked',
             label: 'Bloqueado',
-            ui: { grid: 6 },
+            ui: { grid: 12 },
             required: true,
             componenttype: ApolloFormSchemaComponentType.SELECT,
             options: [
@@ -93,7 +108,7 @@ const NewUserTemp = ({ values, customValues, editMode }: UserNewEditForm) => {
     const [loading, setLoading] = useState(false)
 
     return (
-        <>
+        <Grid container className={classes.gridContainer} style={{ backgroundColor: backgroundColor }}>
             {loading && <LoadingScreen />}
             <ApolloForm
                 schema={formSchema}
@@ -105,7 +120,7 @@ const NewUserTemp = ({ values, customValues, editMode }: UserNewEditForm) => {
                 defaultExpandedGroup={true}
                 customValues={customValues}
             />
-        </>
+        </Grid>
     )
 }
 

@@ -28,7 +28,7 @@ function NavHorizontal() {
             <Toolbar
                 sx={{
                     ...bgBlur({
-                        color: theme.palette.background.default,
+                        color: theme.palette.background.paper,
                     }),
                 }}
             >

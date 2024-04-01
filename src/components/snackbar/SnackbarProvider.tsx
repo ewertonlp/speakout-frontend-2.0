@@ -40,7 +40,7 @@ export default function SnackbarProvider({ children }: Props) {
                 autoHideDuration={5000}
                 TransitionComponent={isRTL ? Collapse : undefined}
                 variant="success" // Set default variant
-                anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
                 iconVariant={{
                     info: <SnackbarIcon icon="eva:info-fill" color="info" />,
                     success: <SnackbarIcon icon="eva:checkmark-circle-2-fill" color="success" />,
@@ -72,18 +72,18 @@ function SnackbarIcon({ icon, color }: SnackbarIconProps) {
         <Box
             component="span"
             sx={{
-                mr: 1.5,
-                width: 40,
-                height: 40,
+                mr: 2,
+                width: 50,
+                height: 50,
                 display: 'flex',
-                borderRadius: 1.5,
+                borderRadius: 5,
                 alignItems: 'center',
                 justifyContent: 'center',
                 color: `${color}.main`,
-                bgcolor: theme => alpha(theme.palette[color].main, 0.16),
+                bgcolor: theme => alpha(theme.palette[color].main, 0.3),
             }}
         >
-            <Iconify icon={icon} width={28} />
+            <Iconify icon={icon} width={30} />
         </Box>
     )
 }

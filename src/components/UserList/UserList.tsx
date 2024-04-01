@@ -23,20 +23,21 @@ import { checkPermission } from 'src/utils/functions'
 import { IDashUser } from 'types/IDashUser'
 import { UserSelector } from '../UserSelector'
 
-
 const StyledListItem = styled(ListItem)(({ theme }) => ({
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: theme.palette.background.default,
     marginBottom: theme.spacing(1),
-    padding: theme.spacing(1),
+    padding: theme.spacing(2),
     borderRadius: theme.shape.borderRadius,
+    border: '1px solid #a3a3a3',
 }))
 
-const StyledCard = styled(Card)({
-    margin: '2rem auto',
+const StyledCard = styled(Card)(({ theme }) => ({
+    backgroundColor: theme.palette.card.default,
+    margin: '4rem auto',
     padding: '1rem',
-    borderRadius: 15,
-    boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
-})
+    borderRadius: 10,
+    boxShadow: '0 5px 10px  rgba(0, 0, 0, 0.1)',
+}))
 export const UserList = ({ postId }) => {
     const [selectedUsers, setSelectedUsers] = useState<IDashUser[]>([])
     const [loading, setLoading] = useState(false)
@@ -87,16 +88,16 @@ export const UserList = ({ postId }) => {
         await postController.update({ users: newSelectedUsers }, postId)
     }
 
-    const handleSendEmail = async (selectedUser) => {
+    const handleSendEmail = async selectedUser => {
         try {
-            setLoading(true);
-            const response = await postController.sendEmail(selectedUser.email);
+            setLoading(true)
+            const response = await postController.sendEmail(selectedUser.email)
             enqueueSnackbar('O convite foi enviado por email ao usuário selecionado.', { variant: 'success' })
         } catch (error) {
             enqueueSnackbar('Erro ao enviar email', { variant: 'error' })
             console.error('Erro ao enviar email', error)
         } finally {
-            setLoading(false);
+            setLoading(false)
         }
     }
 
@@ -135,7 +136,10 @@ export const UserList = ({ postId }) => {
                                                         aria-label="mail"
                                                         onClick={() => handleSendEmail(selectedUser)}
                                                         sx={{
-                                                            marginX: 2,
+                                                            marginX: 1,
+                                                            '&:hover': {
+                                                                color: 'primary.main', // Altere para a cor desejada
+                                                            },
                                                         }}
                                                     >
                                                         {checkPermission(user?.role) && <SendIcon />}
@@ -146,6 +150,11 @@ export const UserList = ({ postId }) => {
                                                         edge="end"
                                                         aria-label="delete"
                                                         onClick={() => handleDelete(selectedUser)}
+                                                        sx={{
+                                                            '&:hover': {
+                                                                color: '#FF5630', // Altere para a cor desejada
+                                                            },
+                                                        }}
                                                     >
                                                         {checkPermission(user?.role) && <DeleteIcon />}
                                                     </IconButton>

@@ -1,7 +1,8 @@
 // next
 import Head from 'next/head'
 // @mui
-import { Button, Card, Container, Grid } from '@mui/material'
+import { Button, Card, Container, Dialog, DialogContent, DialogTitle, Divider, Grid, Typography } from '@mui/material'
+import { useTheme } from '@mui/material/styles'
 import UserController from 'controllers/userController'
 import { UserFiltersFormSchema } from 'formSchemas/userFormSchema'
 import { useRouter } from 'next/router'
@@ -15,6 +16,8 @@ import { useSettingsContext } from 'src/components/settings'
 import DashboardLayout from 'src/layouts/dashboard'
 import CrudTable from 'src/sections/@dashboard/general/app/CrudTable'
 import { IDashUser, IDashUserFilter } from 'types/IDashUser'
+import NewEditForm from './form/NewEditForm'
+import NewUserTemp from './form/NewUserTemp'
 
 // ----------------------------------------------------------------------
 
@@ -25,17 +28,17 @@ Usuarios.getLayout = (page: React.ReactElement) => <DashboardLayout>{page}</Dash
 export default function Usuarios() {
     const router = useRouter()
     const { themeStretch } = useSettingsContext()
-
     const [userFilters, setUserFilters] = useState<IDashUserFilter>()
-
     function handleSetUserFilters(data: IDashUserFilter) {
         setUserFilters(data)
     }
-
     const [loading, setLoading] = useState(false)
     const [users, setUsers] = useState<IDashUser[]>([])
-
     const { tenantId } = useAuthContext()
+    const [openModal, setOpenModal] = useState(false)
+    const theme = useTheme()
+    const backgroundColor =
+        theme.palette.mode === 'dark' ? theme.palette.background.default : theme.palette.background.default
 
     const getUsers = async () => {
         setLoading(true)
@@ -86,19 +89,21 @@ export default function Usuarios() {
                                                 variant="contained"
                                                 startIcon={<Iconify icon="material-symbols:add" />}
                                                 onClick={() => {
-                                                    router.push('/usuarios/cadastro')
+                                                    setOpenModal(true)
                                                 }}
+                                                sx={{ borderRadius: '25px', py: 1.5 }}
                                             >
                                                 Cadastrar usuário
                                             </Button>
                                         </Grid>
                                         <Grid item>
                                             <Button
-                                                variant="soft"
+                                                variant="outlined"
                                                 startIcon={<Iconify icon="material-symbols:add" />}
                                                 onClick={() => {
-                                                    router.push('/usuarios/cadastro/usuariotemporario')
+                                                    setOpenModal(true)
                                                 }}
+                                                sx={{ borderRadius: '25px', py: 1.5 }}
                                             >
                                                 Cadastrar usuário temporário
                                             </Button>
@@ -106,6 +111,7 @@ export default function Usuarios() {
                                     </Grid>
                                 }
                             />
+                            <Divider />
                         </Grid>
                         <Grid item xs={12}>
                             <AccordionFilter
@@ -130,6 +136,26 @@ export default function Usuarios() {
                     </Grid>
                 </Container>
             </Card>
+            <Dialog open={openModal} onClose={() => setOpenModal(false)}>
+                <DialogTitle sx={{ textAlign: 'center' }}>
+                    <Typography fontSize="1.5rem" fontWeight={600} >
+                        Cadastrar Novo Usuário
+                    </Typography>
+                </DialogTitle>
+                <DialogContent>
+                    <NewEditForm />
+                </DialogContent>
+            </Dialog>
+            <Dialog open={openModal} onClose={() => setOpenModal(false)} style={{}}>
+                <DialogTitle sx={{ textAlign: 'center' }}>
+                    <Typography fontSize="1.5rem" fontWeight={600} >
+                        Cadastrar Novo Usuário Temporário
+                    </Typography>
+                </DialogTitle>
+                <DialogContent>
+                    <NewUserTemp />
+                </DialogContent>
+            </Dialog>
         </>
     )
 }

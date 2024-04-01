@@ -31,18 +31,20 @@ export default function Button(theme: Theme) {
     const largeSize = ownerState.size === 'large';
 
     const defaultStyle = {
+     
       ...(inheritColor && {
         // CONTAINED
         ...(containedVariant && {
           color: theme.palette.grey[800],
+          
           '&:hover': {
-            boxShadow: theme.customShadows.z8,
-            backgroundColor: theme.palette.grey[400],
+            // boxShadow: theme.customShadows.z8,
+            backgroundColor: theme.palette.grey[500],
           },
         }),
         // OUTLINED
         ...(outlinedVariant && {
-          borderColor: alpha(theme.palette.grey[500], 0.32),
+          borderColor: alpha(theme.palette.primary.main, 0.32),
           '&:hover': {
             borderColor: theme.palette.text.primary,
             backgroundColor: theme.palette.action.hover,
@@ -70,7 +72,7 @@ export default function Button(theme: Theme) {
         // CONTAINED
         ...(containedVariant && {
           '&:hover': {
-            boxShadow: theme.customShadows[color],
+            // boxShadow: theme.customShadows[color],
           },
         }),
         // SOFT

@@ -6,24 +6,26 @@ function UserConfirmation() {
     const { push } = useRouter()
 
     return (
-        <Container sx={{ height: '100%', display: 'flex', justifyContent: 'center' }}>
+        <Container sx={{ height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
             <Card
                 sx={{
-                    width: '80%',
+                    width: '50%',
                     minWidth: '300px',
-                    height: '100%',
+                    height: '40vh',
                     display: 'flex',
-                    justifyContent: 'space-evenly',
+                    justifyContent: 'center',
                     flexDirection: 'column',
                     alignItems: 'center',
+                    border: '1px solid #7777',
+                    backgroundColor: 'card.default',
                 }}
             >
-                <Typography textAlign="center" variant="h5">
+                <Typography textAlign="center" mb={2} variant="h5">
                     Usuário confirmado com sucesso!
                 </Typography>
                 <Button
                     variant="contained"
-                    sx={{ padding: '8px', width: '30%', fontSize: '16px' }}
+                    sx={{ padding: '8px', width: '50%', fontSize: '16px' }}
                     onClick={() => push('/login')}
                 >
                     Ir para login

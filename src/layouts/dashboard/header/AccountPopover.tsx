@@ -71,16 +71,16 @@ export default function AccountPopover() {
             <IconButtonAnimate
                 onClick={handleOpenPopover}
                 sx={{
-                    p: 0,
+                    pl: 1,
                     ...(openPopover && {
                         '&:before': {
                             zIndex: 1,
                             content: "''",
-                            width: '100%',
-                            height: '100%',
+                            width: '95%',
+                            height: '95%',
                             borderRadius: '50%',
                             position: 'absolute',
-                            bgcolor: theme => alpha(theme.palette.grey[900], 0.8),
+                            bgcolor: theme => alpha(theme.palette.grey[200], 0.5),
                         },
                     }),
                 }}
@@ -91,10 +91,10 @@ export default function AccountPopover() {
             <MenuPopover
                 open={openPopover}
                 onClose={handleClosePopover}
-                sx={{ width: 200, p: 0 }}
+                sx={{ width: 250, mt: 8}}
                 anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
             >
-                <Box sx={{ my: 1.5, px: 2.5 }}>
+                <Box sx={{ my: 1.5, px: 2.5,}}>
                     <Typography variant="subtitle2" noWrap>
                         {user?.username}
                     </Typography>
@@ -180,7 +180,7 @@ export function UpdatePasswordModal({
         <>
             <Dialog open={open} onClose={handleClose}>
                 <Typography variant="h4" paddingTop="18px" textAlign="center">
-                    Mudança de senha
+                    Alterar a senha
                 </Typography>
                 <DialogContent sx={{ padding: '0' }}>
                     <Grid item sx={{ textAlign: 'center' }} p={3}>
