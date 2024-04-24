@@ -68,13 +68,13 @@ function Form() {
             sx={{
                 maxWidth: '550px',
                 height: '100%',
-                border: '1px solid #777777',
+                border: '1px solid #adadad',
                 backgroundColor: 'card.default',
             }}
         >
             <Grid item sx={{ textAlign: 'center' }} p={4}>
                 <Typography variant="h4" mb={2}>
-                    Trocar de senha
+                    Mudar a senha
                 </Typography>
                 <Stack spacing={3}>{message && <Alert severity={message.severity}>{message.text}</Alert>}</Stack>
                 <ApolloForm

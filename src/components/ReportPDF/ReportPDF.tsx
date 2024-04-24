@@ -1,7 +1,6 @@
 import { Document, Font, Image, Page, StyleSheet, Text, View } from '@react-pdf/renderer'
 import { format } from 'date-fns'
 
-
 Font.register({ family: 'CircularStd-Bold', src: '/fonts/CircularStd-Bold.otf' })
 
 const styles = StyleSheet.create({
@@ -10,15 +9,14 @@ const styles = StyleSheet.create({
         padding: 20,
     },
     logo: {
-        width: 60,
-        height: 'auto',
+        width: '100vw',
+        height: '150px',
         position: 'absolute',
-        right: 5,
-        top: 0,
+      top:0,
+      left:0
     },
     header: {
-        flexDirection: 'column',
-      
+        width: '100%',
     },
     section: {
         display: 'flex',
@@ -64,13 +62,13 @@ const styles = StyleSheet.create({
     },
 })
 
-
 const ReportPDF = ({ reportData }) => (
-    
     <Document>
         <Page size="A4" style={styles.page}>
             <View style={styles.header}>
-                <Image src="/logo/logo_speakout.jpg" style={styles.logo} />
+                <Image
+                    src={{ uri: '/header.jpg', method: 'GET', headers: { 'Cache-Control': 'no-cache' }, body: '' }}
+                />
                 <Text style={styles.headerText}>Relatório de Denúncia</Text>
             </View>
             <Text style={styles.subheader}>Informações Gerais</Text>
@@ -181,7 +179,7 @@ const ReportPDF = ({ reportData }) => (
                 </Text>
             </View>
 
-            <Text style={styles.subheader}>Comitê:</Text>
+            {/* <Text style={styles.subheader}>Comitê:</Text>
             <View style={styles.section}>
                 {reportData.data.users.map(user => (
                     <View style={styles.userSection} key={user.id}>
@@ -191,9 +189,9 @@ const ReportPDF = ({ reportData }) => (
                         <Text style={styles.text}>Atualizado: {format(new Date(user.updatedAt), 'dd/MM/yyyy')}</Text>
                     </View>
                 ))}
-            </View>
+            </View> */}
 
-            <Text style={styles.subheader}>Chat com Manifestante</Text>
+            {/* <Text style={styles.subheader}>Chat com Manifestante</Text>
             <View style={styles.section}>
                 {reportData.data.posthistories.map(message => (
                     <View style={styles.userSection} key={message.id}>
@@ -213,7 +211,7 @@ const ReportPDF = ({ reportData }) => (
                         </Text>
                     </View>
                 ))}
-            </View>
+            </View> */}
 
             <Text style={styles.subheader}>Conclusão</Text>
             <View style={styles.section}>

@@ -31,7 +31,6 @@ export default function SnackbarProvider({ children }: Props) {
     return (
         <>
             <StyledNotistack />
-
             <NotistackProvider
                 ref={notistackRef}
                 dense
@@ -40,7 +39,7 @@ export default function SnackbarProvider({ children }: Props) {
                 autoHideDuration={5000}
                 TransitionComponent={isRTL ? Collapse : undefined}
                 variant="success" // Set default variant
-                anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
                 iconVariant={{
                     info: <SnackbarIcon icon="eva:info-fill" color="info" />,
                     success: <SnackbarIcon icon="eva:checkmark-circle-2-fill" color="success" />,
@@ -49,7 +48,7 @@ export default function SnackbarProvider({ children }: Props) {
                 }}
                 // With close as default
                 action={key => (
-                    <IconButton size="small" onClick={onClose(key)} sx={{ p: 0.5 }}>
+                    <IconButton size="small" onClick={onClose(key)} sx={{ p: 1 }}>
                         <Iconify icon="eva:close-fill" />
                     </IconButton>
                 )}
@@ -80,7 +79,7 @@ function SnackbarIcon({ icon, color }: SnackbarIconProps) {
                 alignItems: 'center',
                 justifyContent: 'center',
                 color: `${color}.main`,
-                bgcolor: theme => alpha(theme.palette[color].main, 0.3),
+                bgcolor: theme => alpha(theme.palette.background.neutral, 0.3),
             }}
         >
             <Iconify icon={icon} width={30} />

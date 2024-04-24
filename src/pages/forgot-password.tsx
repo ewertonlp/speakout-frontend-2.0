@@ -52,7 +52,7 @@ function Form() {
     ]
 
     return (
-        <Card sx={{ maxWidth: '550px', height: '100%', border: '1px solid #777777', backgroundColor: "card.default" }}>
+        <Card sx={{ maxWidth: '550px', height: '100%', border: '1px solid #adadad', backgroundColor: "card.default" }}>
             <Grid p={3}>
                 <Grid item sx={{ textAlign: 'center', padding: '20px 0' }}>
                     <Typography variant="h4">Redefinir sua Senha</Typography>

@@ -79,18 +79,18 @@ const NewUserTemp = ({ values, customValues, editMode }: UserNewEditForm) => {
             if (data.id) {
                 delete data.password
                 await userController.update(data.id, data)
-                enqueueSnackbar('Oba! Usuário editado com sucesso!', { variant: 'success' })
+                enqueueSnackbar('Usuário editado com sucesso!', { variant: 'success' })
             } else {
                 delete data.id
                 if (data.password != data.confirmPassword) {
                     enqueueSnackbar('Ops! As senhas não coincidem', { variant: 'error' })
                     return
                 }
-                data.comite = true
-                data.cpf = ""
+                // data.comite = true
+                // data.cpf = ""
                 await userController.create(data)
                 enqueueSnackbar(
-                    'Oba! Cadastro realizado com sucesso! Um email de confirmação foi enviado para o usuário',
+                    'Cadastro realizado com sucesso! Um email de confirmação foi enviado para o usuário',
                     {
                         variant: 'success',
                         autoHideDuration: null,

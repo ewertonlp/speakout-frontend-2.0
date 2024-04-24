@@ -35,7 +35,8 @@ export default function Usuarios() {
     const [loading, setLoading] = useState(false)
     const [users, setUsers] = useState<IDashUser[]>([])
     const { tenantId } = useAuthContext()
-    const [openModal, setOpenModal] = useState(false)
+    const [openModalUser, setOpenModalUser] = useState(false) 
+    const [openModalTempUser, setOpenModalTempUser] = useState(false) 
     const theme = useTheme()
     const backgroundColor =
         theme.palette.mode === 'dark' ? theme.palette.background.default : theme.palette.background.default
@@ -58,6 +59,18 @@ export default function Usuarios() {
         } catch (error) {}
         setLoading(false)
     }
+
+    const disableUser = async (data: any, id: string) => {
+        const userController = new UserController()
+        try {
+            const newData = {
+                ...data,
+                status: false,
+            }
+            await userController.update(id, newData)
+        } catch (error) {}
+    }
+
 
     useEffect(() => {
         getUsers()
@@ -89,7 +102,7 @@ export default function Usuarios() {
                                                 variant="contained"
                                                 startIcon={<Iconify icon="material-symbols:add" />}
                                                 onClick={() => {
-                                                    setOpenModal(true)
+                                                    setOpenModalUser(true) 
                                                 }}
                                                 sx={{ borderRadius: '25px', py: 1.5 }}
                                             >
@@ -101,7 +114,7 @@ export default function Usuarios() {
                                                 variant="outlined"
                                                 startIcon={<Iconify icon="material-symbols:add" />}
                                                 onClick={() => {
-                                                    setOpenModal(true)
+                                                    setOpenModalTempUser(true) 
                                                 }}
                                                 sx={{ borderRadius: '25px', py: 1.5 }}
                                             >
@@ -131,12 +144,14 @@ export default function Usuarios() {
                                     { id: 'cpf', label: 'CPF' },
                                     { id: 'action', label: 'Ações' },
                                 ]}
+                                removeFunction={disableUser}
+                                getItems={getUsers}
                             />
                         </Grid>
                     </Grid>
                 </Container>
             </Card>
-            <Dialog open={openModal} onClose={() => setOpenModal(false)}>
+            <Dialog open={openModalUser} onClose={() => setOpenModalUser(false)}>
                 <DialogTitle sx={{ textAlign: 'center' }}>
                     <Typography fontSize="1.5rem" fontWeight={600} >
                         Cadastrar Novo Usuário
@@ -146,7 +161,7 @@ export default function Usuarios() {
                     <NewEditForm />
                 </DialogContent>
             </Dialog>
-            <Dialog open={openModal} onClose={() => setOpenModal(false)} style={{}}>
+            <Dialog open={openModalTempUser} onClose={() => setOpenModalTempUser(false)}>
                 <DialogTitle sx={{ textAlign: 'center' }}>
                     <Typography fontSize="1.5rem" fontWeight={600} >
                         Cadastrar Novo Usuário Temporário

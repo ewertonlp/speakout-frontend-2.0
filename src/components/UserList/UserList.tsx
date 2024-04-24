@@ -2,9 +2,14 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import SendIcon from '@mui/icons-material/Send'
 import {
     Box,
+    Button,
     Card,
     CardContent,
     CircularProgress,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
     Divider,
     IconButton,
     List,
@@ -14,7 +19,7 @@ import {
     Tooltip,
     Typography,
 } from '@mui/material'
-import { styled } from '@mui/material/styles'
+import { styled, useTheme } from '@mui/material/styles'
 import { PostController } from 'controllers/postController'
 import { useSnackbar } from 'notistack'
 import { useEffect, useState } from 'react'
@@ -31,18 +36,28 @@ const StyledListItem = styled(ListItem)(({ theme }) => ({
     border: '1px solid #a3a3a3',
 }))
 
+
+
 const StyledCard = styled(Card)(({ theme }) => ({
-    backgroundColor: theme.palette.card.default,
+    backgroundColor: theme.palette.background.paper,
     margin: '4rem auto',
     padding: '1rem',
     borderRadius: 10,
-    boxShadow: '0 5px 10px  rgba(0, 0, 0, 0.1)',
+   
+    '&:hover': {
+        boxShadow: '1px 1px 15px rgba(0, 0, 0, 0.16)',
+    },
 }))
 export const UserList = ({ postId }) => {
     const [selectedUsers, setSelectedUsers] = useState<IDashUser[]>([])
     const [loading, setLoading] = useState(false)
     const postController = new PostController()
     const { enqueueSnackbar } = useSnackbar()
+    const [deleteUserId, setDeleteUserId] = useState('')
+    const [isDeleteModalOpen, setDeleteModalOpen] = useState(false)
+    const theme = useTheme()
+
+    const borderColor = theme.palette.mode === 'dark' ? '#424249' : '#d2d2d2'
 
     const { user } = useAuthContext()
 
@@ -80,12 +95,18 @@ export const UserList = ({ postId }) => {
         await postController.update({ users: updatedUsers }, postId)
     }
 
-    const handleDelete = async userToDelete => {
-        const newSelectedUsers = selectedUsers.filter(user => user.id !== userToDelete.id)
+    const handleDeleteConfirmation = id => {
+        setDeleteUserId(id)
+        setDeleteModalOpen(true)
+    }
 
+    console.log(selectedUsers)
+
+    const handleDelete = async () => {
+        const newSelectedUsers = selectedUsers.filter(user => user.id !== deleteUserId)
         setSelectedUsers(newSelectedUsers)
-
         await postController.update({ users: newSelectedUsers }, postId)
+        setDeleteModalOpen(false)
     }
 
     const handleSendEmail = async selectedUser => {
@@ -112,8 +133,8 @@ export const UserList = ({ postId }) => {
                     <UserSelector selectedUsers={selectedUsers} onUserSelect={handleUserSelect} />
                 )}
             </Box>
-            <StyledCard>
-                <CardContent>
+            <StyledCard sx={{border: `1px solid ${borderColor}`}}>
+                <CardContent >
                     <Box display="flex" justifyContent="space-between" alignItems="center">
                         <Typography variant="h4">Usuários do Comitê</Typography>
                     </Box>
@@ -149,10 +170,10 @@ export const UserList = ({ postId }) => {
                                                     <IconButton
                                                         edge="end"
                                                         aria-label="delete"
-                                                        onClick={() => handleDelete(selectedUser)}
+                                                        onClick={() => handleDeleteConfirmation(selectedUsers[0].id)}
                                                         sx={{
                                                             '&:hover': {
-                                                                color: '#FF5630', // Altere para a cor desejada
+                                                                color: '#FF5630',
                                                             },
                                                         }}
                                                     >
@@ -169,6 +190,18 @@ export const UserList = ({ postId }) => {
                     )}
                 </CardContent>
             </StyledCard>
+            <Dialog open={isDeleteModalOpen} onClose={() => setDeleteModalOpen(false)}>
+                <DialogTitle textAlign={'center'}>Confirmar Exclusão</DialogTitle>
+                <DialogContent>Tem certeza que deseja excluir o usuário?</DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setDeleteModalOpen(false)} size="large">
+                        Cancelar
+                    </Button>
+                    <Button onClick={handleDelete} color="error" size="large">
+                        Excluir
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </>
     )
 }

@@ -1,5 +1,6 @@
 import { LoadingButton } from '@mui/lab'
 import { Button, Card, Grid, TextField, Typography } from '@mui/material'
+import { useTheme } from '@mui/material/styles'
 import ComplaintController from 'controllers/complaintController'
 import TenantController from 'controllers/tenantController'
 import Head from 'next/head'
@@ -24,6 +25,9 @@ function StatusDenunciaPage() {
     const [openModal, setOpenModal] = useState(false)
     const [historyOfOccurences, setHistoryOfOccurences] = useState<IPostHistory[]>()
     const { enqueueSnackbar } = useSnackbar()
+    const theme = useTheme()
+
+    const borderColor = theme.palette.mode === 'dark' ? '#424249' : '#d2d2d2'
 
     useEffect(() => {
         if (!router.isReady) return
@@ -74,21 +78,27 @@ function StatusDenunciaPage() {
 
             <AppBar logoUrl={companyInfo?.logo.url as string} />
             <Grid container display="flex" alignItems="center" height="calc(100% - 84px)" justifyContent="center">
-                <Grid item xs={11} lg={8}>
+                <Grid item xs={10} lg={5}>
                     <Card
                         sx={{
-                            boxShadow: '0 10px 50px 5px rgba(0, 0, 0, .3)',
+                            border: `1px solid ${borderColor}`,
+                            backgroundColor: 'card.default',
+                            borderRadius: '10px',
+                            padding: '2rem',
+                            '&:hover': {
+                                boxShadow: '1px 1px 15px rgba(0, 0, 0, 0.16)',
+                            },
                         }}
                     >
                         <Grid
                             p={3}
                             sx={{ textAlign: 'center', display: 'flex', flexDirection: 'column', rowGap: '35px' }}
                         >
-                            <Typography variant="h4">Acompanhar relato</Typography>
+                            <Typography variant="h3">Acompanhar relato</Typography>
                             <Typography variant="body1">
-                                Insira o número de protocolo no campo abaixo para verificar o status do relato ou enviar
-                                novas evidências para o comitê. Através do número de protocolo é possível acompanhar
-                                todo o processo de tratamento do seu relato.
+                                Insira o número de protocolo, recebido por email, no campo abaixo para verificar o
+                                status do relato ou enviar novas evidências para o comitê. Através do número de
+                                protocolo é possível acompanhar todo o processo de tratamento do seu relato.
                             </Typography>
                             <TextField
                                 label="Qual o número de protocolo do seu relato?"
@@ -99,15 +109,25 @@ function StatusDenunciaPage() {
                                 id="outlined-basic"
                                 fullWidth
                                 autoComplete={'false'}
+                                sx={{
+                                    border: `1px solid ${borderColor}`,
+                                    borderRadius: '15px',
+                                    backgroundColor: '#d6d6d6',
+                                }}
                             />
-                            <Grid display="flex" flexDirection="row" gap="10px" justifyContent={'right'}>
-                                <Button variant="outlined" onClick={() => router.back()}>
+                            <Grid display="flex" flexDirection="row" gap="10px" justifyContent="center">
+                                <Button
+                                    variant="outlined"
+                                    onClick={() => router.back()}
+                                    sx={{ width: '150px', borderRadius: '30px' }}
+                                >
                                     Voltar
                                 </Button>
                                 <LoadingButton
                                     loading={loadingComplaints}
                                     variant="contained"
                                     onClick={handleSubmitButton}
+                                    sx={{ width: '150px', borderRadius: '30px' }}
                                 >
                                     Consultar
                                 </LoadingButton>

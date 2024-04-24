@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 
+import { Button, Dialog, DialogTitle, InputAdornment, Typography } from '@mui/material'
 import Grid from '@mui/material/Grid'
 import MenuItem from '@mui/material/MenuItem'
 import { useTheme } from '@mui/material/styles'
-import { Button, Dialog, DialogTitle, InputAdornment, Typography } from '@mui/material'
 import CurrencyFormat from 'react-currency-format'
 import { Controller, useFormContext } from 'react-hook-form'
 import { RHFCheckbox, RHFRadioGroup, RHFSelect, RHFSwitch, RHFTextField } from '../hook-form'
@@ -22,7 +22,9 @@ export const ApolloField: React.FC<ApolloFieldProps> = ({ formField, isDesktop }
     const [dialogOpen, setDialogOpen] = useState(false)
     const theme = useTheme()
     const backgroundColor =
-        theme.palette.mode === 'dark' ? theme.palette.card.default : theme.palette.card.paper
+        theme.palette.mode === 'dark' ? theme.palette.background.paper : theme.palette.background.paper
+
+    const borderColor = theme.palette.mode === 'dark' ? '#424249' : '#d2d2d2'
     const { setValue } = useFormContext()
 
     const [showPassword, setShowPassword] = useState(false)
@@ -75,15 +77,27 @@ export const ApolloField: React.FC<ApolloFieldProps> = ({ formField, isDesktop }
                             setValue(fieldSchema.name, event.target.value)
                             if (fieldSchema.onChange) fieldSchema.onChange(event)
                         }}
-                        sx={{
+                        style={{
                             borderRadius: '10px',
-                            backgroundColor: backgroundColor, 
+                            backgroundColor: backgroundColor,
+                            border: `1px solid ${borderColor}`,
                         }}
                         placeholder="#000"
                     />
                 )
             case ApolloFormSchemaComponentType.HIDDEN:
-                return <input type="hidden" {...field} name={field.name} />
+                return (
+                    <input
+                        type="hidden"
+                        {...field}
+                        name={field.name}
+                        style={{
+                            borderRadius: '10px',
+                            backgroundColor: backgroundColor,
+                            border: `1px solid ${borderColor}`,
+                        }}
+                    />
+                )
             case ApolloFormSchemaComponentType.SELECT:
                 return (
                     <RHFSelect
@@ -93,10 +107,6 @@ export const ApolloField: React.FC<ApolloFieldProps> = ({ formField, isDesktop }
                         InputLabelProps={{ shrink: true }}
                         SelectProps={{
                             native: false,
-                            sx: {
-                                textTransform: 'none',
-                                backgroundColor: backgroundColor
-                            },
                         }}
                         {...field}
                         onChange={(event: any) => {
@@ -104,27 +114,31 @@ export const ApolloField: React.FC<ApolloFieldProps> = ({ formField, isDesktop }
                             if (fieldSchema.onChange) fieldSchema.onChange(event)
                         }}
                         disabled={fieldSchema.disabled}
+                        style={{
+                            borderRadius: '10px',
+                            backgroundColor: backgroundColor,
+                            border: `1px solid ${borderColor}`,
+                        }}
                     >
                         {fieldSchema.options?.map((option: any) => (
-                            <MenuItem
-                                key={option.label}
-                                value={option.value}
-                                sx={{
-                                    mx: 1,
-                                    my: 0.5,
-                                    borderRadius: 0.75,
-                                    typography: 'body2',
-                                    textTransform: 'none',
-                                    backgroundColor: backgroundColor, 
-                                }}
-                            >
+                            <MenuItem key={option.label} value={option.value}>
                                 {option.label}
                             </MenuItem>
                         ))}
                     </RHFSelect>
                 )
             case ApolloFormSchemaComponentType.SELECTSEARCH:
-                return <RHFAutoComplete {...fieldSchema} {...field} />
+                return (
+                    <RHFAutoComplete
+                        {...fieldSchema}
+                        {...field}
+                        style={{
+                            borderRadius: '10px',
+                            backgroundColor: backgroundColor,
+                            border: `1px solid ${borderColor}`,
+                        }}
+                    />
+                )
             case ApolloFormSchemaComponentType.RADIOGROUP:
                 return (
                     <>
@@ -144,11 +158,27 @@ export const ApolloField: React.FC<ApolloFieldProps> = ({ formField, isDesktop }
                                 if (fieldSchema.onChange) fieldSchema.onChange(event)
                             }}
                             disabled={fieldSchema.disabled}
+                            style={{
+                                borderRadius: '10px',
+                                backgroundColor: backgroundColor,
+                                border: `1px solid ${borderColor}`,
+                            }}
                         />
                     </>
                 )
             case ApolloFormSchemaComponentType.CHECKBOX:
-                return <RHFCheckbox {...fieldSchema} {...field} onClick={fieldSchema.onClick} />
+                return (
+                    <RHFCheckbox
+                        {...fieldSchema}
+                        {...field}
+                        onClick={fieldSchema.onClick}
+                        style={{
+                            backgroundColor: backgroundColor,
+                            borderRadius: '10px',
+                            border: `1px solid ${borderColor}`,
+                        }}
+                    />
+                )
             case ApolloFormSchemaComponentType.TEXTAREA:
                 return (
                     <RHFTextField
@@ -162,7 +192,11 @@ export const ApolloField: React.FC<ApolloFieldProps> = ({ formField, isDesktop }
                         onBlur={fieldSchema.onBlur}
                         multiline
                         rows={3}
-                        style={{ backgroundColor: backgroundColor, borderRadius: '10px' }}
+                        style={{
+                            backgroundColor: backgroundColor,
+                            borderRadius: '10px',
+                            border: `1px solid ${borderColor}`,
+                        }}
                     />
                 )
             case ApolloFormSchemaComponentType.NUMBER:
@@ -180,7 +214,11 @@ export const ApolloField: React.FC<ApolloFieldProps> = ({ formField, isDesktop }
                         }
                         disabled={fieldSchema.disabled && fieldSchema.disabled === true ? true : false}
                         onChange={(event: any) => setValue(fieldSchema.name, Number(event.target.value))}
-                        style={{ backgroundColor: backgroundColor, borderRadius: '10px' }}
+                        style={{
+                            backgroundColor: backgroundColor,
+                            borderRadius: '10px',
+                            border: `1px solid ${borderColor}`,
+                        }}
                     />
                 )
             case ApolloFormSchemaComponentType.CURRENCY:
@@ -207,7 +245,11 @@ export const ApolloField: React.FC<ApolloFieldProps> = ({ formField, isDesktop }
                                 fieldSchema.onChange(event.target.value)
                             }
                         }}
-                        style={{ backgroundColor: backgroundColor, borderRadius: '10px' }}
+                        style={{
+                            backgroundColor: backgroundColor,
+                            borderRadius: '10px',
+                            border: `1px solid ${borderColor}`,
+                        }}
                     />
                 )
             case ApolloFormSchemaComponentType.PERCENTAGE:
@@ -227,19 +269,49 @@ export const ApolloField: React.FC<ApolloFieldProps> = ({ formField, isDesktop }
                                 </InputAdornment>
                             ),
                         }}
-                        style={{ backgroundColor: backgroundColor, borderRadius: '10px' }}
+                        style={{
+                            backgroundColor: backgroundColor,
+                            borderRadius: '10px',
+                            border: `1px solid ${borderColor}`,
+                        }}
                     />
                 )
             case ApolloFormSchemaComponentType.DATE:
-                return <RHFDatePicker {...fieldSchema} {...field} onChange={fieldSchema.onChange} />
+                return (
+                    <RHFDatePicker
+                        {...fieldSchema}
+                        {...field}
+                        onChange={fieldSchema.onChange}
+                        style={{
+                            backgroundColor: backgroundColor,
+                            borderRadius: '10px',
+                            border: `1px solid ${borderColor}`,
+                        }}
+                    />
+                )
             case ApolloFormSchemaComponentType.DATETIME:
-                return <RHFDateTimePicker {...fieldSchema} {...field} />
+                return (
+                    <RHFDateTimePicker
+                        {...fieldSchema}
+                        {...field}
+                        style={{
+                            backgroundColor: backgroundColor,
+                            borderRadius: '10px',
+                            border: `1px solid ${borderColor}`,
+                        }}
+                    />
+                )
             case ApolloFormSchemaComponentType.EMAIL:
                 return (
                     <RHFTextField
                         {...fieldSchema}
                         {...field}
-                        type="email"  
+                        type="email"
+                        style={{
+                            backgroundColor: backgroundColor,
+                            borderRadius: '10px',
+                            border: `1px solid ${borderColor}`,
+                        }}
                     />
                 )
             case ApolloFormSchemaComponentType.DECIMAL:
@@ -249,7 +321,12 @@ export const ApolloField: React.FC<ApolloFieldProps> = ({ formField, isDesktop }
                         {...field}
                         type="number"
                         onChange={(event: any) => setValue(fieldSchema.name, Number(event.target.value))}
-                        style={{ backgroundColor: backgroundColor, borderRadius: '10px' }}
+                        style={{
+                            borderRadius: '10px',
+                            backgroundColor: backgroundColor,
+                            paddingx: '1rem',
+                            border: `1px solid ${borderColor}`,
+                        }}
                     />
                 )
             case ApolloFormSchemaComponentType.PASSWORD:
@@ -259,16 +336,40 @@ export const ApolloField: React.FC<ApolloFieldProps> = ({ formField, isDesktop }
                         {...fieldSchema}
                         {...field}
                         type={showPassword ? 'text' : 'password'}
-                        InputProps={{
-                            sx: { borderRadius: '10px', backgroundColor: backgroundColor, paddingx: '1rem' },
+                        style={{
+                            borderRadius: '10px',
+                            backgroundColor: backgroundColor,
+                            paddingx: '1rem',
+                            border: `1px solid ${borderColor}`,
                         }}
                     />
                 )
 
             case ApolloFormSchemaComponentType.SWITCH:
-                return <RHFSwitch {...fieldSchema} {...field} onClick={fieldSchema.onClick} />
+                return (
+                    <RHFSwitch
+                        {...fieldSchema}
+                        {...field}
+                        onClick={fieldSchema.onClick}
+                        style={{
+                            backgroundColor: backgroundColor,
+                            borderRadius: '10px',
+                            border: `1px solid ${borderColor}`,
+                        }}
+                    />
+                )
             default:
-                return <RHFTextField {...fieldSchema} {...field} />
+                return (
+                    <RHFTextField
+                        {...fieldSchema}
+                        {...field}
+                        style={{
+                            backgroundColor: backgroundColor,
+                            borderRadius: '10px',
+                            border: `1px solid ${borderColor}`,
+                        }}
+                    />
+                )
         }
     }
 

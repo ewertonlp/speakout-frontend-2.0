@@ -4,6 +4,7 @@ import moment from 'moment'
 import { Fragment } from 'react'
 import { CustomAvatar } from 'src/components/custom-avatar'
 import { IImageUpload } from 'types/IImageUpload'
+import { useTheme } from '@mui/material/styles'
 
 function ComplaintHistoryCard({
     date,
@@ -21,6 +22,8 @@ function ComplaintHistoryCard({
     files?: IImageUpload[]
 }) {
     const formattedDate = moment(date).format('DD/MM/YYYY HH:mm')
+    const theme = useTheme()
+    const borderColor = theme.palette.mode === 'dark' ? '#424249' : '#d2d2d2'
 
     const downloadFile = async (file: IImageUpload) => {
         const link = document.createElement('a')
@@ -43,10 +46,13 @@ function ComplaintHistoryCard({
         <Grid item>
             <Card
                 sx={{
-                    border: '1px solid #a3a3a3',
-                    backgroundColor: 'background.default',
-                    borderRadius: '8px',
+                    border: `1px solid ${borderColor}`,
+                    backgroundColor: 'card.default',
+                    borderRadius: '10px',
                     mt: '2rem',
+                    '&:hover': {
+                        boxShadow: '1px 1px 15px rgba(0, 0, 0, 0.16)',
+                    },
                 }}
             >
                 <Grid p={!biggerPadding ? 1.5 : 2.5}>

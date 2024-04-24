@@ -139,7 +139,6 @@ export default function ReportsListing() {
     const handleDeletePost = async () => {
         if (deletePostId) {
             const postController = new PostController()
-
             try {
                 await postController.deletePost(deletePostId)
                 const updatePosts = posts.filter(post => post.id !== deletePostId)
@@ -252,7 +251,7 @@ export default function ReportsListing() {
                             setTableData={setPosts}
                             clickableRow
                             onDelete={handleDeleteConfirmation}
-                            sx={{ boxShadow: '2px 2px 10px rgba(1,0,0,0.5)' }}
+                            sx={{ boxShadow: '1px 1px 15px rgba(1,0,0,0.16)' }}
                             tableLabels={[
                                 { id: 'email', label: 'Email' },
                                 { id: 'createdAt', label: 'Data Criação' },

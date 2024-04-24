@@ -1,5 +1,6 @@
 // next
 import { Container, Divider, Grid, Typography } from '@mui/material'
+import Link from '@mui/material/Link'
 import { useTheme } from '@mui/material/styles'
 import { makeStyles } from '@mui/styles'
 import { PostController } from 'controllers/postController'
@@ -28,7 +29,7 @@ const useStyles = makeStyles(theme => ({
         borderRadius: '30px',
         backgroundColor: 'background.default',
         '&:hover': {
-            boxShadow: '2px 2px 15px rgba(0, 0, 0, 0.2)',
+            boxShadow: '1px 1px 15px rgba(0, 0, 0, 0.16)',
         },
     },
 }))
@@ -203,15 +204,47 @@ export default function GeneralAnalyticsPage() {
 
     if (loading) return <LoadingScreen />
 
+    const borderColor = theme.palette.mode === 'dark' ? '#424249' : '#d2d2d2'
+
     return (
         <>
             <Head>
                 <title>Dashboard | Speakout</title>
             </Head>
             <Container maxWidth={themeStretch ? false : 'xl'}>
-                <Typography variant="h4" sx={{ mt: 3 }}>
-                    Dashboard
-                </Typography>
+                <Grid
+                    container
+                    spacing={1}
+                    xs={12}
+                    sx={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        paddingBottom: '1.5rem',
+                    }}
+                >
+                    <Typography variant="h4" sx={{ mt: 5 }}>
+                        Dashboard
+                    </Typography>
+                    <Grid item>
+                        <Link
+                            href="/relatos"
+                            sx={{
+                                borderRadius: '30px',
+                                border: '1px solid #7EB353',
+                                color: '#7EB353',
+                                padding: '1rem 1.5rem',
+                                mt: '3rem',
+                                transition: 'all 0.2s ease-out',
+                                '&:hover': {
+                                    backgroundColor:'#7EB353', color:'#ffff'
+                                },
+                            }}
+                        >
+                            Ir para os relatos
+                        </Link>
+                    </Grid>
+                </Grid>
                 <Divider sx={{ mb: 5 }} />
 
                 <Grid
@@ -225,15 +258,15 @@ export default function GeneralAnalyticsPage() {
                         backgroundColor: 'card.default',
                         padding: '1rem 1.5rem',
                         borderRadius: '15px',
-                        border: `1px solid ${theme.palette.action.focus}`,
+                        border: `1px solid ${borderColor}`,
                     }}
                 >
                     <Typography sx={{ color: `${theme.palette.text.secondary}`, fontSize: '1.2rem' }}>
-                        Empresa: <span style={{ color: `${theme.palette.text.primary}` }}>{tenants[0].description}</span>
+                        Empresa:{' '}
+                        <span style={{ color: `${theme.palette.text.primary}` }}>{tenants[0].description}</span>
                     </Typography>
                     <Typography sx={{ color: `${theme.palette.text.secondary}`, fontSize: '1.2rem' }}>
-                        Total de relatos:{' '}
-                        <span style={{ color: `${theme.palette.text.primary}` }}>{totalPosts}</span>
+                        Total de relatos: <span style={{ color: `${theme.palette.text.primary}` }}>{totalPosts}</span>
                     </Typography>
                 </Grid>
 
@@ -260,8 +293,8 @@ export default function GeneralAnalyticsPage() {
                                     ],
                                 }}
                                 style={{
-                                    backgroundColor: theme.palette.card.default,
-                                    border: `1px solid ${theme.palette.action.focus}`,
+                                    backgroundColor: theme.palette.background.paper,
+                                    border: `1px solid ${borderColor}`,
                                 }}
                             />
                         </div>
@@ -278,8 +311,8 @@ export default function GeneralAnalyticsPage() {
                                     colors: [theme.palette.info.dark, theme.palette.warning.main],
                                 }}
                                 style={{
-                                    backgroundColor: theme.palette.card.default,
-                                    border: `1px solid ${theme.palette.action.focus}`,
+                                    backgroundColor: theme.palette.background.paper,
+                                    border: `1px solid ${borderColor}`,
                                 }}
                             />
                         </div>
@@ -297,8 +330,8 @@ export default function GeneralAnalyticsPage() {
                                     colors: [theme.palette.info.dark, theme.palette.error.dark],
                                 }}
                                 style={{
-                                    backgroundColor: theme.palette.card.default,
-                                    border: `1px solid ${theme.palette.action.focus}`,
+                                    backgroundColor: theme.palette.background.paper,
+                                    border: `1px solid ${borderColor}`,
                                 }}
                             />
                         </div>
@@ -339,8 +372,8 @@ export default function GeneralAnalyticsPage() {
                                     ],
                                 }}
                                 style={{
-                                    backgroundColor: theme.palette.card.default,
-                                    border: `1px solid ${theme.palette.action.focus}`,
+                                    backgroundColor: theme.palette.background.paper,
+                                    border: `1px solid ${borderColor}`,
                                 }}
                             />
                         </div>
@@ -416,8 +449,8 @@ export default function GeneralAnalyticsPage() {
                                     ],
                                 }}
                                 style={{
-                                    backgroundColor: theme.palette.card.default,
-                                    border: `1px solid ${theme.palette.action.focus}`,
+                                    backgroundColor: theme.palette.background.paper,
+                                    border: `1px solid ${borderColor}`,
                                 }}
                             />
                         </div>

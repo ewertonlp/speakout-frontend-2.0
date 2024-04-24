@@ -1,4 +1,4 @@
-import { Grid, InputLabel, TextField } from '@mui/material'
+import { Divider, Grid, InputLabel, TextField, Typography } from '@mui/material'
 import ComplaintController from 'controllers/complaintController'
 import TenantController from 'controllers/tenantController'
 import { UploadController } from 'controllers/uploadController'
@@ -20,6 +20,7 @@ import { SuccessMessageModal } from 'src/components/ouvidoria/SuccessMessageModa
 import TermosAceite from 'src/components/ouvidoria/TermoAceite'
 import { ICompanyInfo } from 'types/ICompanyInfo'
 import { IComplaint } from 'types/IComplaint'
+import { useTheme } from '@mui/material/styles'
 
 const Form = ({ values }) => {
     const { enqueueSnackbar } = useSnackbar()
@@ -47,6 +48,12 @@ const Form = ({ values }) => {
     const [protocol, setProtocol] = useState<string>('')
 
     const [openSuccesMessageModal, setOpenSuccessMessageModal] = useState<boolean>(false)
+
+    const theme = useTheme();
+    const backgroundColor =
+        theme.palette.mode === 'dark' ? theme.palette.background.paper : theme.palette.background.paper
+
+    const borderColor = theme.palette.mode === 'dark' ? '#424249' : '#d2d2d2'
 
     const onSubmit = async data => {
         if (!companyInfo) return
@@ -85,7 +92,7 @@ const Form = ({ values }) => {
                         },
                     }
                     const response = await complaintController.sendComplaint(formattedData)
-                    setProtocol(response.data.protocol)
+                    setProtocol(response.protocol)
                     setOpenSuccessMessageModal(true)
                 } catch (error) {
                     console.log(error)
@@ -106,7 +113,7 @@ const Form = ({ values }) => {
                     },
                 }
                 const response = await complaintController.sendComplaint(formattedData)
-                setProtocol(response.data.protocol)
+                setProtocol(response.protocol)
                 setOpenSuccessMessageModal(true)
             } catch (error) {
                 console.error('Erro ao enviar formulário:', error)
@@ -454,7 +461,7 @@ const Form = ({ values }) => {
         },
         {
             name: 'relacao',
-            label: 'Qual a sua relação com a XX',
+            label: 'Qual a sua relação com a Empresa',
             groupKey: 'relationForBusiness',
             ui: { grid: 12 },
             required: true,
@@ -508,13 +515,13 @@ const Form = ({ values }) => {
             required: true,
             renderComponent() {
                 return (
-                    <Grid>
+                    <Grid >
                         <InputLabel sx={{ paddingLeft: '5px' }}>
                             Qual infração do código de ética ocorreu?{' '}
                             <a
                                 style={{
                                     textDecoration: 'none',
-                                    color: '#5e6d9e',
+                                    color: '#3566d1',
                                 }}
                                 href={companyInfo?.linkcondutecode}
                                 target="_blank"
@@ -529,8 +536,13 @@ const Form = ({ values }) => {
                             maxRows={4}
                             multiline
                             type="text"
-                            sx={{ width: '100%' }}
                             placeholder="Informe aqui o código de ética"
+                            sx={{
+                                width: "100%",
+                                borderRadius: '10px',
+                                backgroundColor: backgroundColor,
+                                border: `1px solid ${borderColor}`,
+                            }}
                         />
                     </Grid>
                 )
@@ -704,8 +716,13 @@ const Form = ({ values }) => {
             required: true,
             renderComponent(params) {
                 return (
-                    <Grid item>
-                        <Grid item xs={12}>
+                    <Grid item sx={{
+                        borderRadius: '10px',
+                        backgroundColor: backgroundColor,
+                        border: `1px solid ${borderColor}`,
+                        padding: '1rem'
+                    }}>
+                        <Grid item xs={12} >
                             <InputLabel>
                                 Caso você tenha evidências sobre o fato, faça o upload do arquivo aqui. Tamanho máximo:
                                 1GB
@@ -753,8 +770,12 @@ const Form = ({ values }) => {
             <Head>
                 <title>Registro</title>
             </Head>
-            <AppBar logoUrl={companyInfo?.logo?.url as string} />
-            <Grid container lg={8} xs={12} sx={{ margin: '30px auto' }}>
+            <AppBar logoUrl={companyInfo?.logo?.url as string}/>
+            <Grid container lg={7} xs={11} sx={{ margin: '2rem auto', padding: '4rem 0' }}>
+                <Grid item xs={12} sx={{mb:'3rem', textAlign:'center'}}>
+                <Typography variant='h4' >Preencha o formulário abaixo</Typography>
+                <Divider />
+                </Grid>
                 <ApolloForm
                     schema={formSchema}
                     onSubmit={onSubmit}

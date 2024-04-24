@@ -14,6 +14,7 @@ import { useSettingsContext } from 'src/components/settings'
 import DashboardLayout from 'src/layouts/dashboard'
 import { IArea } from 'types/IArea'
 import NewEditForm from '../form/NewEditForm'
+import { useTheme } from '@mui/material/styles'
 
 // ----------------------------------------------------------------------
 
@@ -27,6 +28,7 @@ export default function Edicao() {
     const { enqueueSnackbar } = useSnackbar()
     const [initialValues, setInitialValues] = useState<IArea>()
     const [openModal, setOpenModal] = useState(false)
+    const theme = useTheme()
 
     const [customValues, setCustomValues] = useState<ApolloFormSchemaCustomValues[]>()
 
@@ -49,6 +51,8 @@ export default function Edicao() {
             loadData(query.id)
         }
     }, [query.id])
+
+    const borderColor = theme.palette.mode === 'dark' ? '#424249' : '#d2d2d2'
 
     return (
         <CustomCard>
@@ -75,10 +79,14 @@ export default function Edicao() {
                     sx={{
                         maxWidth: '800px',
                         margin: '10rem auto',
-                        border: '1px solid #777777',
+                        border: `1px solid ${borderColor}`,
                         borderRadius: '10px',
                         padding: '4rem 2rem',
                         backgroundColor: 'card.default',
+                        transition: 'all 0.2s ease-out',
+                        '&:hover': {
+                            boxShadow: '1px 1px 15px rgba(0, 0, 0, 0.16)',
+                        },
                     }}
                 >
                     <NewEditForm />

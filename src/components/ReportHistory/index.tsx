@@ -7,10 +7,12 @@ import { IPostHistory } from 'types/IPostHistory'
 import ComplaintHistoryCard from '../ouvidoria/ComplaintHistoryCard'
 import { NewCommentModal } from '../ouvidoria/NewCommentModal'
 
+
 function ReportHistory({ histories, getPost }: { histories: IPostHistory[]; getPost: (id: string) => void }) {
     const [openModal, setOpenModal] = useState<boolean>(false)
 
     const { user } = useAuthContext()
+
 
     return (
         <Grid
@@ -29,7 +31,7 @@ function ReportHistory({ histories, getPost }: { histories: IPostHistory[]; getP
                 {checkPermission(user?.role) && (
                     <Button
                         variant="contained"
-                        sx={{ paddingX: '2rem', paddingY: '0.6rem' }}
+                        sx={{ paddingX: '2rem', paddingY: '0.6rem', borderRadius:'30px' }}
                         onClick={() => setOpenModal(true)}
                     >
                         <AddIcon sx={{ mr: 1 }} /> Nova Mensagem

@@ -13,6 +13,7 @@ import { useAuthContext } from 'src/auth/useAuthContext'
 import LoadingScreen from 'src/components/loading-screen'
 import { useSettingsContext } from 'src/components/settings'
 import DashboardLayout from 'src/layouts/dashboard'
+import { useTheme } from '@mui/material/styles'
 
 const reportData = [
     { title: 'Total de relatos', Icon: InboxIcon, status: 'Total de relatos' },
@@ -30,6 +31,7 @@ const Relatorios = ({ data = reportData }) => {
 
     const [loading, setLoading] = useState(true)
     const [selectedStatus, setSelectedStatus] = useState('')
+    const theme = useTheme()
   
     const [reportNumbers, setReportNumbers] = useState({
         'Total de relatos': '-',
@@ -78,6 +80,9 @@ const Relatorios = ({ data = reportData }) => {
         console.log(status)
     }
 
+    const borderColor = theme.palette.mode === 'dark' ? '#424249' : '#d2d2d2'
+    const backgroundColor = theme.palette.mode === 'dark' ? 'card.default' : 'card.default'
+
     return (
         <>
             <Head>
@@ -107,6 +112,8 @@ const Relatorios = ({ data = reportData }) => {
                                                 display: 'flex',
                                                 flexDirection: 'column',
                                                 cursor: 'pointer',
+                                                border: `1px solid ${borderColor}`,
+                                                backgroundColor: backgroundColor,
                                             }}
                                         >
                                             <report.Icon

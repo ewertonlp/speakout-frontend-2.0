@@ -39,7 +39,7 @@ export const UserSelector = ({ onUserSelect, selectedUsers }) => {
 
     return (
         <>
-            <Button variant="contained" sx={{paddingX: '1rem', paddingY: '0.7rem'}} onClick={handleOpen}>
+            <Button variant="contained" sx={{paddingX: '1rem', paddingY: '0.7rem', borderRadius: '30px'}} onClick={handleOpen}>
                 <AddIcon /> Adicionar Usuário Temporário
             </Button>
             <Dialog open={open} onClose={handleClose}>

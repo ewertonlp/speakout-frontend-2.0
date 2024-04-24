@@ -24,8 +24,8 @@ export function SuccessMessageModal({
             <Dialog open={open} onClose={handleClose}>
                 <FormSuccess protocol={protocol} />
                 <DialogActions>
-                    <Button variant="outlined" sx={{ color: 'green', borderColor: 'green' }} onClick={handleClose}>
-                        Ok
+                    <Button variant="contained" sx={{ color: '#fff', borderRadius: '30px', padding: '0.5rem 3rem' }} onClick={handleClose}>
+                        FECHAR
                     </Button>
                 </DialogActions>
             </Dialog>

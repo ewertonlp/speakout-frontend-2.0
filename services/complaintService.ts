@@ -6,8 +6,9 @@ import api from './api'
 export default class ComplaintService {
     async sendComplaint(data: IComplaint) {
         try {
-            console.log(data);
+            
             const response = await api.post(`api/posts`, { data: data });
+            console.log(response.data)
             return response.data;
         } catch (error) {
             console.error('Erro ao enviar queixa:', error.response || error.message);

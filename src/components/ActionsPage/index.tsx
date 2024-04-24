@@ -1,5 +1,5 @@
 import AddIcon from '@mui/icons-material/Add'
-import { Button, Grid, Typography } from '@mui/material'
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid,Typography } from '@mui/material'
 import { PostController } from 'controllers/postController'
 import { useRouter } from 'next/router'
 import { useSnackbar } from 'notistack'
@@ -9,12 +9,17 @@ import { checkPermission } from 'src/utils/functions'
 import { IPostListing } from 'types/IPostListing'
 import { NewActionModal } from '../NewActionModal'
 import ActionCard from '../ouvidoria/ActionCard'
+import { PostActionDetailsController } from 'controllers/postActionDetailsController'
+
 
 function ActionsPage({ post, getPost }: { post: IPostListing; getPost: (id: string) => void }) {
     const [openModal, setOpenModal] = useState<boolean>(false)
     const postController = new PostController()
     const { enqueueSnackbar } = useSnackbar()
     const [loading, setLoading] = useState(false)
+    const [ deleteAction, setDeleteAction] = useState('')
+    const [postActions, setPostActions] = useState<IPostListing[]>([])
+    const [isDeleteModalOpen, setDeleteModalOpen] = useState(false)
 
     const { push, query } = useRouter()
 
@@ -34,6 +39,33 @@ function ActionsPage({ post, getPost }: { post: IPostListing; getPost: (id: stri
     //     }
     // }
 
+    const handleDeleteAction = async () => {      
+        if (deleteAction) {
+            const postActionDetailsController = new PostActionDetailsController()
+
+            try {
+                await postActionDetailsController.delete(deleteAction)
+                const updateActions = postActions.filter(action => action.id !== deleteAction)
+                console.log(updateActions)
+                enqueueSnackbar('Relato excluído com sucesso', { variant: 'success' })
+                setPostActions(updateActions)
+            } catch (error) {
+                console.error('Erro ao excluir o post:', error)
+                enqueueSnackbar('Erro ao excluir o relato', { variant: 'error' })
+            }
+            setDeleteModalOpen(false)
+            setDeleteAction('')
+        }
+    }
+
+    const handleDeleteConfirmation = id => {
+        setDeleteAction(id)
+        setDeleteModalOpen(true)
+    }
+
+    console.log(deleteAction)
+
+    
     return (
         <Grid
             style={{
@@ -52,7 +84,7 @@ function ActionsPage({ post, getPost }: { post: IPostListing; getPost: (id: stri
                     <Button
                         variant="contained"
                         color="primary"
-                        sx={{ paddingX: '1rem', paddingY: '0.7rem' }}
+                        sx={{ paddingX: '1rem', paddingY: '0.7rem', borderRadius:'30px' }}
                         onClick={() => setOpenModal(true)}
                     >
                         <AddIcon /> Cadastrar Nova ação
@@ -77,25 +109,10 @@ function ActionsPage({ post, getPost }: { post: IPostListing; getPost: (id: stri
                             files={action.media}
                             lightShadow
                             biggerPadding
-                      
+                            deleteAction={deleteAction}
+                            onDelete={handleDeleteConfirmation}
                         />
-                        {/* <div>
-                            <Tooltip title="Enviar convite">
-                                <IconButton
-                                    edge="end"
-                                    aria-label="mail"
-                                    onClick={e => {
-                                        e.stopPropagation() // Impede que o clique se propague para o ActionCard
-                                        handleSendEmail()
-                                    }}
-                                    sx={{
-                                        marginX: 2,
-                                    }}
-                                >
-                                    {checkPermission(user?.role) && <SendIcon />}
-                                </IconButton>
-                            </Tooltip>
-                        </div> */}
+                       
                     </div>
                 ))) || (
                 <Typography variant="body1" textAlign={'center'} fontWeight={600}>
@@ -103,6 +120,18 @@ function ActionsPage({ post, getPost }: { post: IPostListing; getPost: (id: stri
                 </Typography>
             )}
             <NewActionModal users={post.users} setOpen={setOpenModal} open={openModal} getPost={getPost} />
+            <Dialog open={isDeleteModalOpen} onClose={() => setDeleteModalOpen(false)}>
+                <DialogTitle textAlign={'center'}>Confirmar Exclusão</DialogTitle>
+                <DialogContent>Tem certeza que deseja excluir esta Ação?</DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setDeleteModalOpen(false)} size="large">
+                        Cancelar
+                    </Button>
+                    <Button onClick={handleDeleteAction} color="error" size="large">
+                        Excluir
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </Grid>
     )
 }

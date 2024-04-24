@@ -3,6 +3,10 @@ import {
     Button,
     Card,
     CardProps,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
     Divider,
     IconButton,
     MenuItem,
@@ -11,6 +15,7 @@ import {
     TableCell,
     TableContainer,
     TableRow,
+    Typography,
     styled,
 } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
@@ -45,7 +50,7 @@ interface Props extends CardProps {
 }
 
 const StyledCard = styled(Card)(({ theme }) => ({
-    boxShadow: theme.shadows[5],
+    boxShadow: theme.shadows[8],
     borderRadius: theme.shape.borderRadius,
 }))
 
@@ -67,7 +72,7 @@ export default function CrudTable({
 
     return (
         <StyledCard {...other}>
-            <TableContainer sx={{ maxWidth: '100%'}}>
+            <TableContainer sx={{ maxWidth: '100%' }}>
                 <Scrollbar>
                     <Table sx={{ minWidth: 720 }}>
                         <TableHeadCustom headLabel={tableLabels} />
@@ -133,6 +138,7 @@ function GenericTableRow({ row, tableLabels, editPagePath, removeFunction, getIt
     const [openPopover, setOpenPopover] = useState<HTMLElement | null>(null)
     const theme = useTheme()
     const backgroundColor = theme.palette.mode === 'dark' ? '#141A29' : '#f5f5f5'
+    const borderColor = theme.palette.mode === 'dark' ? '#424249' : '#d2d2d2'
 
     const handleOpenPopover = (event: React.MouseEvent<HTMLElement>) => {
         setOpenPopover(event.currentTarget)
@@ -147,23 +153,39 @@ function GenericTableRow({ row, tableLabels, editPagePath, removeFunction, getIt
         router.push(router.pathname + editPagePath + row.id)
     }
 
-    const handleDelete = async (data: any, id: string) => {
-        handleClosePopover()
-        if (removeFunction && getItems) {
-            try {
-                await removeFunction(data, id)
-                getItems()
-            } catch (error) {}
-        }
-    }
+    // const handleDelete = async (data: any, id: string) => {
+    //     console.log(data)
+    //     if (removeFunction && getItems) {
+    //         try {
+    //             await removeFunction(data, id)
+    //             getItems()
+    //         } catch (error) {
+    //             console.error(error)
+    //         }
+    //     }
+    //     handleClosePopover()
+    // }
 
     const router = useRouter()
+
+    const [openDeleteModal, setOpenDeleteModal] = useState(false)
+
+    // Função para abrir o modal de exclusão
+    const handleOpenDeleteModal = () => {
+        setOpenDeleteModal(true)
+    }
+
+    // Função para fechar o modal de exclusão
+    const handleCloseDeleteModal = () => {
+        setOpenDeleteModal(false)
+    }
 
     return (
         <>
             <TableRow
                 sx={{
                     backgroundColor: backgroundColor,
+                    borderBottom: `1px solid ${borderColor}`,
                     '&:hover': { backgroundColor: theme.palette.action.hover },
                 }}
             >
@@ -188,11 +210,39 @@ function GenericTableRow({ row, tableLabels, editPagePath, removeFunction, getIt
                         </Box>
                     </MenuItem>
                     <Divider />
-                    <MenuItem onClick={() => handleDelete(row, row.id)} sx={{ color: 'error.main' }}>
+                    {/* <MenuItem onClick={handleOpenDeleteModal} sx={{ color: 'error.main' }}>
                         <Box display="flex" alignItems="center">
                             <Iconify icon="eva:trash-2-fill" />
                         </Box>
-                    </MenuItem>
+                    </MenuItem> */}
+                    <Dialog
+                        open={openDeleteModal}
+                        onClose={handleCloseDeleteModal}
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="alert-dialog-description"
+                    >
+                        <DialogTitle id="alert-dialog-title">Confirmação de Exclusão</DialogTitle>
+                        <DialogContent>
+                            <Typography variant="body1" gutterBottom>
+                                Tem certeza de que deseja realizar essa ação?
+                            </Typography>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={handleCloseDeleteModal} color="primary">
+                                Cancelar
+                            </Button>
+                            <Button
+                                onClick={() => {
+                                    // removeFunction(disableUser)
+                                    handleCloseDeleteModal()
+                                }}
+                                color="error"
+                                autoFocus
+                            >
+                                Confirmar Exclusão
+                            </Button>
+                        </DialogActions>
+                    </Dialog>
                 </TableCell>
             </TableRow>
         </>
@@ -203,6 +253,7 @@ function ClickableGenericTableRow({ row, tableLabels, onDelete }: RowProps) {
     const router = useRouter()
     const theme = useTheme()
     const backgroundColor = theme.palette.mode === 'dark' ? '#141A29' : '#f5f5f5'
+    const borderColor = theme.palette.mode === 'dark' ? '#424249' : '#d2d2d2'
 
     const backgroundButtonColors = {
         Cancelado: 'error',
@@ -226,6 +277,7 @@ function ClickableGenericTableRow({ row, tableLabels, onDelete }: RowProps) {
             onClick={() => router.push(`/relatos/detalhes/${row.id}`)}
             sx={{
                 backgroundColor: backgroundColor,
+                borderBottom: `1px solid ${borderColor}`,
                 '&:hover': { backgroundColor: theme.palette.action.hover },
             }}
         >
@@ -235,7 +287,7 @@ function ClickableGenericTableRow({ row, tableLabels, onDelete }: RowProps) {
                         formatValues(row[tl.id])
                     ) : (
                         <Button
-                            sx={{ color: 'white', whiteSpace: 'nowrap' }}
+                            sx={{ color: 'white', whiteSpace: 'nowrap', width:'190px' }}
                             color={backgroundButtonColors[formatValues(row[tl.id])]}
                             variant="contained"
                         >

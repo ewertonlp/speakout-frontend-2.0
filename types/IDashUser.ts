@@ -8,9 +8,9 @@ export type ISelectedUser = {
 }
 
 export type IDashUser = {
-    id?: string
+    id: string
     fullname: string
-    cpf?: string
+    cpf?: string | undefined
     email: string
     password: string
     tenant: string

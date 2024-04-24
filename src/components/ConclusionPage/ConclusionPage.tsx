@@ -29,6 +29,7 @@ import { IImageUpload } from 'types/IImageUpload'
 import { IPostClosed } from 'types/IPostClosed'
 import ReportPDF from '../ReportPDF/ReportPDF'
 import ComplaintHistoryCard from '../ouvidoria/ComplaintHistoryCard'
+import { useTheme } from '@mui/material/styles'
 
 const StyledCard = styled(Card)({
     margin: '2rem auto',
@@ -68,6 +69,11 @@ export const ConclusionPage = ({ histories, tenantId, postId, emailDenunciante }
     const [isReportFinalized, setIsReportFinalized] = useState(false)
     const [reportUrl, setReportUrl] = useState<string | null>(null)
     const [downloadingFile, setDownloadingFile] = useState<string | null>(null)
+    const [fileUploaded, setFileUploaded] = useState(false);
+
+    const theme = useTheme()
+
+    const borderColor = theme.palette.mode === 'dark' ? '#424249' : '#d2d2d2'
 
     const [files, setFiles] = useState<IImageUpload[]>([])
 
@@ -125,7 +131,7 @@ export const ConclusionPage = ({ histories, tenantId, postId, emailDenunciante }
     useEffect(() => {
         fetchPostClosedFiles()
         fetchPostClosedComments()
-    }, [postId])
+    }, [postId, fileUploaded])
 
     const downloadFile = async (file: IImageUpload) => {
         setDownloadingFile(file.id)
@@ -157,6 +163,7 @@ export const ConclusionPage = ({ histories, tenantId, postId, emailDenunciante }
     const handleFileSelection = async (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files ? event.target.files[0] : null
         setSelectedFile(file)
+        setFileUploaded(true);
     }
 
     const handleFinalizeReport = async () => {
@@ -222,11 +229,15 @@ export const ConclusionPage = ({ histories, tenantId, postId, emailDenunciante }
                             sx={{
                                 backgroundColor: 'card.default',
                                 borderRadius: '10px',
-                                boxShadow: '0 5px 10px  rgba(0, 0, 0, 0.1)',
+                                border: `1px solid ${borderColor}`,
                                 display: 'flex',
                                 flexDirection: 'column',
                                 justifyContent: 'center',
                                 padding: '0 1rem 0 1rem',
+                                transition: 'all 0.2s ease-out',
+                                '&:hover': {
+                                    boxShadow: '1px 1px 15px rgba(0, 0, 0, 0.16)',
+                                },
                             }}
                         >
                             <Box
@@ -256,7 +267,6 @@ export const ConclusionPage = ({ histories, tenantId, postId, emailDenunciante }
                             </Box>
 
                             <Grid item xs={12}>
-                            
                                 <TextField
                                     value={message}
                                     onChange={e => setMessage(e.target.value)}
@@ -265,7 +275,7 @@ export const ConclusionPage = ({ histories, tenantId, postId, emailDenunciante }
                                     rows={4}
                                     fullWidth
                                     sx={{
-                                        border: '1px solid #a3a3a3',
+                                        border: `1px solid ${borderColor}`,
                                         borderRadius: '8px',
                                         backgroundColor: 'background.default',
                                     }}
@@ -294,13 +304,20 @@ export const ConclusionPage = ({ histories, tenantId, postId, emailDenunciante }
                             sx={{
                                 backgroundColor: 'card.default',
                                 borderRadius: '10px',
-                                boxShadow: '0 5px 10px  rgba(0, 0, 0, 0.1)',
+                                border: `1px solid ${borderColor}`,
                                 display: 'flex',
                                 flexDirection: 'column',
                                 justifyContent: 'center',
+                                padding: '0 1rem 0 1rem',
+                                transition: 'all 0.2s ease-out',
+                                '&:hover': {
+                                    boxShadow: '1px 1px 15px rgba(0, 0, 0, 0.16)',
+                                },
                             }}
                         >
-                            <Typography variant="h5" mt='1rem'>Histórico de comentários</Typography>
+                            <Typography variant="h5" mt="1rem">
+                                Histórico de comentários
+                            </Typography>
                             <Grid item xs={12} px="1rem">
                                 {loadingComments ? (
                                     <CenteredBox>
@@ -330,13 +347,15 @@ export const ConclusionPage = ({ histories, tenantId, postId, emailDenunciante }
                                 sx={{
                                     backgroundColor: 'card.default',
                                     borderRadius: '10px',
-                                    boxShadow: '0 5px 10px  rgba(0, 0, 0, 0.1)',
+                                    border: `1px solid ${borderColor}`,
                                     display: 'flex',
                                     flexDirection: 'column',
-                                    position: 'relative',
-                                    
                                     justifyContent: 'center',
-                                    padding: '1rem',
+                                    padding: '0 1rem 0 1rem',
+                                    transition: 'all 0.2s ease-out',
+                                    '&:hover': {
+                                        boxShadow: '1px 1px 15px rgba(0, 0, 0, 0.16)',
+                                    },
                                 }}
                             >
                                 <Typography sx={{ marginY: '10px' }} variant="h6">
@@ -365,8 +384,16 @@ export const ConclusionPage = ({ histories, tenantId, postId, emailDenunciante }
                                 xs={5}
                                 sx={{
                                     backgroundColor: 'card.default',
-                                    borderRadius: '10px',
-                                    boxShadow: '0 5px 10px  rgba(0, 0, 0, 0.1)',
+                                borderRadius: '10px',
+                                border: `1px solid ${borderColor}`,
+                                display: 'flex',
+                                flexDirection: 'column',
+                                justifyContent: 'center',
+                                padding: '0 1rem 0 1rem',
+                                transition: 'all 0.2s ease-out',
+                                '&:hover': {
+                                    boxShadow: '1px 1px 15px rgba(0, 0, 0, 0.16)',
+                                },
                                 }}
                             >
                                 <Typography sx={{ marginY: '10px' }} variant="h6">

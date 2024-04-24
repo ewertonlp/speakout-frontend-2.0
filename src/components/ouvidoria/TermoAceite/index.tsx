@@ -29,13 +29,15 @@ function TermosAceite({
         <Grid container>
             <Grid
                 item
-                lg={8}
+                lg={6}
                 xs={12}
                 sx={{
-                    margin: '0 auto',
+                    margin: '2rem auto',
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
+                    justifyContent: 'center',
+                    backgroundColor: '#fff',
                 }}
             >
                 <Grid
@@ -45,11 +47,10 @@ function TermosAceite({
                         flexDirection: 'column',
                         rowGap: '20px',
                         padding: '30px',
-                        boxShadow: '4px 4px 40px -12px rgba(0,0,0,0.20)',
                         marginTop: '30px',
                     }}
                 >
-                    <Typography variant="h4" textAlign="center">
+                    <Typography variant="h3" textAlign="center" mb="20px">
                         Termo de aceite
                     </Typography>
                     <Typography variant="subtitle1" fontWeight="normal" textAlign="center">
@@ -58,8 +59,8 @@ function TermosAceite({
                         sugestão ou elogio. Todas as denúncias serão encaminhadas para o Comitê de Ética da empresa{' '}
                         {companyName}.
                     </Typography>
-                    <Grid>
-                        <Typography variant="h6" fontWeight="normal">
+                    <Grid sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: '2rem' }}>
+                        <Typography variant="h5" fontWeight="normal" mb="1rem">
                             Você concorda com os termos de aceite? *
                         </Typography>
                         <Typography variant="body2" fontWeight="normal">
@@ -71,10 +72,20 @@ function TermosAceite({
                             Marque "Sim" para continuar
                         </Typography>
                         <Grid sx={{ display: 'flex', columnGap: '10px', marginTop: '15px' }}>
-                            <Button onClick={handleNoButtonClick} variant="outlined" color="success">
+                            <Button
+                                onClick={handleNoButtonClick}
+                                variant="outlined"
+                                color="error"
+                                sx={{ paddingX: '2rem', borderRadius: '30px' }}
+                            >
                                 Não
                             </Button>
-                            <Button onClick={handleYesButtonClick} variant="contained" color="success">
+                            <Button
+                                onClick={handleYesButtonClick}
+                                variant="contained"
+                                color="success"
+                                sx={{ paddingX: '2rem', borderRadius: '30px' }}
+                            >
                                 Sim
                             </Button>
                         </Grid>

@@ -82,7 +82,7 @@ function Home() {
                     <Grid
                         item
                         xs={10.5}
-                        sx={{ border: '1px solid #637381', borderRadius: '10px', backgroundColor: '#E1E1E6' }}
+                        sx={{ border: '1px solid #637381', borderRadius: '10px', backgroundColor: '#ebebeb' }}
                     >
                         <Typography variant="h3" color="#1D1D1E" textAlign="center" sx={{ margin: '20px 0' }}>
                             Como funciona

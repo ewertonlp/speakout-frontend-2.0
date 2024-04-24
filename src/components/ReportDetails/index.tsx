@@ -32,6 +32,7 @@ function ReportDetails({ post, setPost }: { post: IPostListing; setPost: (value:
     const { query } = useRouter()
     const { enqueueSnackbar } = useSnackbar()
     const theme = useTheme();
+    const borderColor = theme.palette.mode === 'dark' ? '#424249' : '#d2d2d2'
     const titleColor = theme.palette.mode === 'dark' ? theme.palette.common.white : theme.palette.common.black;
 
     async function handleEditStatus(newStatus: string, handleCloseEditMode: () => void) {
@@ -87,7 +88,10 @@ function ReportDetails({ post, setPost }: { post: IPostListing; setPost: (value:
                             padding: '25px',
                             backgroundColor: 'card.default',
                             borderRadius: '10px',
-                            boxShadow: '2px 2px 10px rgba(0,0,0,.08)',
+                            border: `1px solid ${borderColor}`,
+                            '&:hover': {
+                                boxShadow: '1px 1px 15px rgba(0, 0, 0, 0.16)',
+                            },
                         }}
                     >
                         <Grid display="flex" flexDirection="column">
@@ -136,7 +140,10 @@ function ReportDetails({ post, setPost }: { post: IPostListing; setPost: (value:
                             padding: '25px',
                             backgroundColor: 'card.default',
                             borderRadius: '10px',
-                            boxShadow: '2px 2px 10px rgba(0,0,0,.08)',
+                            border: `1px solid ${borderColor}`,
+                            '&:hover': {
+                                boxShadow: '1px 1px 15px rgba(0, 0, 0, 0.16)',
+                            },
                         }}
                     >
                         <TitleTypography >Manifestante</TitleTypography>
@@ -176,7 +183,10 @@ function ReportDetails({ post, setPost }: { post: IPostListing; setPost: (value:
                                 padding: '25px',
                                 backgroundColor: 'card.default',
                                 borderRadius: '10px',
-                                boxShadow: '2px 2px 10px rgba(0,0,0,.08)',
+                                border: `1px solid ${borderColor}`,
+                                '&:hover': {
+                                    boxShadow: '1px 1px 15px rgba(0, 0, 0, 0.16)',
+                                },
                             }}
                         >
                             <TitleTypography >Denunciados</TitleTypography>
@@ -203,7 +213,10 @@ function ReportDetails({ post, setPost }: { post: IPostListing; setPost: (value:
                                 padding: '25px',
                                 backgroundColor: 'card.default',
                                 borderRadius: '10px',
-                                boxShadow: '2px 2px 10px rgba(0,0,0,.08)',
+                                border: `1px solid ${borderColor}`,
+                                '&:hover': {
+                                    boxShadow: '1px 1px 15px rgba(0, 0, 0, 0.16)',
+                                },
                             }}
                         >
                             <TitleTypography>Evento</TitleTypography>
@@ -215,18 +228,18 @@ function ReportDetails({ post, setPost }: { post: IPostListing; setPost: (value:
                                 justifyContent="space-between"
                                 flexWrap="wrap"
                             >
-                                <Grid xs={12} sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 5, mb: 2 }}>
+                                <Grid item xs={12} sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 5, mb: 2 }}>
                                     <CardItem title="Tipo" value={post.response['tipo-denuncia'].label} />
                                     <CardItem title="Infração do código de ética" value={post.response.infracao} />
                                 </Grid>
-                                <Grid xs={12} sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 5, mb: 2 }}>
+                                <Grid item xs={12} sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 5, mb: 2 }}>
                                     <CardItem
                                         title="Grau de certeza"
                                         value={post.response['grau-de-certeza-denuncia']}
                                     />
                                     <CardItem title="Data do incidente" value={formattedDate} />
                                 </Grid>
-                                <Grid xs={12} sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 5, mb: 2 }}>
+                                <Grid item xs={12} sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 5, mb: 2 }}>
                                     <CardItem
                                         title="Continua ocorrendo"
                                         value={post.response['recorrencia-ocorrencia']}
@@ -234,10 +247,14 @@ function ReportDetails({ post, setPost }: { post: IPostListing; setPost: (value:
 
                                     <CardItem title="Localidade" value={post.response['local-ocorrencia']} />
                                 </Grid>
-                                <Grid xs={12} sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 5, mb: 2 }}>
+                                <Grid item xs={12} sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 5, mb: 2 }}>
                                     <CardItem
                                         title="Nome das testemunhas"
                                         value={post.response['sim-testemunhas-ocorrencia']}
+                                    />
+                                    <CardItem
+                                        title="Descrição da ocorrência"
+                                        value={post.response['nao-testemunhas-ocorrencia']}
                                     />
                                     <CardItem
                                         title="Descrição da ocorrência"

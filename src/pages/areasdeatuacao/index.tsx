@@ -2,6 +2,7 @@
 import Head from 'next/head'
 // @mui
 import { Button, Card, Container, Dialog, DialogContent, DialogTitle, Divider, Grid, Typography } from '@mui/material'
+import { useTheme } from '@mui/material/styles'
 import { AreaController } from 'controllers/areaController'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
@@ -11,6 +12,7 @@ import Iconify from 'src/components/iconify/Iconify'
 import LoadingScreen from 'src/components/loading-screen/LoadingScreen'
 import { useSettingsContext } from 'src/components/settings'
 import DashboardLayout from 'src/layouts/dashboard'
+import BarChart from 'src/sections/@dashboard/general/analytics/BarChart'
 import CrudTable from 'src/sections/@dashboard/general/app/CrudTable'
 import { IArea } from 'types/IArea'
 import NewEditForm from './form/NewEditForm'
@@ -25,15 +27,18 @@ export default function Areas() {
     const router = useRouter()
     const { themeStretch } = useSettingsContext()
     const [loading, setLoading] = useState(false)
-    const [openModal, setOpenModal] = useState(false) 
+    const [openModal, setOpenModal] = useState(false)
     const [areaFilters, setAreaFilters] = useState()
     const [areas, setAreas] = useState<IArea[]>([])
+    const [areaDescriptions, setAreaDescriptions] = useState<string[]>([])
+    const theme = useTheme()
+    const borderColor = theme.palette.mode === 'dark' ? '#424249' : '#d2d2d2'
+
+    const [relationWithAreaData, setRelationWithAreaData] = useState({})
 
     function handleSetUserFilters(data: any) {
         setAreaFilters(data)
     }
-
-
 
     const { tenantId } = useAuthContext()
 
@@ -43,11 +48,16 @@ export default function Areas() {
             const areaController = new AreaController()
             const areas = await areaController.getAll()
             setAreas(areas.data)
+            const descriptions = areas.data.map(area => area.description)
+            setAreaDescriptions(descriptions)
+            // areas.data.forEach(area => console.log(area.description))
             setLoading(false)
         } catch (error) {
             setLoading(false)
         }
     }
+
+    console.log(areaDescriptions)
 
     useEffect(() => {
         if (!tenantId) {
@@ -80,7 +90,7 @@ export default function Areas() {
                                         <Grid item>
                                             <Button
                                                 variant="contained"
-                                                sx={{borderRadius: '25px', px: 4, py: 1.5}}
+                                                sx={{ borderRadius: '25px', px: 4, py: 1.5 }}
                                                 startIcon={<Iconify icon="material-symbols:add" />}
                                                 onClick={() => {
                                                     setOpenModal(true)
@@ -95,14 +105,14 @@ export default function Areas() {
                             <Divider />
                         </Grid>
                         {/* <Grid item xs={12}> */}
-                            {/* <AccordionFilter
+                        {/* <AccordionFilter
                                 schemaForm={UserFiltersFormSchema}
                                 setFilters={handleSetUserFilters}
                                 formData={userFilters}
                             /> */}
                         {/* </Grid> */}
 
-                        <Grid item xs={7}>
+                        <Grid item xs={5}>
                             <CrudTable
                                 tableData={areas}
                                 setTableData={setAreas}
@@ -110,18 +120,54 @@ export default function Areas() {
                                     { id: 'description', label: 'Área de Atuação' },
                                     { id: 'action', label: 'Ações' },
                                 ]}
-                                sx={{width: '100%'}}
+                                sx={{ width: '100%' }}
                             />
+                        </Grid>
+                        <Grid item xs={5}>
+                            <Grid
+                                sx={{
+                                    border: `1px solid ${borderColor}`,
+                                    backgroundColor: 'card.default',
+                                    borderRadius: '10px',
+                                    padding: '2rem',
+                                    '&:hover': {
+                                        boxShadow: '1px 1px 15px rgba(0, 0, 0, 0.16)',
+                                    },
+                                }}
+                            >
+                                <div>
+                                    <BarChart
+                                        title="Relatos por departamento"
+                                        chart={{
+                                            series: [],
+                                            colors: [
+                                                theme.palette.info.dark,
+                                                theme.palette.info.dark,
+                                                theme.palette.info.dark,
+                                                theme.palette.info.dark,
+                                                theme.palette.info.dark,
+                                                theme.palette.info.dark,
+                                            ],
+                                        }}
+                                        style={{
+                                            backgroundColor: theme.palette.background.paper,
+                                            border: `1px solid ${borderColor}`,
+                                        }}
+                                    />
+                                </div>
+                            </Grid>
                         </Grid>
                     </Grid>
                 </Container>
             </Card>
-            <Dialog open={openModal} onClose={() => setOpenModal(false)} sx={{height:'100vh', py: '3rem'}}>
-                <DialogTitle sx={{textAlign:"center"}} >
-                    <Typography fontSize='1.5rem' fontWeight={600} color="text">Cadastrar Nova Empresa</Typography>
+            <Dialog open={openModal} onClose={() => setOpenModal(false)} sx={{ height: '100vh', py: '3rem' }}>
+                <DialogTitle sx={{ textAlign: 'center' }}>
+                    <Typography fontSize="1.5rem" fontWeight={600} color="text">
+                        Cadastrar Área (Departamento)
+                    </Typography>
                 </DialogTitle>
-                <DialogContent sx={{paddingBottom: '2rem'}}>
-                    <NewEditForm /> 
+                <DialogContent sx={{ paddingBottom: '2rem' }}>
+                    <NewEditForm />
                 </DialogContent>
             </Dialog>
         </>

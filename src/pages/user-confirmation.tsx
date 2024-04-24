@@ -16,7 +16,7 @@ function UserConfirmation() {
                     justifyContent: 'center',
                     flexDirection: 'column',
                     alignItems: 'center',
-                    border: '1px solid #7777',
+                    border: '1px solid #adadad',
                     backgroundColor: 'card.default',
                 }}
             >
@@ -25,7 +25,7 @@ function UserConfirmation() {
                 </Typography>
                 <Button
                     variant="contained"
-                    sx={{ padding: '8px', width: '50%', fontSize: '16px' }}
+                    sx={{ padding: '8px', width: '50%', fontSize: '16px', borderRadius:'30px' }}
                     onClick={() => push('/login')}
                 >
                     Ir para login

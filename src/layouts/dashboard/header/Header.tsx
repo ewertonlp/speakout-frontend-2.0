@@ -8,7 +8,6 @@ import {
     Select,
     SelectChangeEvent,
     Stack,
-    Switch,
     Toolbar,
     Typography,
 } from '@mui/material'
@@ -25,9 +24,7 @@ import Iconify from '../../../components/iconify/Iconify'
 import Logo from '../../../components/logo'
 import { useSettingsContext } from '../../../components/settings'
 //
-import Brightness4Icon from '@mui/icons-material/Brightness4'
-import Brightness7Icon from '@mui/icons-material/Brightness7'
-import { makeStyles } from '@mui/styles'
+
 import TenantController from 'controllers/tenantController'
 import UserController from 'controllers/userController'
 import { useRouter } from 'next/router'
@@ -36,7 +33,7 @@ import { useAuthContext } from 'src/auth/useAuthContext'
 import NoticeModal from 'src/components/NoticeModal'
 import { ITenantGet } from 'types/ITenant'
 import AccountPopover from './AccountPopover'
-import NotificationsPopover from './NotificationsPopover'
+
 import ThemeToggle from 'src/components/themeButton/themeButton'
 
 // ----------------------------------------------------------------------
@@ -168,7 +165,7 @@ export default function Header({ onOpenNav }: Props) {
                     )}
                     <ThemeToggle themeMode={themeMode} onToggleMode={onToggleMode} />
                     
-                    <NotificationsPopover />
+                    {/* <NotificationsPopover /> */}
                     <AccountPopover />
                     <NoticeModal
                         open={openModal}

@@ -32,7 +32,7 @@ class UserService {
     }
 
     async getAllRoles(): Promise<{ roles: IRole[] }> {
-        return await api.get('users-permissions/roles')
+        return await api.get('api/users-permissions/roles')
     }
 
     async updateTenant(data: { tenant: string }, id: string) {

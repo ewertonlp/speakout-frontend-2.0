@@ -3,6 +3,7 @@ import { Controller, useFormContext } from 'react-hook-form'
 import { Autocomplete, autocompleteClasses, TextField, TextFieldProps } from '@mui/material'
 import { ApolloFormSchemaItem, ApolloFormSchemaOptions } from '../apollo-form/ApolloForm.component'
 import Iconify from '../iconify/Iconify'
+import { useTheme } from '@mui/material/styles'
 
 interface IProps {
     name: string
@@ -18,6 +19,10 @@ export default function RHFAutoComplete({
 }: IProps & TextFieldProps & ApolloFormSchemaItem) {
     const { control } = useFormContext()
     const { label } = other
+    const theme = useTheme()
+    const backgroundColor =
+        theme.palette.mode === 'dark' ? theme.palette.background.paper : theme.palette.background.paper
+    const borderColor = theme.palette.mode === 'dark' ? '#424249' : '#d2d2d2'
     //@TODO Atualmente o reactHookForm não trata esse campo como required, logo
     // fizemos o tratamento manual em ApolloForm.component > onSubmitCustom
     return (
@@ -39,6 +44,9 @@ export default function RHFAutoComplete({
                     groupBy={option => option?.group || 'Sem Grupo'}
                     popupIcon={<Iconify icon={'ic:baseline-search'} width={25} height={25} />}
                     sx={{
+                        borderRadius: '10px',
+                            backgroundColor: backgroundColor,
+                            border: `1px solid ${borderColor}`,
                         [`& .${autocompleteClasses.popupIndicator}`]: {
                             transform: 'none',
                         },
