@@ -21,6 +21,13 @@ export class PostActionController {
         const postActionService = new PostActionService()
         await postActionService.create(data)
     }
+
+    async delete(id: string): Promise<IPostActionGet[]> {
+        const postActionService = new PostActionService()
+        return await postActionService.delete(id)
+    }
+
+
     async sendMail(email: string) {
         const postActionService = new PostActionService()
         await postActionService.sendMail(email)

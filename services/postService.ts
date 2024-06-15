@@ -1,7 +1,7 @@
+import { IDashUserGet } from 'types/IDashUser'
 import { IPostClosed } from 'types/IPostClosed'
 import { IPostListing } from 'types/IPostListing'
 import api from './api'
-import { IDashUserGet } from 'types/IDashUser'
 
 export class PostService {
     urlBaseService
@@ -28,6 +28,8 @@ export class PostService {
         return response.data
     }
 
+
+
     async findByPostId(postId: string): Promise<IPostClosed> {
         return await api.get(`api/postcloseds/findByPost/${postId}`)
     }
@@ -41,4 +43,10 @@ export class PostService {
         const response = await api.post('api/users/create', {email} )
         return response.data
     }
+
+    async deletePostClosedByCommentId(commentId: string): Promise<IPostClosed> {
+            const response = await api.delete(`/api/postcloseds/${commentId}`) 
+            return await response.data;
+       
+        }
 }

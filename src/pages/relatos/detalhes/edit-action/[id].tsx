@@ -151,6 +151,7 @@ export default function EditAction() {
                     await Promise.all(promises)
                     try {
                         const formattedData: IPostActionDetails = {
+                            id: '',
                             description: formData.description,
                             title: formData.title,
                             media: filesIds,
@@ -169,6 +170,7 @@ export default function EditAction() {
             } else {
                 try {
                     const formattedData: IPostActionDetails = {
+                        id:'',
                         description: formData.description,
                         title: formData.title,
                         postaction: actionId as string,

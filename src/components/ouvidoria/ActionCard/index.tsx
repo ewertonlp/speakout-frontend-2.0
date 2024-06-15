@@ -20,6 +20,7 @@ import { IPostActionStatus, statusEnum } from 'types/IPostAction'
 import { useTheme } from '@mui/material/styles'
 
 function ActionCard({
+    id,
     date,
     lightShadow,
     biggerPadding,
@@ -30,8 +31,8 @@ function ActionCard({
     description,
     files,
     onDelete,
-    deleteAction,
 }: {
+    id: string
     date: string | undefined
     title: string
     description: string
@@ -41,14 +42,12 @@ function ActionCard({
     lightShadow?: boolean
     biggerPadding?: boolean
     files?: IImageUpload[]
-    onDelete: (actionId:string) => void
-    deleteAction: string
+    onDelete: (id:string) => void
 }) {
     const formattedDate = moment(date).format('DD/MM/YYYY HH:mm')
     const formattedLastUpdateDate = moment(lastUpdateDate).format('DD/MM/YYYY HH:mm')
 
     const theme = useTheme()
-
     const borderColor = theme.palette.mode === 'dark' ? '#424249' : '#d2d2d2'
 
     const downloadFile = async (file: IImageUpload) => {
@@ -69,16 +68,9 @@ function ActionCard({
     }
 
     const handleDeleteAction = (event: React.MouseEvent<HTMLButtonElement>) => {
-        event.stopPropagation()
-        if (onDelete && typeof onDelete === 'function') {
-            console.log(onDelete)
-            if (deleteAction) {
-                onDelete(deleteAction) 
-            } else {
-                console.error("ID da ação não está definido.")
-            }
-        }
-    }
+        event.stopPropagation();
+        onDelete(id)
+    };
 
     return (
         <Grid item>

@@ -25,7 +25,7 @@ export default function ThemeProvider({ children }: Props) {
         () => ({
             palette: palette(themeMode),
             typography,
-            shape: { borderRadius: 10 },
+            shape: { borderRadius: 5 },
             direction: themeDirection,
             shadows: shadows(themeMode),
             customShadows: customShadows(themeMode),

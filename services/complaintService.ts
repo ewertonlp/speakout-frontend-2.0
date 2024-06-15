@@ -4,7 +4,7 @@ import { IImageUpload } from 'types/IImageUpload'
 import api from './api'
 
 export default class ComplaintService {
-    async sendComplaint(data: IComplaint) {
+    async sendComplaint(data: IComplaint): Promise<IComplaint> {
         try {
             
             const response = await api.post(`api/posts`, { data: data });

@@ -2,7 +2,9 @@ import { IDashUserGet } from './IDashUser'
 import { IImageUpload } from './IImageUpload'
 import { IPostActionDetailsGet } from './IPostActionDetails'
 
+
 export type IPostAction = {
+    id: string
     title: string
     description: string
     media?: string[]

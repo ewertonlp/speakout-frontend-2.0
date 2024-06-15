@@ -130,8 +130,8 @@ export default function palette(themeMode: 'light' | 'dark') {
         ...COMMON,
         mode: 'light',
         text: {
-            primary: GREY[800],
-            secondary: GREY[700],
+            primary: GREY[900],
+            secondary: GREY[800],
             disabled: GREY[600],
         },
         background: { paper: '#fff', default: '#F0F2F5', neutral: GREY[200] },

@@ -67,8 +67,7 @@ const ReportPDF = ({ reportData }) => (
         <Page size="A4" style={styles.page}>
             <View style={styles.header}>
                 <Image
-                    src={{ uri: '/header.jpg', method: 'GET', headers: { 'Cache-Control': 'no-cache' }, body: '' }}
-                />
+                    src={{ uri: '/header.jpg', method: 'GET', headers: { 'Cache-Control': 'no-cache' }, body: '' }}/>
                 <Text style={styles.headerText}>Relatório de Denúncia</Text>
             </View>
             <Text style={styles.subheader}>Informações Gerais</Text>

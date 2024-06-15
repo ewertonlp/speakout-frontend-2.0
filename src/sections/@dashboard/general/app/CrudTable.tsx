@@ -70,6 +70,8 @@ export default function CrudTable({
 }: Props) {
     const router = useRouter()
 
+   
+
     return (
         <StyledCard {...other}>
             <TableContainer sx={{ maxWidth: '100%' }}>
@@ -134,7 +136,7 @@ const formatValues = (value: any) => {
     }
 }
 
-function GenericTableRow({ row, tableLabels, editPagePath, removeFunction, getItems }: RowProps) {
+function GenericTableRow({ row, tableLabels, editPagePath, removeFunction, getItems, onDelete }: RowProps) {
     const [openPopover, setOpenPopover] = useState<HTMLElement | null>(null)
     const theme = useTheme()
     const backgroundColor = theme.palette.mode === 'dark' ? '#141A29' : '#f5f5f5'
@@ -152,6 +154,8 @@ function GenericTableRow({ row, tableLabels, editPagePath, removeFunction, getIt
         handleClosePopover()
         router.push(router.pathname + editPagePath + row.id)
     }
+
+   
 
     // const handleDelete = async (data: any, id: string) => {
     //     console.log(data)
@@ -178,6 +182,18 @@ function GenericTableRow({ row, tableLabels, editPagePath, removeFunction, getIt
     // Função para fechar o modal de exclusão
     const handleCloseDeleteModal = () => {
         setOpenDeleteModal(false)
+    }
+
+    const handleDeleteConfirm = () => {
+        if (onDelete) {
+            onDelete(row.id); // Chama o método onDelete passando o ID da empresa
+        } 
+        console.log('chegou aqui')
+        handleCloseDeleteModal();
+    };
+
+    const handleDelete = (id) => {
+        router.push(router.pathname + editPagePath + row.id);
     }
 
     return (
@@ -210,11 +226,11 @@ function GenericTableRow({ row, tableLabels, editPagePath, removeFunction, getIt
                         </Box>
                     </MenuItem>
                     <Divider />
-                    {/* <MenuItem onClick={handleOpenDeleteModal} sx={{ color: 'error.main' }}>
+                    <MenuItem onClick={handleOpenDeleteModal} sx={{ color: 'error.main' }}>
                         <Box display="flex" alignItems="center">
                             <Iconify icon="eva:trash-2-fill" />
                         </Box>
-                    </MenuItem> */}
+                    </MenuItem>
                     <Dialog
                         open={openDeleteModal}
                         onClose={handleCloseDeleteModal}
@@ -234,7 +250,7 @@ function GenericTableRow({ row, tableLabels, editPagePath, removeFunction, getIt
                             <Button
                                 onClick={() => {
                                     // removeFunction(disableUser)
-                                    handleCloseDeleteModal()
+                                    onDelete
                                 }}
                                 color="error"
                                 autoFocus

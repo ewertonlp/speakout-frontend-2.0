@@ -87,6 +87,7 @@ export function NewActionModal({
                 try {
                     console.log(filesIds)
                     const formattedData: IPostAction = {
+                        id: formData.id,
                         description: formData.description,
                         user: formData.user,
                         media: filesIds,
@@ -107,6 +108,7 @@ export function NewActionModal({
         } else {
             try {
                 const formattedData: IPostAction = {
+                    id: formData.id,
                     description: formData.description,
                     user: formData.user,
                     post: query.id as string,

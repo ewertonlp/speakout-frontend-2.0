@@ -33,6 +33,7 @@ export default function Empresas() {
         try {
             const tenants = await tenantController.getAll({ status: true })
             tenants.forEach(tenant => (tenant.linkRelato = `https://${location.host}/ouvidoria/${tenant.identity}`))
+            console.log(tenants)
             setTenants(tenants)
         } catch (error) {
             console.log(error)
@@ -40,7 +41,7 @@ export default function Empresas() {
         setLoading(false)
     }
 
-    const disableTenant = async (data: any, id: string) => {
+    const disableTenant = async (id: string, data: any) => {
         const tenantController = new TenantController()
         try {
             const newData = {
@@ -50,6 +51,13 @@ export default function Empresas() {
             await tenantController.update(newData, id)
         } catch (error) {}
     }
+
+    const handleDelete = async (id: string) => {
+        const data = {}; 
+        await disableTenant(id, data);
+    };
+
+  
 
     useEffect(() => {
         getTenants()
@@ -112,8 +120,9 @@ export default function Empresas() {
                                     { id: 'linkRelato', label: 'Link relato', link: true },
                                     { id: 'action', label: 'Ações' },
                                 ]}
-                                removeFunction={disableTenant}
+                                // removeFunction={disableTenant}
                                 getItems={getTenants}
+                                onDelete={handleDelete}
                                 sx={{width: '100%', color: '#1D1D1E'}}
                             />
                         </Grid>

@@ -1,4 +1,5 @@
 import { IDashUserGet } from './IDashUser'
+import { IImageUpload } from './IImageUpload'
 import { IPostActionGet } from './IPostAction'
 import { IPostClosed } from './IPostClosed'
 import { IPostHistory } from './IPostHistory'
@@ -26,6 +27,7 @@ export type IPostListing = {
     response: any
     sensibilidade: string
     sensibilidadeNum: number
+    media: IImageUpload[]
     users: IDashUserGet[]
     posthistories: IPostHistory[]
     postactions: IPostActionGet[]

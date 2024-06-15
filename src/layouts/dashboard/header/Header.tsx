@@ -35,6 +35,7 @@ import { ITenantGet } from 'types/ITenant'
 import AccountPopover from './AccountPopover'
 
 import ThemeToggle from 'src/components/themeButton/themeButton'
+import NotificationsPopover from './NotificationsPopover'
 
 // ----------------------------------------------------------------------
 
@@ -165,7 +166,7 @@ export default function Header({ onOpenNav }: Props) {
                     )}
                     <ThemeToggle themeMode={themeMode} onToggleMode={onToggleMode} />
                     
-                    {/* <NotificationsPopover /> */}
+                    <NotificationsPopover />
                     <AccountPopover />
                     <NoticeModal
                         open={openModal}

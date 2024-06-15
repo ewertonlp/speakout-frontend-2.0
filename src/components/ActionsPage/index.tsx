@@ -1,28 +1,27 @@
 import AddIcon from '@mui/icons-material/Add'
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid,Typography } from '@mui/material'
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, Typography } from '@mui/material'
+import { PostActionController } from 'controllers/postActionController'
 import { PostController } from 'controllers/postController'
 import { useRouter } from 'next/router'
 import { useSnackbar } from 'notistack'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useAuthContext } from 'src/auth/useAuthContext'
 import { checkPermission } from 'src/utils/functions'
 import { IPostListing } from 'types/IPostListing'
 import { NewActionModal } from '../NewActionModal'
 import ActionCard from '../ouvidoria/ActionCard'
-import { PostActionDetailsController } from 'controllers/postActionDetailsController'
-
+import { IPostActionGet } from 'types/IPostAction'
 
 function ActionsPage({ post, getPost }: { post: IPostListing; getPost: (id: string) => void }) {
     const [openModal, setOpenModal] = useState<boolean>(false)
     const postController = new PostController()
     const { enqueueSnackbar } = useSnackbar()
     const [loading, setLoading] = useState(false)
-    const [ deleteAction, setDeleteAction] = useState('')
-    const [postActions, setPostActions] = useState<IPostListing[]>([])
-    const [isDeleteModalOpen, setDeleteModalOpen] = useState(false)
+    const [deleteAction, setDeleteAction] = useState<string>('')
+    const [postActions, setPostActions] = useState<IPostActionGet[]>([]);
+    const [isDeleteModalOpen, setDeleteModalOpen] = useState<boolean>(false)
 
     const { push, query } = useRouter()
-
     const { user } = useAuthContext()
 
     // const handleSendEmail = async () => {
@@ -39,33 +38,42 @@ function ActionsPage({ post, getPost }: { post: IPostListing; getPost: (id: stri
     //     }
     // }
 
-    const handleDeleteAction = async () => {      
+    const postActionController = new PostActionController()
+
+    // const fetchActions = async () => {
+    //     try {
+    //         const updatedPost = await postActionController.getById(post.id)
+    //         setPostActions(updatedPost)
+    //     } catch (error) {
+    //         console.error('Erro ao buscar ações:', error)
+    //     }
+    // }
+
+    const handleDeleteAction = async () => {
         if (deleteAction) {
-            const postActionDetailsController = new PostActionDetailsController()
-
             try {
-                await postActionDetailsController.delete(deleteAction)
-                const updateActions = postActions.filter(action => action.id !== deleteAction)
-                console.log(updateActions)
-                enqueueSnackbar('Relato excluído com sucesso', { variant: 'success' })
-                setPostActions(updateActions)
+                const updatedActions: IPostActionGet[] = await postActionController.delete(deleteAction);
+                enqueueSnackbar('Ação excluída com sucesso', { variant: 'success' });
+                setPostActions(updatedActions);
             } catch (error) {
-                console.error('Erro ao excluir o post:', error)
-                enqueueSnackbar('Erro ao excluir o relato', { variant: 'error' })
+                console.error('Erro ao excluir a ação:', error);
+                enqueueSnackbar('Erro ao excluir a Ação', { variant: 'error' });
+            } finally {
+                setDeleteModalOpen(false);
+                setDeleteAction('');
             }
-            setDeleteModalOpen(false)
-            setDeleteAction('')
         }
-    }
+    };
 
-    const handleDeleteConfirmation = id => {
+    const handleDeleteConfirmation = (id: string) => {
         setDeleteAction(id)
         setDeleteModalOpen(true)
     }
 
-    console.log(deleteAction)
+    useEffect(() => {
+        setPostActions(post.postactions);
+    }, [post.postactions])
 
-    
     return (
         <Grid
             style={{
@@ -84,15 +92,14 @@ function ActionsPage({ post, getPost }: { post: IPostListing; getPost: (id: stri
                     <Button
                         variant="contained"
                         color="primary"
-                        sx={{ paddingX: '1rem', paddingY: '0.7rem', borderRadius:'30px' }}
+                        sx={{ paddingX: '1rem', paddingY: '0.7rem', borderRadius: '30px' }}
                         onClick={() => setOpenModal(true)}
                     >
                         <AddIcon /> Cadastrar Nova ação
                     </Button>
                 )}
             </Grid>
-            {(post.postactions &&
-                post.postactions.length > 0 &&
+            {(post.postactions.length > 0 &&
                 post.postactions.map((action, index) => (
                     <div
                         key={index}
@@ -100,6 +107,7 @@ function ActionsPage({ post, getPost }: { post: IPostListing; getPost: (id: stri
                         style={{ cursor: 'pointer' }}
                     >
                         <ActionCard
+                            id={action.id}
                             date={action.createdAt!}
                             name={action.user ? action.user.fullname : 'Desconhecido'}
                             title={action.title}
@@ -109,14 +117,12 @@ function ActionsPage({ post, getPost }: { post: IPostListing; getPost: (id: stri
                             files={action.media}
                             lightShadow
                             biggerPadding
-                            deleteAction={deleteAction}
-                            onDelete={handleDeleteConfirmation}
+                            onDelete={() => handleDeleteConfirmation(action.id)}
                         />
-                       
                     </div>
                 ))) || (
-                <Typography variant="body1" textAlign={'center'} fontWeight={600}>
-                    Ainda não existe histórico para exibir
+                <Typography variant="h5" textAlign={'center'} fontWeight={500}>
+                    Ainda não existe Ações para exibir
                 </Typography>
             )}
             <NewActionModal users={post.users} setOpen={setOpenModal} open={openModal} getPost={getPost} />

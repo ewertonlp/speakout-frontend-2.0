@@ -5,9 +5,12 @@ import { Container, Grid, Typography } from '@mui/material'
 // layouts
 // components
 import ArrowBackIosNewOutlinedIcon from '@mui/icons-material/ArrowBackIosNewOutlined'
+import { useTheme } from '@mui/material/styles'
 import { PostController } from 'controllers/postController'
+import { UploadController } from 'controllers/uploadController'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
+import ActionsPage from 'src/components/ActionsPage'
 import { ConclusionPage } from 'src/components/ConclusionPage'
 import ReportDetails from 'src/components/ReportDetails'
 import ReportHistory from 'src/components/ReportHistory'
@@ -17,28 +20,32 @@ import LoadingScreen from 'src/components/loading-screen/LoadingScreen'
 import { useSettingsContext } from 'src/components/settings'
 import DashboardLayout from 'src/layouts/dashboard'
 import styled from 'styled-components'
+import { IDashUser } from 'types/IDashUser'
+import { IImageUpload } from 'types/IImageUpload'
 import { IPostHistory } from 'types/IPostHistory'
 import { IPostListing } from 'types/IPostListing'
-import ActionsPage from 'src/components/ActionsPage'
-import { useTheme } from '@mui/material/styles'
 
 // ----------------------------------------------------------------------
 
 Detalhes.getLayout = (page: React.ReactElement) => <DashboardLayout>{page}</DashboardLayout>
 
 // ----------------------------------------------------------------------
-export default function Detalhes() {
+export default function Detalhes(uploadedFiles: IImageUpload[]) {
     const { themeStretch } = useSettingsContext()
     const { query, back } = useRouter()
     const [loading, setLoading] = useState<boolean>(false)
-    const theme = useTheme();
-    const titleColor = theme.palette.mode === 'dark' ? theme.palette.text.secondary : theme.palette.text.secondary;
-
+    const theme = useTheme()
+    const titleColor = theme.palette.mode === 'dark' ? theme.palette.text.secondary : theme.palette.text.secondary
+    const [selectedUsers, setSelectedUsers] = useState<IDashUser[]>([])
     const [page, setPage] = useState<'relato' | 'historico' | 'usuarios' | 'conclusao' | 'acoes'>('relato')
+    const [fileUploaded, setFileUploaded] = useState(false)
 
     const [post, setPost] = useState<IPostListing>()
 
     const [histories, setHistories] = useState<IPostHistory[]>([])
+
+    const uploadController = new UploadController()
+    const [files, setFiles] = useState<IImageUpload[]>([])
 
     const getPost = async id => {
         setLoading(true)
@@ -46,6 +53,12 @@ export default function Detalhes() {
         try {
             const postData = await postController.getById(id)
             setPost(postData.data)
+            if (postData.data.media) {
+                console.log('Arquivos de mídia:', postData.data.media)
+            } else {
+                console.log('Sem arquivos de mídia.')
+            }
+            setFiles(postData.data.media)
             setHistories(postData.data.posthistories)
         } catch (error) {
             console.log(error)
@@ -54,10 +67,10 @@ export default function Detalhes() {
     }
 
     useEffect(() => {
-        if (query.id && Number(query.id)) { 
+        if (query.id && Number(query.id)) {
             getPost(query.id)
         }
-    }, [query.id])
+    }, [query.id, fileUploaded])
 
     if (loading) return <LoadingScreen />
 
@@ -95,15 +108,24 @@ export default function Detalhes() {
                         <ReportMenu page={page} setPage={setPage} />
 
                         {page === 'relato' ? (
-                            <ReportDetails post={post} setPost={setPost} />
+                            <ReportDetails post={post} setPost={setPost} uploadedFiles={uploadedFiles} />
                         ) : page === 'historico' ? (
                             <ReportHistory histories={histories} getPost={getPost} />
                         ) : page === 'usuarios' ? (
-                            <UserList postId={post.id}/>
+                            <UserList
+                                postId={post.id}
+                                selectedUsers={selectedUsers}
+                                setSelectedUsers={setSelectedUsers}
+                            />
                         ) : page === 'acoes' ? (
                             <ActionsPage post={post} getPost={getPost} />
                         ) : (
-                            <ConclusionPage histories={histories} postId={post.id} tenantId={post.tenant.id} emailDenunciante={post.users} />
+                            <ConclusionPage
+                                histories={histories}
+                                postId={post.id}
+                                tenantId={post.tenant.id}
+                                emailDenunciante={post.users}
+                            />
                         )}
                     </Container>
                 </>

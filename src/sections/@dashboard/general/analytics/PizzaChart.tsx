@@ -40,7 +40,7 @@ interface Props extends CardProps {
     subheader?: string
     chart: {
         colors?: string[]
-        series: {
+        series?: {
             label: string
             value: number
         }[]
@@ -63,7 +63,7 @@ export default function PizzaChart({ title, subheader, chart, ...other }: Props)
 
     const { colors, series, options } = chart
 
-    const chartSeries = series.map(i => i.value)
+    const chartSeries = series?.map(i => i.value)
 
     const chartOptions = useChart({
         chart: {
@@ -72,7 +72,7 @@ export default function PizzaChart({ title, subheader, chart, ...other }: Props)
             },
         },
         colors,
-        labels: series.map(i => i.label),
+        labels: series?.map(i => i.label),
         
         stroke: {
             colors: [theme.palette.background.paper],

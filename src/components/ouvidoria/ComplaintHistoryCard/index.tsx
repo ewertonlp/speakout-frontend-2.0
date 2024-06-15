@@ -50,9 +50,7 @@ function ComplaintHistoryCard({
                     backgroundColor: 'card.default',
                     borderRadius: '10px',
                     mt: '2rem',
-                    '&:hover': {
-                        boxShadow: '1px 1px 15px rgba(0, 0, 0, 0.16)',
-                    },
+                  
                 }}
             >
                 <Grid p={!biggerPadding ? 1.5 : 2.5}>

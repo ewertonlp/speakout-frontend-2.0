@@ -1,4 +1,5 @@
 import { Divider, Grid, InputLabel, TextField, Typography } from '@mui/material'
+import { useTheme } from '@mui/material/styles'
 import ComplaintController from 'controllers/complaintController'
 import TenantController from 'controllers/tenantController'
 import { UploadController } from 'controllers/uploadController'
@@ -20,7 +21,7 @@ import { SuccessMessageModal } from 'src/components/ouvidoria/SuccessMessageModa
 import TermosAceite from 'src/components/ouvidoria/TermoAceite'
 import { ICompanyInfo } from 'types/ICompanyInfo'
 import { IComplaint } from 'types/IComplaint'
-import { useTheme } from '@mui/material/styles'
+import { IImageUpload } from 'types/IImageUpload'
 
 const Form = ({ values }) => {
     const { enqueueSnackbar } = useSnackbar()
@@ -45,11 +46,13 @@ const Form = ({ values }) => {
     const [checkTipoDenuncia, setCheckTipoDenuncia] = useState<string>()
     const [checkRelacao, setCheckRelacao] = useState<string>()
 
+    const [uploadedFiles, setUploadedFiles] = useState<IImageUpload[]>([])
+
     const [protocol, setProtocol] = useState<string>('')
 
     const [openSuccesMessageModal, setOpenSuccessMessageModal] = useState<boolean>(false)
 
-    const theme = useTheme();
+    const theme = useTheme()
     const backgroundColor =
         theme.palette.mode === 'dark' ? theme.palette.background.paper : theme.palette.background.paper
 
@@ -75,16 +78,22 @@ const Form = ({ values }) => {
                 const uploadController = new UploadController()
                 const filesIds = [] as string[]
                 const promises = fileFieldValue.map(async file => {
-                    const uploadImageResponse = await uploadController.uploadFile(file)
-                    filesIds.push(uploadImageResponse[0].id)
-                    console.log(promises)
+                    try {
+                        const uploadImageResponse = await uploadController.uploadFile(file)
+                        filesIds.push(uploadImageResponse[0].id)
+                        setUploadedFiles(uploadImageResponse)
+                        enqueueSnackbar('Arquivo enviado com sucesso', { variant: 'success' })
+                    } catch (error) {
+                        console.error('Erro ao fazer upload do arquivo:', error)
+                        enqueueSnackbar('Erro ao fazer upload do arquivo', { variant: 'error' })
+                    }
                 })
                 await Promise.all(promises)
                 try {
                     const formattedData: IComplaint = {
                         tenant: companyInfo?.id,
                         email: data.email,
-                        media: filesIds,
+                        media: uploadedFiles,
                         response: {
                             ...formData,
                             infracao: infracao,
@@ -92,7 +101,7 @@ const Form = ({ values }) => {
                         },
                     }
                     const response = await complaintController.sendComplaint(formattedData)
-                    setProtocol(response.protocol)
+                    setProtocol(response.protocol ?? '')
                     setOpenSuccessMessageModal(true)
                 } catch (error) {
                     console.log(error)
@@ -113,7 +122,7 @@ const Form = ({ values }) => {
                     },
                 }
                 const response = await complaintController.sendComplaint(formattedData)
-                setProtocol(response.protocol)
+                setProtocol(response.protocol ?? '')
                 setOpenSuccessMessageModal(true)
             } catch (error) {
                 console.error('Erro ao enviar formulário:', error)
@@ -121,6 +130,8 @@ const Form = ({ values }) => {
             }
         }
     }
+
+    console.log(uploadedFiles)
 
     useEffect(() => {
         if (!router.isReady) return
@@ -375,7 +386,7 @@ const Form = ({ values }) => {
         {
             name: 'identificacao',
             label: 'Você deseja se identificar?',
-            ui: { grid: 12 },
+            ui: { grid: 6 },
             componenttype: ApolloFormSchemaComponentType.SELECT,
             groupKey: 'identification',
             required: true,
@@ -500,7 +511,7 @@ const Form = ({ values }) => {
             name: 'especificar-tipo-relacao',
             label: 'Especifique o tipo de relação',
             groupKey: 'relationForBusiness',
-            ui: { grid: 12 },
+            ui: { grid: 6 },
             required: true,
             componenttype:
                 checkRelacao && checkRelacao == 'especificar'
@@ -511,11 +522,11 @@ const Form = ({ values }) => {
             name: 'infracao',
             label: 'Qual infração do código de ética ocorreu? Link do Código de ética',
             groupKey: 'raleteInfration',
-            ui: { grid: 12 },
+            ui: { grid: 6 },
             required: true,
             renderComponent() {
                 return (
-                    <Grid >
+                    <Grid>
                         <InputLabel sx={{ paddingLeft: '5px' }}>
                             Qual infração do código de ética ocorreu?{' '}
                             <a
@@ -533,12 +544,12 @@ const Form = ({ values }) => {
                         <TextField
                             onChange={e => setInfracao(e.target.value)}
                             rows={2}
-                            maxRows={4}
+                            maxRows={3}
                             multiline
                             type="text"
                             placeholder="Informe aqui o código de ética"
                             sx={{
-                                width: "100%",
+                                width: '100%',
                                 borderRadius: '10px',
                                 backgroundColor: backgroundColor,
                                 border: `1px solid ${borderColor}`,
@@ -552,9 +563,13 @@ const Form = ({ values }) => {
             name: 'empresa',
             label: 'Em qual empresa você trabalha?',
             groupKey: 'raleteInfration',
-            ui: { grid: 12 },
+            ui: { grid: 6 },
             required: true,
-            componenttype: ApolloFormSchemaComponentType.TEXTAREA,
+            // componenttype: ApolloFormSchemaComponentType.TEXTAREA,
+            componenttype:
+                checkIdentification == 'true'
+                    ? ApolloFormSchemaComponentType.TEXT
+                    : ApolloFormSchemaComponentType.HIDDEN,
         },
         {
             name: 'tipo-denuncia',
@@ -716,16 +731,19 @@ const Form = ({ values }) => {
             required: true,
             renderComponent(params) {
                 return (
-                    <Grid item sx={{
-                        borderRadius: '10px',
-                        backgroundColor: backgroundColor,
-                        border: `1px solid ${borderColor}`,
-                        padding: '1rem'
-                    }}>
-                        <Grid item xs={12} >
+                    <Grid
+                        item
+                        sx={{
+                            borderRadius: '10px',
+                            backgroundColor: backgroundColor,
+                            border: `1px solid ${borderColor}`,
+                            padding: '1rem',
+                        }}
+                    >
+                        <Grid item xs={12}>
                             <InputLabel>
                                 Caso você tenha evidências sobre o fato, faça o upload do arquivo aqui. Tamanho máximo:
-                                1GB
+                                10Mb
                             </InputLabel>
                         </Grid>
                         <TextField
@@ -770,11 +788,11 @@ const Form = ({ values }) => {
             <Head>
                 <title>Registro</title>
             </Head>
-            <AppBar logoUrl={companyInfo?.logo?.url as string}/>
+            <AppBar logoUrl={companyInfo?.logo?.url as string} />
             <Grid container lg={7} xs={11} sx={{ margin: '2rem auto', padding: '4rem 0' }}>
-                <Grid item xs={12} sx={{mb:'3rem', textAlign:'center'}}>
-                <Typography variant='h4' >Preencha o formulário abaixo</Typography>
-                <Divider />
+                <Grid item xs={12} sx={{ mb: '3rem', textAlign: 'center' }}>
+                    <Typography variant="h3" mb='1rem' color='#003768'>Envie sua denúncia</Typography>
+                    <Divider />
                 </Grid>
                 <ApolloForm
                     schema={formSchema}

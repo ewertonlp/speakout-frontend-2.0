@@ -23,6 +23,12 @@ export class PostActionService {
     async create(data: IPostAction) {
         await api.post(this.urlBaseService, { data: data })
     }
+
+    async delete(id: string): Promise<any> {
+        await api.delete(`${this.urlBaseService}/${id}`)
+        // return await this.getById(id)
+    }
+
     async sendMail(email: string) {
         await api.post(`${this.urlBaseService}/sendMail`, { email: email })
     }

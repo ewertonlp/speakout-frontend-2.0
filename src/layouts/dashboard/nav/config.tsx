@@ -43,8 +43,8 @@ const navConfig = [
     {
         subheader: 'Menu',
         items: [
-            { title: 'Home', path: PATH_PAGE.home, icon: ICONS.home, adminOnly: true },
-            { title: 'Dashboard', path: PATH_PAGE.reports, icon: ICONS.report, adminOnly: true },
+            { title: 'Dashboard', path: PATH_PAGE.home, icon: ICONS.home, adminOnly: true },
+            // { title: 'Dashboard', path: PATH_PAGE.reports, icon: ICONS.report, adminOnly: true },
             { title: 'Relatos', path: PATH_PAGE.narratives, icon: ICONS.parchment },
             { title: 'Áreas de atuação', path: PATH_PAGE.areas, icon: ICONS.area, adminOnly: true },
             { title: 'Usuários', path: PATH_PAGE.users, icon: ICONS.user, adminOnly: true },

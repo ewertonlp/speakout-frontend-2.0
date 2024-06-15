@@ -91,8 +91,9 @@ export default function AccountPopover() {
             <MenuPopover
                 open={openPopover}
                 onClose={handleClosePopover}
-                sx={{ width: 250, mt: 8}}
+                style={{margin: '4rem 0 0 -4rem'}}
                 anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                // transformOrigin={{ vertical: 'top', horizontal: 'right' }}
             >
                 <Box sx={{ my: 1.5, px: 2.5,}}>
                     <Typography variant="subtitle2" noWrap>

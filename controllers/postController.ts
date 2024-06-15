@@ -108,6 +108,12 @@ export class PostController {
         return response
     }
 
+    async deletePostClosedByCommentId(commentId: string): Promise<IPostClosed> {
+        const postService = new PostService()
+        const response = await postService.deletePostClosedByCommentId(commentId)
+        return response
+    }
+
     async deletePost(postId: string): Promise<IPostListing> {
         const postService = new PostService()
         const deletePost = await postService.deletePost(postId)

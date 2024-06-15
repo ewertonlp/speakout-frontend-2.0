@@ -18,6 +18,7 @@ export type IDashUser = {
     username: string
     role?: string
     areas?: string[]
+    selectedUsers?: string[]
 }
 export type IDashUserGet = {
     id: string

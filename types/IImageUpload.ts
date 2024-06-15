@@ -16,4 +16,5 @@ export type IImageUpload = {
     updatedAt: 'string'
     url: 'string'
     width: 'string'
+    uploadedFiles?: File[] 
 }

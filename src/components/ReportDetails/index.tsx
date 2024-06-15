@@ -1,12 +1,26 @@
-import { Button, Card, Grid } from '@mui/material'
+import { AttachFile, GetApp } from '@mui/icons-material'
+import { Button, Card, Divider, Grid, IconButton, List, ListItem, ListItemIcon, ListItemText } from '@mui/material'
+import { useTheme } from '@mui/material/styles'
+import { styled } from '@mui/system'
 import { PostController } from 'controllers/postController'
+import { UploadController } from 'controllers/uploadController'
 import moment from 'moment'
 import { useRouter } from 'next/router'
 import { useSnackbar } from 'notistack'
-import { useTheme } from '@mui/material/styles';
+import { Fragment, useEffect, useState } from 'react'
+import { IImageUpload } from 'types/IImageUpload'
 import { IPostListing } from 'types/IPostListing'
 import { ISelectOption } from 'types/ISelectOption'
 import { CardItem, ColumnGrid, EditableCardItem, GrayTypography, TitleTypography } from '../CustomMuiComponents'
+
+const FileIcon = styled(AttachFile)({
+    fontSize: '2rem',
+})
+
+const FileList = styled(List)({
+    width: '100%',
+    backgroundColor: 'background.default',
+})
 
 const sensivityOptions: ISelectOption[] = [
     { label: 'Alta', value: 'alta' },
@@ -26,14 +40,19 @@ export function getEmailDenunciante(post: IPostListing): string {
     return post.response.email
 }
 
-function ReportDetails({ post, setPost }: { post: IPostListing; setPost: (value: IPostListing) => void }) {
+function ReportDetails({ post, setPost }: { post: IPostListing; setPost: (value: IPostListing) => void; uploadedFiles: IImageUpload[] }) {
     const formattedDate = moment(post.response['data-ocorrencia']).format('DD/MM/YYYY')
     const formattedCreatedAt = moment(post.createdAt).format('DD/MM/YYYY HH:mm')
     const { query } = useRouter()
     const { enqueueSnackbar } = useSnackbar()
-    const theme = useTheme();
+    const theme = useTheme()
     const borderColor = theme.palette.mode === 'dark' ? '#424249' : '#d2d2d2'
-    const titleColor = theme.palette.mode === 'dark' ? theme.palette.common.white : theme.palette.common.black;
+    const titleColor = theme.palette.mode === 'dark' ? theme.palette.common.white : theme.palette.common.black
+
+    const [files, setFiles] = useState<IImageUpload[]>([])
+    const [downloadingFile, setDownloadingFile] = useState<string | null>(null)
+    const uploadController = new UploadController()
+
 
     async function handleEditStatus(newStatus: string, handleCloseEditMode: () => void) {
         const postController = new PostController()
@@ -79,9 +98,65 @@ function ReportDetails({ post, setPost }: { post: IPostListing; setPost: (value:
     const diasEmAberto = getDiasEmAberto(formattedCreatedAt).toString()
     const diasEmAbertoNumero = parseInt(diasEmAberto, 10)
 
+    const fetchUploadedFiles = async (id) => {
+        const postController = new PostController()
+        // const postFiles = await postController.getById(post.id)
+        const uploadedfiles = await uploadController.getById(id)
+        // console.log(uploadedfiles)
+        // console.log(postFiles)
+        // const uploadPostFiles = Array.isArray(postFiles) ? postFiles : [postFiles]
+
+        // const uploadedFiles = uploadPostFiles.map(postUploadedFile => {
+        //     if (postUploadedFile && postUploadedFile.media) {
+        //         return Promise.all(postUploadedFile.media.map(mediaItem => uploadController.getById(mediaItem.id)))
+        //     }
+        //     return Promise.resolve<IImageUpload[]>([])
+        // })
+
+        // console.log(uploadedFiles)
+
+        // const AllFilesArray = await Promise.all(uploadedFiles)
+
+        // const allFiles = ([] as IImageUpload[]).concat(...AllFilesArray)
+
+        // setFiles(allFiles)
+    }
+
+    const downloadFile = (file: IImageUpload) => {
+        const handleClick = () => {
+            setDownloadingFile(file.id);
+            const link = document.createElement('a');
+            link.href = file.url;
+            if (
+                file.name.endsWith('.png') ||
+                file.name.endsWith('.jpeg') ||
+                file.name.endsWith('svg') ||
+                file.name.endsWith('.pdf') ||
+                file.name.endsWith('.jpg')
+            ) {
+                link.target = '_blank';
+            } else {
+                link.download = file.name;
+            }
+            link.click();
+            setDownloadingFile(null);
+        };
+    
+        return (
+            <button onClick={handleClick}>
+                Baixar {file.name}
+            </button>
+        );
+    };
+    
+
+    useEffect(() => {
+        // fetchUploadedFiles()
+    }, [])
+
     return (
         <>
-            <Grid display="flex" justifyContent="center" gap={5} container mt='4rem'>
+            <Grid display="flex" justifyContent="center" gap={5} container mt="4rem">
                 <Grid xs={6} lg={5} item paddingBottom="20px">
                     <Card
                         sx={{
@@ -95,7 +170,7 @@ function ReportDetails({ post, setPost }: { post: IPostListing; setPost: (value:
                         }}
                     >
                         <Grid display="flex" flexDirection="column">
-                            <TitleTypography >Detalhes</TitleTypography>
+                            <TitleTypography>Detalhes</TitleTypography>
                             <Grid item sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 5, mb: 2 }}>
                                 <CardItem title="Protocolo" value={post.protocol} />
                                 {/* <Grid display="flex" flexDirection="column" rowGap="5px" marginY="12px">
@@ -146,7 +221,7 @@ function ReportDetails({ post, setPost }: { post: IPostListing; setPost: (value:
                             },
                         }}
                     >
-                        <TitleTypography >Manifestante</TitleTypography>
+                        <TitleTypography>Manifestante</TitleTypography>
                         <Grid
                             marginTop="20px"
                             display="flex"
@@ -189,7 +264,7 @@ function ReportDetails({ post, setPost }: { post: IPostListing; setPost: (value:
                                 },
                             }}
                         >
-                            <TitleTypography >Denunciados</TitleTypography>
+                            <TitleTypography>Denunciados</TitleTypography>
                             <Grid
                                 marginTop="20px"
                                 display="flex"
@@ -228,18 +303,30 @@ function ReportDetails({ post, setPost }: { post: IPostListing; setPost: (value:
                                 justifyContent="space-between"
                                 flexWrap="wrap"
                             >
-                                <Grid item xs={12} sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 5, mb: 2 }}>
+                                <Grid
+                                    item
+                                    xs={12}
+                                    sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 5, mb: 2 }}
+                                >
                                     <CardItem title="Tipo" value={post.response['tipo-denuncia'].label} />
                                     <CardItem title="Infração do código de ética" value={post.response.infracao} />
                                 </Grid>
-                                <Grid item xs={12} sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 5, mb: 2 }}>
+                                <Grid
+                                    item
+                                    xs={12}
+                                    sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 5, mb: 2 }}
+                                >
                                     <CardItem
                                         title="Grau de certeza"
                                         value={post.response['grau-de-certeza-denuncia']}
                                     />
                                     <CardItem title="Data do incidente" value={formattedDate} />
                                 </Grid>
-                                <Grid item xs={12} sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 5, mb: 2 }}>
+                                <Grid
+                                    item
+                                    xs={12}
+                                    sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 5, mb: 2 }}
+                                >
                                     <CardItem
                                         title="Continua ocorrendo"
                                         value={post.response['recorrencia-ocorrencia']}
@@ -247,7 +334,11 @@ function ReportDetails({ post, setPost }: { post: IPostListing; setPost: (value:
 
                                     <CardItem title="Localidade" value={post.response['local-ocorrencia']} />
                                 </Grid>
-                                <Grid item xs={12} sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 5, mb: 2 }}>
+                                <Grid
+                                    item
+                                    xs={12}
+                                    sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 5, mb: 2 }}
+                                >
                                     <CardItem
                                         title="Nome das testemunhas"
                                         value={post.response['sim-testemunhas-ocorrencia']}
@@ -260,6 +351,54 @@ function ReportDetails({ post, setPost }: { post: IPostListing; setPost: (value:
                                         title="Descrição da ocorrência"
                                         value={post.response['nao-testemunhas-ocorrencia']}
                                     />
+
+<FileList>
+                                    {files.map(file => (
+                                        <Fragment key={file.id}>
+                                            <ListItem>
+                                                <ListItemIcon>
+                                                    <FileIcon />
+                                                </ListItemIcon>
+                                                <ListItemText primary={file.name} />
+                                                <IconButton
+                                                    onClick={() => downloadFile(file)}
+                                                    color="primary"
+                                                    aria-label="download file"
+                                                >
+                                                    <GetApp />
+                                                </IconButton>
+                                            </ListItem>
+                                            <Divider />
+                                        </Fragment>
+                                    ))}
+                                </FileList>
+
+                                    {/* {uploadedFiles.length > 0 && (
+                                        <Grid>
+                                            <Typography sx={{ marginY: '10px' }} variant="h6">
+                                                Arquivos anexados
+                                            </Typography>
+                                            <FileList>
+                                                {uploadedFiles.map(file => (
+                                                    <Fragment key={file.id}>
+                                                        <ListItem>
+                                                            <ListItemIcon>
+                                                                <FileIcon />
+                                                            </ListItemIcon>
+                                                            <ListItemText primary={file.name} />
+                                                            <IconButton
+                                                                onClick={() => downloadFile(file)}
+                                                                color="primary"
+                                                                aria-label="download file"
+                                                            >
+                                                                <GetApp />
+                                                            </IconButton>
+                                                        </ListItem>
+                                                    </Fragment>
+                                                ))}
+                                            </FileList>
+                                        </Grid>
+                                    )} */}
                                 </Grid>
                             </Grid>
                         </Card>

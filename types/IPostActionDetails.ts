@@ -2,6 +2,7 @@ import { IDashUser } from './IDashUser'
 import { IMedia } from './IMedia'
 
 export type IPostActionDetails = {
+    id: string
     postaction: string
     title: string
     description: string

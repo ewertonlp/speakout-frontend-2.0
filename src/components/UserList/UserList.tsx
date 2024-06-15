@@ -48,8 +48,15 @@ const StyledCard = styled(Card)(({ theme }) => ({
         boxShadow: '1px 1px 15px rgba(0, 0, 0, 0.16)',
     },
 }))
-export const UserList = ({ postId }) => {
-    const [selectedUsers, setSelectedUsers] = useState<IDashUser[]>([])
+
+interface UserListProps {
+    postId: string;
+    selectedUsers: IDashUser[];
+    setSelectedUsers: (users: IDashUser[]) => void;
+}
+
+export const UserList = ({ postId, selectedUsers, setSelectedUsers }: UserListProps) => {
+    // const [selectedUsers, setSelectedUsers] = useState<IDashUser[]>([])
     const [loading, setLoading] = useState(false)
     const postController = new PostController()
     const { enqueueSnackbar } = useSnackbar()
@@ -99,8 +106,6 @@ export const UserList = ({ postId }) => {
         setDeleteUserId(id)
         setDeleteModalOpen(true)
     }
-
-    console.log(selectedUsers)
 
     const handleDelete = async () => {
         const newSelectedUsers = selectedUsers.filter(user => user.id !== deleteUserId)
